@@ -16,7 +16,6 @@ class OnlyFieldsSerializerMixin:
         kwargs['only_fields'] = self.only_fields
         return super().get_serializer(*args, **kwargs)
 
-
 class AccountViewSet(OnlyFieldsSerializerMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = UserSerializer
     only_fields = ['password', 'username', 'first_name', 'last_name', 'email', 'birth_date']
