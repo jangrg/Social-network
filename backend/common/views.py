@@ -17,7 +17,7 @@ class OnlyFieldsSerializerMixin:
         return super().get_serializer(*args, **kwargs)
 
 
-class AccountViewSet(OnlyFieldsSerializerMixin, mixins.CreateModelMixin,viewsets.GenericViewSet):
+class AccountViewSet(OnlyFieldsSerializerMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = UserSerializer
     only_fields = ['password', 'username', 'first_name', 'last_name', 'email', 'birth_date']
 
@@ -36,7 +36,7 @@ class AccountViewSet(OnlyFieldsSerializerMixin, mixins.CreateModelMixin,viewsets
     def logout(self, request, *args, **kwargs):
         auth.logout(request)
         # Redirect to a success page.
-        return HttpResponseRedirect("/api/time/")
+        return Response({})
 
 
 class TimeView(APIView):
