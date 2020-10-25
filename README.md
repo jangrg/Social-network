@@ -15,4 +15,5 @@ backend setup from terminal:
 
 nuxt setup:
 
-    //TODO
+    npm i
+    npm run dev
