@@ -7,43 +7,43 @@
           <div>
             <strong>Register:</strong>
           </div>
-          <b-form class="mx-auto mt-2 text-center" @submit.prevent="register">
+          <b-form class="mx-auto mt-2 text-center">
             <b-form-input
-              v-model="email"
+              v-model="form.email"
               type="email"
               placeholder="Enter your email"
             >
             </b-form-input>
             <b-form-input
-              v-model="name"
+              v-model="form.name"
               type="text"
               placeholder="Enter your name"
             >
             </b-form-input>
             <b-form-input
-              v-model="username"
+              v-model="form.username"
               type="text"
               placeholder="Enter your username"
             >
             </b-form-input>
             <b-form-input
-              v-model="password1"
+              v-model="form.password"
               type="password"
               placeholder="Enter a password"
             >
             </b-form-input>
              <b-form-input
-              v-model="password2"
+              v-model="repeatedPassword"
               type="password"
               placeholder="Repeat the password"
-              :class="{'notEqual': checkPasswords}"
+              :class="{'notEqual': passwordsDontMatch}"
             >
             </b-form-input>
-            <span v-if="checkPasswords">Passwords are not equal!</span>
-            <b-form-checkbox v-model="store" class="mt-2"
+            <span v-if="passwordsDontMatch">Passwords are not equal!</span>
+            <b-form-checkbox v-model="form.store" class="mt-2"
               >Are you a store?</b-form-checkbox
             >
-            <button type="submit" class="btn btn-primary mt-2 text-align">
+            <button @click.prevent="register" :disabled="passwordsDontMatch" type="submit" class="btn btn-primary mt-2 text-align">
               Submit
             </button>
           </b-form>
@@ -64,33 +64,31 @@ export default {
   components: {BrandName},
   data() {
     return{
-      username: null,
-      email: null,
-      name: null,
-      password1: null, //example
-      password2: null,
-      store: null
+      form: {
+        username: '',
+        email: '',
+        name: '',
+        password: '',
+        store: false
+      },
+      repeatedPassword: '',
     }
   },
   computed: {
-        checkPasswords() {
-        return this.password1 !== this.password2;
+        passwordsDontMatch() {
+        return this.form.password !== this.repeatedPassword;
       }
   },
   methods: {
     async register() {
-      let formData = new FormData();
-      formData.append("email", this.email);
-      formData.append("name", this.name);
-      formData.append("password", this.password1);
-      formData.append("store", this.store);
-      console.log(JSON.stringify(formData));
       try {
         console.log('here')
-        window.location.reload();
+        await this.$axios.post(`/account/`, this.form);
         this.$toast.show("Zahtjev uspješno poslan!");
+        // TODO: redirect na homepage
       } catch (e) {
         this.$toast.error(e, { duration: 8000 }); //.response.data.detail
+        // TODO: check error json, and show it
       }
     },
   }
