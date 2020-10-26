@@ -1,4 +1,5 @@
 backend/.idea/
+frontend/.vscode/
 .idea/
 __pycache__/
 .env
