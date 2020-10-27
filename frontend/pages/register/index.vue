@@ -11,38 +11,39 @@
             <b-form-input
               v-model="form.email"
               type="email"
-              placeholder="Enter your email"
-            >
+              placeholder="Enter your email">
             </b-form-input>
+
             <b-form-input
               v-model="form.name"
               type="text"
-              placeholder="Enter your name"
-            >
+              placeholder="Enter your name">
             </b-form-input>
+
             <b-form-input
               v-model="form.username"
               type="text"
-              placeholder="Enter your username"
-            >
+              placeholder="Enter your username">
             </b-form-input>
+
             <b-form-input
               v-model="form.password"
               type="password"
-              placeholder="Enter a password"
-            >
+              placeholder="Enter a password">
             </b-form-input>
+
              <b-form-input
               v-model="repeatedPassword"
               type="password"
               placeholder="Repeat the password"
-              :class="{'notEqual': passwordsDontMatch}"
-            >
+              :class="{'notEqual': passwordsDontMatch}">
             </b-form-input>
+
             <span v-if="passwordsDontMatch">Passwords are not equal!</span>
-            <b-form-checkbox v-model="form.store" class="mt-2"
-              >Are you a store?</b-form-checkbox
-            >
+
+            <b-form-checkbox v-model="form.store" class="mt-3 mb-2">
+              Are you a store?</b-form-checkbox>
+
             <button @click.prevent="register" :disabled="passwordsDontMatch" type="submit" class="btn btn-primary mt-2 text-align">
               Submit
             </button>
@@ -52,16 +53,27 @@
     </div>
     <div></div>
   </div>
-
 </template>
 
 <script>
-
 import BrandName from '../../components/BrandName'
 
 export default {
   name:"RegisterForm",
   components: {BrandName},
+
+  head() {
+    return {
+      title: "Register",
+      meta: [
+        {
+          name: "viewport",
+          content: "width=device-width, initial-scale=1, shrink-to-fit=no",
+        },
+      ],
+    };
+  },
+
   data() {
     return{
       form: {
@@ -82,11 +94,19 @@ export default {
   methods: {
     async register() {
       try {
-        console.log('here')
-        console.log(this.form);
+        
+        //Pretpostavljam da se validira na backendu
         await this.$axios.post(`/account/`, this.form);
         this.$toast.show("Zahtjev uspješno poslan!");
-        // TODO: redirect na homepage
+
+        this.$store.commit('User/SET_LOGGED_USER', {
+          name: this.form.name,
+          email: this.form.email
+        });
+
+        //redirect na homepage
+        this.$router.push('/')
+
       } catch (e) {
         this.$toast.error(e, { duration: 8000 }); //.response.data.detail
         // TODO: check error json, and show it
