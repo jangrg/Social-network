@@ -1,49 +1,67 @@
 <template>
-  <div class="container">
+  <div class="d-flex flex-column bg justify-content-between">
     <div>
-      <logo />
-      <h1 class="title">
-        frontend
-      </h1>
-      <h2 class="subtitle">
-        Frontend for social network project.
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
+      <div class="container-fluid" v-if="loggedIn">
+        <b-navbar variant="warning">
+          <b-navbar-brand class="lead"><strong>Wellcome!</strong></b-navbar-brand>
+          <b-button class="btn btn-primary btn-lg text-align mx-1" to="/users">Profile</b-button>
+          <b-button class="btn btn-primary btn-lg text-align mx-1" @click.prevent="logOut">Logout</b-button>
+        </b-navbar>
       </div>
     </div>
+    <div class="mx-auto">
+      <div class="lead border rounded mx-auto p-4 white-container justify-content-center">
+        <div class="d-flex flex-column container">
+          <h1 class="title">
+            Welcome to our Social Network
+          </h1>
+          <h2 class="subtitle">
+            Feel free to register now!
+          </h2>
+          <div class="links">
+            <b-button v-if="!loggedIn" class="btn btn-primary btn-lg text-align" to="/register">Register</b-button>
+            <b-button v-if="!loggedIn" variant="btn btn-outline-primary btn-lg text-align" to="/login">Login</b-button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div></div>
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import { ButtonPlugin } from 'bootstrap-vue'
 
 export default {
-  components: {
-    Logo
+  name: "Homepage",
+
+  head() {
+    return {
+      title: "Homepage",
+      meta: [
+        {
+          name: "viewport",
+          content: "width=device-width, initial-scale=1, shrink-to-fit=no",
+        },
+      ],
+    };
+  },
+  computed: {
+      loggedIn() {
+        return this.$store.state.User.user == undefined ? false : true;
+      }
+  },
+  methods: {
+      logOut() {
+        this.$store.commit('User/RESET_USER')
+        this.$router.push('/')
+      }
   }
 }
 </script>
 
 <style>
 .container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
   align-items: center;
   text-align: center;
 }
@@ -53,15 +71,15 @@ export default {
     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   display: block;
   font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
+  font-size: 75px;
+  color: #24303d;
   letter-spacing: 1px;
 }
 
 .subtitle {
   font-weight: 300;
   font-size: 42px;
-  color: #526488;
+  color: #5b6885;
   word-spacing: 5px;
   padding-bottom: 15px;
 }
@@ -69,4 +87,13 @@ export default {
 .links {
   padding-top: 15px;
 }
+
+.btn {
+  width: 100px;
+}
+
+.btn-primary {
+  background-color: #182839;
+}
+
 </style>
