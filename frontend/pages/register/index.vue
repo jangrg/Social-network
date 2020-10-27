@@ -15,9 +15,15 @@
             </b-form-input>
 
             <b-form-input
-              v-model="form.name"
+              v-model="form.firstname"
               type="text"
-              placeholder="Enter your name">
+              placeholder="Enter your first name">
+            </b-form-input>
+
+            <b-form-input
+              v-model="form.lastname"
+              type="text"
+              placeholder="Enter your surname">
             </b-form-input>
 
             <b-form-input
@@ -29,24 +35,32 @@
             <b-form-input
               v-model="form.password"
               type="password"
-              placeholder="Enter a password">
+              placeholder="Enter a password"
+              :class="{'notEqual': passCheck}">
             </b-form-input>
 
-             <b-form-input
+            <span class="passCheck" v-if="passCheck">Password should have 8 characters both letters and numbers.</span>
+
+             <b-form-input :disabled="passCheck"
               v-model="repeatedPassword"
               type="password"
               placeholder="Repeat the password"
               :class="{'notEqual': passwordsDontMatch}">
             </b-form-input>
-
+            
             <span v-if="passwordsDontMatch">Passwords are not equal!</span>
 
             <b-form-checkbox v-model="form.store" class="mt-3 mb-2">
               Are you a store?</b-form-checkbox>
 
-            <button @click.prevent="register" :disabled="passwordsDontMatch" type="submit" class="btn btn-primary mt-2 text-align">
+            <button @click.prevent="register" :disabled="allowSubmit" type="submit" class="btn btn-primary mt-2 text-align">
               Submit
             </button>
+
+            <p class="lead mt-4">
+            Already a user?  <b-button class="btn btn-primary text-align" variant="primary" to="/login">Login</b-button>
+          </p>
+
           </b-form>
         </div>
       </div>
@@ -79,7 +93,8 @@ export default {
       form: {
         username: '',
         email: '',
-        name: '',
+        firstname: '',
+        surname:'',
         password: '',
         store: false
       },
@@ -88,7 +103,19 @@ export default {
   },
   computed: {
         passwordsDontMatch() {
-        return this.form.password !== this.repeatedPassword;
+        return this.form.password !== this.repeatedPassword && this.repeatedPassword.length > 0 ;
+      },
+
+      passCheck(){
+        if (this.form.password.length > 8  && /[a-zA-Z]/g.test(this.form.password) && /\d/.test(this.form.password))
+          return false;
+
+        if (this.form.password.length > 0 )
+          return true;
+      },
+
+      allowSubmit(){
+        return this.form.password !== this.repeatedPassword
       }
   },
   methods: {
@@ -138,5 +165,9 @@ input {
 .notEqual {
   color: red;
   border-color: red;
+}
+
+.passCheck{
+  font-size: 0.8rem;
 }
 </style>
