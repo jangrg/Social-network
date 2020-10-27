@@ -7,38 +7,37 @@
           <div>
             <strong>Login:</strong>
           </div>
-          <b-form class="mx-auto mt-2 text-center" @submit.prevent="loginUser">
+          <b-form class="mx-auto mt-2 text-center">
             <b-form-input
-              v-model="email"
+              v-model="form.email"
               type="email"
-              placeholder="Enter your email"
-            >
+              placeholder="Enter your email">
             </b-form-input>
+
             <b-form-input
               class="mt-2"
-              v-model="password"
+              v-model="form.password"
               type="password"
-              placeholder="Enter your password"
-            >
+              placeholder="Enter your password">
             </b-form-input>
-            <b-form-checkbox v-model="remember" class="mt-2"
-              >Remember me</b-form-checkbox
-            >
-            <button type="submit" class="btn btn-primary mt-2 text-align">
-              Submit
+
+            <b-form-checkbox v-model="form.remember" class="mt-2">
+              Remember me
+            </b-form-checkbox>
+
+            <button @click.prevent="loginUser" type="submit" class="btn btn-primary mt-2 text-align">
+              Login
             </button>
           </b-form>
-          <p class="lead mt-3">
-            Not a user?<nuxt-link to="/register" class="ml-5"
-              ><b-button variant="primary">Register!</b-button>
-            </nuxt-link>
+
+          <p class="lead mt-4">
+            Not a user?  <b-button class="btn btn-primary text-align" variant="primary" to="/register">Register!</b-button>
           </p>
+
           <div class="mt-2">
             <p class="lead text-center">
               Forgot your
-              <nuxt-link to="/passwordForgot" class="ml-auto"
-                >password?</nuxt-link
-              >
+              <nuxt-link to="/passwordForgot" class="ml-auto">password?</nuxt-link>
             </p>
           </div>
         </div>
@@ -49,7 +48,7 @@
 </template>
 
 <script>
-import BrandName from "../../components/BrandName";
+import BrandName from "../../components/BrandName"
 
 export default {
   name: "Index",
@@ -67,25 +66,37 @@ export default {
   },
   data() {
     return {
-      email: null,
-      password: null,
-      remember: null,
+      form: {
+        email: '',
+        password: '',
+        remember: false 
+      }
     };
   },
   methods: {
     //Not finished
-    async loginUser() {
-      let formData = new formData();
-      formData.append("email", this.email);
-      formData.append("name", this.name);
-      formData.append("password", this.password1);
+   async loginUser() {
+      try {
+        
+        let user = await this.$axios.post(`/account/`, this.form);
+        
+        this.$store.commit('User/SET_LOGGED_USER', {
+          name: user.name,
+          email: user.email
+        });
 
-      //axios stuff, ne znam kako sam napraviti. Vjv cemo podatke koje vrati axios spremiti u store i onda preusmjeriti na glavni
-      //page
+        //redirect na homepage
+        this.$router.push('/')
 
-    }
+        this.$toast.show("Zahtjev uspješno poslan!");
+        // TODO: redirect na homepage
+      } catch (e) {
+        this.$toast.error(e, { duration: 8000 }); //.response.data.detail
+        // TODO: check error json, and show it
+      }
+    },
   }
-};
+}
 </script>
 
 <style>
@@ -107,4 +118,5 @@ export default {
 .container-fluid {
   padding: 0;
 }
+
 </style>
