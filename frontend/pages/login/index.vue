@@ -33,11 +33,23 @@
             Not a user?  <b-button class="btn btn-primary text-align" variant="primary" to="/register">Register!</b-button>
           </p>
 
-          <div class="mt-2">
-            <p class="lead text-center">
-              Forgot your
-              <nuxt-link to="/passwordForgot" class="ml-auto">password?</nuxt-link>
-            </p>
+          <div class="mt-2 text-center mx-auto">
+            <b-form-checkbox v-model="form.passwordForgot" class="mt-2">
+              Forgot your password ?
+            </b-form-checkbox>
+
+              <div class="forgottenPass" v-if="form.passwordForgot">
+                <b-form-input
+                  v-model="emailForPassword"
+                  type="email"
+                  placeholder="Enter your email">
+                </b-form-input>
+              </div>
+
+              <button v-if="form.passwordForgot" @click.prevent="forgottenPassword" type="submit" class="btn btn-primary mt-2 text-align">
+              Send email
+            </button>
+
           </div>
         </div>
       </div>
@@ -68,13 +80,14 @@ export default {
       form: {
         username: '',
         password: '',
-      }
+        passwordForgot: false
+      },
+      emailForPassword: " "
     };
   },
   methods: {
    async loginUser() {
       try {
-        
         let response = await this.$axios.post(`/account/login/`, this.form);
         this.$toast.show("Zahtjev uspješno poslan!", { duration: 8000 });
         this.$store.commit('User/SET_LOGGED_USER', response.data.user);
@@ -83,9 +96,23 @@ export default {
         this.$router.push('/')
 
       } catch (e) {
-        this.$toast.error(`${e.response.status} ${e.response.statusText}`, { duration: 8000 });
+        if (e.response.status == 401) this.$toast.error(`Not a registered user!`, { duration: 8000 });
+        else this.$toast.error(`${e.response.status} ${e.response.statusText}`, { duration: 8000 });
+        this.$router.push('/login');
       }
     },
+    async forgottenPassword(){
+      try{
+        if (this.form.passwordForgot == true){
+          let data = await this.$axios.post(`/password_reset/`,{email: this.emailForPassword});
+          this.$toast.show("Email sent!", { duration: 8000 });
+        }
+      }catch(e){
+        if (e.response.status == 400) this.$toast.error(`Not a registered user!`, { duration: 8000 });
+        else this.$toast.error(`${e.response.status} ${e.response.statusText}`, { duration: 8000 });
+        this.$router.push('/login');
+      }
+    }
   }
 }
 </script>
