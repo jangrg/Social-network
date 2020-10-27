@@ -3,25 +3,31 @@
     <BrandName form="Please log in" />
     <div class="mx-auto">
       <div class="lead border rounded mx-auto p-5 white-container justify-content-center">
-        <div class="center">
+        <div class="center ">
           <div>
             <strong>Login:</strong>
           </div>
           <b-form class="mx-auto mt-2 text-center" @submit.prevent="loginUser">
             <b-form-input
-              v-model="email"
+              v-model="form.email"
               type="email"
               placeholder="Enter your email"
             >
             </b-form-input>
             <b-form-input
+              v-model="form.username"
+              type="text"
+              placeholder="Enter your username"
+            >
+            </b-form-input>
+            <b-form-input
               class="mt-2"
-              v-model="password"
+              v-model="form.password"
               type="password"
               placeholder="Enter your password"
             >
             </b-form-input>
-            <b-form-checkbox v-model="remember" class="mt-2"
+            <b-form-checkbox v-model="form.remember" class="mt-2"
               >Remember me</b-form-checkbox
             >
             <button type="submit" class="btn btn-primary mt-2 text-align">
@@ -67,22 +73,29 @@ export default {
   },
   data() {
     return {
-      email: null,
-      password: null,
-      remember: null,
+      form:{
+        email: '',
+        username: '',
+        password: '',
+        remember: false,
+      }
     };
   },
   methods: {
-    //Not finished
     async loginUser() {
-      let formData = new formData();
-      formData.append("email", this.email);
-      formData.append("name", this.name);
-      formData.append("password", this.password1);
+      try{
+        let data = await this.$axios.post(`/account/login/`, this.form);
+        if (data.data.error != undefined) throw data.data.error;
 
-      //axios stuff, ne znam kako sam napraviti. Vjv cemo podatke koje vrati axios spremiti u store i onda preusmjeriti na glavni
-      //page
+        this.$store.commit('User/SET_LOGGED_USER', {
+          name: this.form.username, email: this.form.email});
 
+        this.$router.push('/');
+      }catch(e){
+        this.$toast.error(e, { duration: 8000 });
+        console.log(e);
+        this.$router.push('/login');
+      }
     }
   }
 };
@@ -106,5 +119,10 @@ export default {
 
 .container-fluid {
   padding: 0;
+}
+
+p.lead{
+  align-content: center;
+  justify-content: center;
 }
 </style>
