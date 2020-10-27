@@ -83,6 +83,7 @@ export default {
     async register() {
       try {
         console.log('here')
+        console.log(this.form);
         await this.$axios.post(`/account/`, this.form);
         this.$toast.show("Zahtjev uspješno poslan!");
         // TODO: redirect na homepage

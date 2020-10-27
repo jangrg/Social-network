@@ -9,20 +9,12 @@
         Frontend for social network project.
       </h2>
       <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
+        <nuxt-link to="/login" class="button--green">
+        LogIn
+          </nuxt-link>
+        <nuxt-link to="/register" class="button--grey">
+        Register
+            </nuxt-link>
       </div>
     </div>
   </div>

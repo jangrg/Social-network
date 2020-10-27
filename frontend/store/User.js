@@ -1,19 +1,9 @@
-export const UserModule = {
-    namespaced: true,
+export const state = () =>({
+  user: null
+})
 
-    state: {
-        user: null
-    },
-  
-    mutations: {
-        SET_LOGGED_USER(state, user) {
-          state.user = user;
-        }
-    },
-  
-    actions: {
-        setUser({ commit }, user) {
-          commit('SET_LOGGED_USER', user);
-        }
-    }
+export const mutations = {
+  SET_LOGGED_USER(state, user) {
+    state.user = user
+  }
 }
