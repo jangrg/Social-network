@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-column bg justify-content-between">
     <div>
-      <div class="container-fluid" v-if="loggedIn">
+      <div class="container-fluid" v-if="user">
         <b-navbar variant="warning">
           <b-navbar-brand class="lead"><strong>Wellcome!</strong></b-navbar-brand>
           <b-button class="btn btn-primary btn-lg text-align mx-1" to="/users">Profile</b-button>
@@ -15,12 +15,12 @@
           <h1 class="title">
             Welcome to our Social Network
           </h1>
-          <h2 class="subtitle">
+          <h2 class="subtitle" v-if="!user">
             Feel free to register now!
           </h2>
           <div class="links">
-            <b-button v-if="!loggedIn" class="btn btn-primary btn-lg text-align" to="/register">Register</b-button>
-            <b-button v-if="!loggedIn" variant="btn btn-outline-primary btn-lg text-align" to="/login">Login</b-button>
+            <b-button v-if="!user" class="btn btn-primary btn-lg text-align" to="/register">Register</b-button>
+            <b-button v-if="!user" variant="btn btn-outline-primary btn-lg text-align" to="/login">Login</b-button>
           </div>
         </div>
       </div>
@@ -47,12 +47,13 @@ export default {
     };
   },
   computed: {
-      loggedIn() {
-        return this.$store.state.User.user == undefined ? false : true;
+      user() {
+        return this.$store.state.User.user;
       }
   },
   methods: {
       logOut() {
+        // send request to backend to logout!
         this.$store.commit('User/RESET_USER')
         this.$router.push('/')
       }

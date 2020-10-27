@@ -9,9 +9,8 @@
           </div>
           <b-form class="mx-auto mt-2 text-center">
             <b-form-input
-              v-model="form.email"
-              type="email"
-              placeholder="Enter your email">
+              v-model="form.username"
+              placeholder="Enter your username">
             </b-form-input>
 
             <b-form-input
@@ -21,9 +20,9 @@
               placeholder="Enter your password">
             </b-form-input>
 
-            <b-form-checkbox v-model="form.remember" class="mt-2">
+            <!-- <b-form-checkbox v-model="form.remember" class="mt-2">
               Remember me
-            </b-form-checkbox>
+            </b-form-checkbox> -->
 
             <button @click.prevent="loginUser" type="submit" class="btn btn-primary mt-2 text-align">
               Login
@@ -67,32 +66,24 @@ export default {
   data() {
     return {
       form: {
-        email: '',
+        username: '',
         password: '',
-        remember: false 
       }
     };
   },
   methods: {
-    //Not finished
    async loginUser() {
       try {
         
-        let user = await this.$axios.post(`/account/`, this.form);
-        
-        this.$store.commit('User/SET_LOGGED_USER', {
-          name: user.name,
-          email: user.email
-        });
+        let response = await this.$axios.post(`/account/login/`, this.form);
+        this.$toast.show("Zahtjev uspješno poslan!", { duration: 8000 });
+        this.$store.commit('User/SET_LOGGED_USER', response.data.user);
 
-        //redirect na homepage
+        // redirect to user profile
         this.$router.push('/')
 
-        this.$toast.show("Zahtjev uspješno poslan!");
-        // TODO: redirect na homepage
       } catch (e) {
-        this.$toast.error(e, { duration: 8000 }); //.response.data.detail
-        // TODO: check error json, and show it
+        this.$toast.error(`${e.response.status} ${e.response.statusText}`, { duration: 8000 });
       }
     },
   }

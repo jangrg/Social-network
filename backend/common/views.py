@@ -16,6 +16,7 @@ class OnlyFieldsSerializerMixin:
         kwargs['only_fields'] = self.only_fields
         return super().get_serializer(*args, **kwargs)
 
+
 class AccountViewSet(OnlyFieldsSerializerMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = UserSerializer
     only_fields = ['password', 'username', 'first_name', 'last_name', 'email', 'birth_date']
@@ -27,9 +28,9 @@ class AccountViewSet(OnlyFieldsSerializerMixin, mixins.CreateModelMixin, viewset
         user = auth.authenticate(username=username, password=password)
         if user is not None and user.is_active:
             auth.login(request, user)
-            return HttpResponseRedirect("/api/time/")
+            return Response({'user': self.serializer_class(user, only_fields=['username', 'first_name', 'last_name', 'email', 'birth_date']).data})
         else:
-            return Response({'error': 'Wrong login data'})
+            return Response(status=401)
 
     @action(detail=False, methods=['GET'], name='Logout')
     def logout(self, request, *args, **kwargs):

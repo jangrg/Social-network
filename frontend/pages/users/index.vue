@@ -13,7 +13,7 @@
             <h1>Your profile</h1>
         </div>
         <div class="my-2">
-            <h1>Name: {{$store.state.User.user.name}} </h1>
+            <h1>Name: {{$store.state.User.user.username}} </h1>
         </div>
         <div class="my-2">
             <h1>E-mail: {{$store.state.User.user.email}} </h1>
@@ -26,6 +26,7 @@
 <script>
 
 export default {
+    // this page needs id in URL
     name: "User",
 
     head() {

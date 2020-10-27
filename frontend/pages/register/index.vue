@@ -95,21 +95,16 @@ export default {
     async register() {
       try {
         
-        //Pretpostavljam da se validira na backendu
-        await this.$axios.post(`/account/`, this.form);
-        this.$toast.show("Zahtjev uspješno poslan!");
+        let response = await this.$axios.post(`/account/`, this.form);
+        this.$toast.show("Zahtjev uspješno poslan!", { duration: 8000 });
 
-        this.$store.commit('User/SET_LOGGED_USER', {
-          name: this.form.name,
-          email: this.form.email
-        });
+        this.$store.commit('User/SET_LOGGED_USER', response.data);
 
-        //redirect na homepage
+        // redirect to user profile
         this.$router.push('/')
 
       } catch (e) {
-        this.$toast.error(e, { duration: 8000 }); //.response.data.detail
-        // TODO: check error json, and show it
+        this.$toast.error(e, { duration: 8000 });
       }
     },
   }
