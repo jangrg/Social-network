@@ -107,7 +107,7 @@ export default {
       },
 
       passCheck(){
-        if (this.form.password.length > 8  && /[a-zA-Z]/g.test(this.form.password) && /\d/.test(this.form.password))
+        if (this.form.password.length >= 8  && /[a-zA-Z]/g.test(this.form.password) && /\d/.test(this.form.password))
           return false;
 
         if (this.form.password.length > 0 )
@@ -122,13 +122,13 @@ export default {
     async register() {
       try {
         
-        let response = await this.$axios.post(`/account/`, this.form);
+        let response = await this.$axios.post(`/account/create/`, this.form);
         this.$toast.show("Zahtjev uspješno poslan!", { duration: 8000 });
 
-        this.$store.commit('User/SET_LOGGED_USER', response.data);
+        this.$store.commit('User/SET_LOGGED_USER', response.data.user);
 
         // redirect to user profile
-        this.$router.push('/')
+        this.$router.push('/');
 
       } catch (e) {
         this.$toast.error(e, { duration: 8000 });

@@ -2,7 +2,7 @@ from django.contrib import auth
 from django.http import HttpResponseRedirect
 import datetime
 
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 
 from .models import User
@@ -21,22 +21,42 @@ class AccountViewSet(OnlyFieldsSerializerMixin, mixins.CreateModelMixin, viewset
     serializer_class = UserSerializer
     only_fields = ['password', 'username', 'first_name', 'last_name', 'email', 'birth_date']
 
-    @action(detail=False, methods=['POST'], name='Login')
-    def login(self, request, *args, **kwargs):
-        username = request.data.get('username', '')
-        password = request.data.get('password', '')
-        user = auth.authenticate(username=username, password=password)
-        if user is not None and user.is_active:
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            user = auth.authenticate(username=user.username, password=request.data.get('password'))
             auth.login(request, user)
-            return Response({'user': self.serializer_class(user, only_fields=['username', 'first_name', 'last_name', 'email', 'birth_date']).data})
+            return Response(
+                {'user': UserSerializer(user, only_fields=['username', 'first_name', 'last_name', 'email', 'birth_date']).data},
+                status=status.HTTP_201_CREATED
+            )
         else:
-            return Response(status=401)
+            Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=['GET'], name='Logout')
+
+class SessionViewSet(OnlyFieldsSerializerMixin, viewsets.GenericViewSet):
+    serializer_class = UserSerializer
+    only_fields = ['username', 'password']
+
+    @action(detail=False, methods=['POST'], name='login')
+    def login(self, request, *args, **kwargs):
+        # serializer = self.serializer_class(data=request.data)
+        if True:  # serializer.is_valid():
+            user = auth.authenticate(username=request.data.get('username'), password=request.data.get('password'))
+            if user is not None and user.is_active:
+                auth.login(request, user)
+                return Response({'user': UserSerializer(user, only_fields=['username', 'first_name', 'last_name', 'email', 'birth_date']).data})
+            else:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['GET'], name='logout')
     def logout(self, request, *args, **kwargs):
+        print(request.user)
         auth.logout(request)
-        # Redirect to a success page.
-        return Response({})
+        return Response(status=status.HTTP_200_OK)
 
 
 class TimeView(APIView):
