@@ -41,16 +41,12 @@ class SessionViewSet(OnlyFieldsSerializerMixin, viewsets.GenericViewSet):
 
     @action(detail=False, methods=['POST'], name='login')
     def login(self, request, *args, **kwargs):
-        # serializer = self.serializer_class(data=request.data)
-        if True:  # serializer.is_valid():
-            user = auth.authenticate(username=request.data.get('username'), password=request.data.get('password'))
-            if user is not None and user.is_active:
-                auth.login(request, user)
-                return Response({'user': UserSerializer(user, only_fields=['username', 'first_name', 'last_name', 'email', 'birth_date']).data})
-            else:
-                return Response(status=status.HTTP_401_UNAUTHORIZED)
+        user = auth.authenticate(username=request.data.get('username'), password=request.data.get('password'))
+        if user is not None and user.is_active:
+            auth.login(request, user)
+            return Response({'user': UserSerializer(user, only_fields=['username', 'first_name', 'last_name', 'email', 'birth_date']).data})
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     @action(detail=False, methods=['GET'], name='logout')
     def logout(self, request, *args, **kwargs):
