@@ -28,4 +28,3 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
 class User(AbstractUser):
     birth_date = models.DateField(null=True, blank=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    following = models.ManyToManyField('User', blank=True, related_name='followers', symmetrical=False)
