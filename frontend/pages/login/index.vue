@@ -61,6 +61,9 @@
 <script>
 import BrandName from "../../components/BrandName"
 
+import styles from '../../static/style.css'
+
+
 export default {
   name: "Index",
   components: { BrandName },
@@ -88,12 +91,12 @@ export default {
   methods: {
    async loginUser() {
       try {
-        let response = await this.$axios.post(`/account/login/`, this.form);
+        let response = await this.$axios.post(`account/login/`, this.form);
         this.$toast.show("Zahtjev uspješno poslan!", { duration: 8000 });
         this.$store.commit('User/SET_LOGGED_USER', response.data.user);
 
         // redirect to user profile
-        this.$router.push('/')
+        this.$router.push('/home')
 
       } catch (e) {
         if (e.response.status == 401) this.$toast.error(`Not a registered user!`, { duration: 8000 });
@@ -118,23 +121,5 @@ export default {
 </script>
 
 <style>
-.bg {
-  /* The image used */
-  background-image: url("/marrakech-4500910_1920.jpg");
-
-  height: 100vh;
-
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.white-container {
-  background-color: whitesmoke;
-}
-
-.container-fluid {
-  padding: 0;
-}
 
 </style>

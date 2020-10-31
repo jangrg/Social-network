@@ -1,26 +1,29 @@
 <template>
-  <div class="d-flex flex-column bg justify-content-between">
-    <div>
-      <div class="container-fluid" v-if="user">
-        <b-navbar variant="warning">
-          <b-navbar-brand class="lead"><strong>Wellcome!</strong></b-navbar-brand>
-          <b-button class="btn btn-primary btn-lg text-align mx-1" to="/users">Profile</b-button>
-          <b-button class="btn btn-primary btn-lg text-align mx-1" @click.prevent="logOut">Logout</b-button>
-        </b-navbar>
-      </div>
-    </div>
-    <div class="mx-auto">
-      <div class="lead border rounded mx-auto p-4 white-container justify-content-center">
+  <div
+    class="bg"
+    :class="{
+      'd-flex': !user,
+      'flex-column': !user,
+      'justify-content-between': !user,
+    }"
+  >
+    <TopBar />
+    <div class="mx-auto" v-if="!user">
+      <div
+        class="lead border rounded mx-auto p-4 white-container justify-content-center"
+      >
         <div class="d-flex flex-column container">
-          <h1 class="title">
-            Welcome to our Social Network
-          </h1>
-          <h2 class="subtitle" v-if="!user">
-            Feel free to register now!
-          </h2>
+          <h1 class="title">Welcome to our Social Network</h1>
+          <h2 class="subtitle">Feel free to register now!</h2>
           <div class="links">
-            <b-button v-if="!user" class="btn btn-primary btn-lg text-align" to="/register">Register</b-button>
-            <b-button v-if="!user" variant="btn btn-outline-primary btn-lg text-align" to="/login">Login</b-button>
+            <b-button class="btn btn-primary btn-lg text-align" to="/register"
+              >Register</b-button
+            >
+            <b-button
+              variant="btn btn-outline-primary btn-lg text-align"
+              to="/login"
+              >Login</b-button
+            >
           </div>
         </div>
       </div>
@@ -30,11 +33,15 @@
 </template>
 
 <script>
-import { ButtonPlugin } from 'bootstrap-vue'
+import { ButtonPlugin } from "bootstrap-vue";
+
+import TopBar from "../components/TopBar";
+
+import styles from "../static/style.css";
 
 export default {
   name: "Homepage",
-
+  components: {TopBar},
   head() {
     return {
       title: "Homepage",
@@ -47,54 +54,12 @@ export default {
     };
   },
   computed: {
-      user() {
-        return this.$store.state.User.user;
-      }
-  },
-  methods: {
-      logOut() {
-        // send request to backend to logout!
-        this.$store.commit('User/RESET_USER')
-        this.$router.push('/')
-      }
+    user() {
+      return this.$store.state.User.user;
+    }
   }
-}
+};
 </script>
 
 <style>
-.container {
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 75px;
-  color: #24303d;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #5b6885;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-
-.btn {
-  width: 100px;
-}
-
-.btn-primary {
-  background-color: #182839;
-}
-
 </style>

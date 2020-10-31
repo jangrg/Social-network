@@ -72,6 +72,8 @@
 <script>
 import BrandName from '../../components/BrandName'
 
+import styles from '../../static/style.css'
+
 export default {
   name:"RegisterForm",
   components: {BrandName},
@@ -122,13 +124,13 @@ export default {
     async register() {
       try {
         
-        let response = await this.$axios.post(`/account/create/`, this.form);
+        let response = await this.$axios.post(`account/create/`, this.form);
         this.$toast.show("Zahtjev uspješno poslan!", { duration: 8000 });
 
         this.$store.commit('User/SET_LOGGED_USER', response.data.user);
 
         // redirect to user profile
-        this.$router.push('/');
+        this.$router.push('/home');
 
       } catch (e) {
         this.$toast.error(e, { duration: 8000 });
@@ -139,35 +141,5 @@ export default {
 </script>
 
 <style>
-.bg {
-  /* The image used */
-  background-image: url("/marrakech-4500910_1920.jpg");
 
-  height: 100vh;
-
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.white-container {
-  background-color: whitesmoke;
-}
-
-.container-fluid {
-  padding: 0;
-}
-
-input {
-  margin-top: 10px !important;
-}
-
-.notEqual {
-  color: red;
-  border-color: red;
-}
-
-.passCheck{
-  font-size: 0.8rem;
-}
 </style>

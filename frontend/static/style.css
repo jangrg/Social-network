@@ -1,0 +1,79 @@
+.container {
+    align-items: center;
+    text-align: center;
+  }
+  
+  .title {
+    font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
+      'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    display: block;
+    font-weight: 300;
+    font-size: 75px;
+    color: #24303d;
+    letter-spacing: 1px;
+  }
+  
+  .subtitle {
+    font-weight: 300;
+    font-size: 42px;
+    color: #5b6885;
+    word-spacing: 5px;
+    padding-bottom: 15px;
+  }
+  
+  .links {
+    padding-top: 15px;
+  }
+  
+  .btn {
+    width: 100px;
+  }
+  
+  .btn-primary {
+    background-color: #182839;
+  }
+
+  .bg {
+    /* The image used */
+    background-image: url("/marrakech-4500910_1920.jpg");
+  
+    height: 100vh;
+  
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .bg-pattern {
+    /* The image used */
+    background-image: url("/double-bubble-outline.png");
+  
+    height: 100vh;
+  
+    background-repeat: repeat;
+  }
+  
+  .white-container {
+    background-color: whitesmoke;
+  }
+  
+  .container-fluid {
+    padding: 0;
+  }
+  
+  input {
+    margin-top: 10px !important;
+  }
+  
+  .notEqual {
+    color: red;
+    border-color: red;
+  }
+  
+  .passCheck{
+    font-size: 0.8rem;
+  }
+
+  body {
+    background-color: white;
+  }
