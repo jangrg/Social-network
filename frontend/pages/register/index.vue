@@ -124,13 +124,13 @@ export default {
     async register() {
       try {
         
-        let response = await this.$axios.post(`account/create/`, this.form);
-        this.$toast.show("Zahtjev uspješno poslan!", { duration: 8000 });
+        let response = await this.$axios.post(`account/`, this.form);
+        this.$toast.show(response.data.message, { duration: 8000 });
 
-        this.$store.commit('User/SET_LOGGED_USER', response.data.user);
+        // this.$store.commit('User/SET_LOGGED_USER', response.data);
 
         // redirect to user profile
-        this.$router.push('/home');
+        this.$router.push('/');
 
       } catch (e) {
         this.$toast.error(e, { duration: 8000 });
