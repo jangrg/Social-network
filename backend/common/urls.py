@@ -10,11 +10,9 @@ API_DESCRIPTION = 'A Web API for social network.'
 schema_view = get_schema_view(title=API_TITLE)
 
 router = routers.DefaultRouter()
-router.register(r'account/create', views.AccountViewSet, basename='account')
-router.register(r'account', views.SessionViewSet, basename='account')
+router.register(r'account', views.AccountViewSet, basename='account')
 
 urlpatterns = [
-    path('time/', views.TimeView.as_view(), name='time'),
     path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset'))
 ]
 
