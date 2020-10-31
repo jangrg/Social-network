@@ -7,7 +7,6 @@ from rest_framework.decorators import action
 from .models import User
 from .serializers import UserSerializer
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 
 class OnlyFieldsSerializerMixin:
@@ -17,6 +16,8 @@ class OnlyFieldsSerializerMixin:
 
 
 class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    queryset = User.objects.all()
+
     def get_serializer_class(self):
         return UserSerializer
 
@@ -52,16 +53,11 @@ class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     @action(detail=True, methods=['POST'], name='confirm')
     def confirm(self, request, pk=None):
-        if pk is not None:
-            try:
-                user = User.objects.filter(id=pk).first()
-                if user is not None and not user.is_active:
-                    user.is_active = True
-                    user.save()
-                    return Response(status=status.HTTP_201_CREATED)
-
-            except Exception as e:
-                return Response(e, status=status.HTTP_400_BAD_REQUEST)
+        user = self.get_object()
+        if user is not None and not user.is_active:
+            user.is_active = True
+            user.save()
+            return Response(status=status.HTTP_201_CREATED)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
