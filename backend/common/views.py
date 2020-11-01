@@ -31,10 +31,10 @@ class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         elif self.action == 'login':
             kwargs['only_fields'] = ['password', 'username']
             return super().get_serializer(*args, **kwargs)
-        elif self.action == 'add_follower':
+        elif self.action == 'add_following':
             kwargs['only_fields'] = ['id']
             return super().get_serializer(*args, **kwargs)
-        elif self.action == 'retrieve':
+        elif self.action == 'read':
             kwargs['only_fields'] = ['id', 'last_login', 'username', 'first_name', 'last_name', 'email', 'date_joined']
             return super().get_serializer(*args, **kwargs)
         return super().get_serializer(*args, **kwargs)
