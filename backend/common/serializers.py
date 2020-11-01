@@ -22,9 +22,18 @@ class DynamicFieldsModelSerializer(ModelSerializer):
 
 
 class UserSerializer(DynamicFieldsModelSerializer):
+    following = SerializerMethodField('get_following')
+    followers = SerializerMethodField('get_followers')
+
     class Meta:
         model = User
         fields = '__all__'
+
+    def get_following(self, user):
+        return UserSerializer(user.following.all(), many=True, only_fields=['id','username', 'password']).data
+
+    def get_followers(self, user):
+        return UserSerializer(user.followers.all(), many=True, only_fields=['id','username', 'password']).data
 
     def create(self):
         obj = User.objects.create_user(**self.validated_data)

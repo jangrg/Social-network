@@ -1,5 +1,6 @@
 from django.contrib import auth
 from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
@@ -15,7 +16,7 @@ class OnlyFieldsSerializerMixin:
         return super().get_serializer(*args, **kwargs)
 
 
-class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
 
     def get_serializer_class(self):
@@ -29,6 +30,12 @@ class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             return None
         elif self.action == 'login':
             kwargs['only_fields'] = ['password', 'username']
+            return super().get_serializer(*args, **kwargs)
+        elif self.action == 'follow':
+            kwargs['only_fields'] = ['id']
+            return super().get_serializer(*args, **kwargs)
+        elif self.action == 'retrieve':
+            kwargs['only_fields'] = ['id', 'last_login', 'username', 'first_name', 'last_name', 'email', 'date_joined']
             return super().get_serializer(*args, **kwargs)
         return super().get_serializer(*args, **kwargs)
 
@@ -76,4 +83,12 @@ class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     @action(detail=False, methods=['GET'], name='logout')
     def logout(self, request, *args, **kwargs):
         auth.logout(request)
+        return Response(status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['POST'], name='add_following')
+    def follow(self, request, pk=None):
+        user_to_follow = self.get_object()
+        user = request.user
+        user.following.add(user_to_follow)
+        user.save()
         return Response(status=status.HTTP_200_OK)

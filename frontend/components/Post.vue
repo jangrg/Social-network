@@ -1,5 +1,8 @@
 <template>
-  
+  <div class="container-fluid">
+     <div class="display-4">Post name: </div> 
+     <div class=""></div>
+  </div>
 </template>
 
 <script>

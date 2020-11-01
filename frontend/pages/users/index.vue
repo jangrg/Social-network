@@ -3,7 +3,7 @@
     <div>
       <div class="container-fluid">
         <b-navbar variant="warning">
-          <b-button class="btn btn-primary btn-lg text-align mx-1" to="/home">Home</b-button>
+          <b-button class="btn btn-primary btn-lg text-align mx-1" to="/">Home</b-button>
           <b-button class="btn btn-primary btn-lg text-align mx-1" @click.prevent="logOut">Logout</b-button>
         </b-navbar>
       </div>
