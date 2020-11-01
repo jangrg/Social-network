@@ -50,15 +50,4 @@ export default {
 </script>
 
 <style>
-    .user-data {
-        text-align: center;
-
-        font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-        font-weight: 300;
-        font-size: 75px;
-        color: #24303d;
-        letter-spacing: 1px;
-    }
-
 </style>

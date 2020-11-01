@@ -60,9 +60,6 @@ import TopBar from "../../components/TopBar";
 
 import SideBar from "../../components/SideBar";
 
-
-import styles from "../../static/style.css";
-
 export default {
   name: "Home",
   components: { TopBar, SideBar },
@@ -86,7 +83,4 @@ export default {
 </script>
 
 <style scoped>
-.stretched {
-  height: 60vh;
-}
 </style>
