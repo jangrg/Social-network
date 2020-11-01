@@ -1,5 +1,6 @@
 from django.contrib import auth
 from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
@@ -29,6 +30,12 @@ class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             return None
         elif self.action == 'login':
             kwargs['only_fields'] = ['password', 'username']
+            return super().get_serializer(*args, **kwargs)
+        elif self.action == 'add_follower':
+            kwargs['only_fields'] = ['id']
+            return super().get_serializer(*args, **kwargs)
+        elif self.action == 'retrieve':
+            kwargs['only_fields'] = ['id', 'last_login', 'username', 'first_name', 'last_name', 'email', 'date_joined']
             return super().get_serializer(*args, **kwargs)
         return super().get_serializer(*args, **kwargs)
 
@@ -77,3 +84,15 @@ class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def logout(self, request, *args, **kwargs):
         auth.logout(request)
         return Response(status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['POST'], name='add_following')
+    def add_following(self, request, pk=None):
+        user = self.get_object()
+        follow = User.objects.get(id=self.request.data.get('follow'))
+        user.following.add(follow)
+        user.save()
+        return Response(status=status.HTTP_201_CREATED)
+
+    def retrieve(self, request, pk):
+        user = get_object_or_404(self.queryset, pk=pk)
+        return Response(self.get_serializer_class()(user, many=False).data)
