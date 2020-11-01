@@ -2,7 +2,9 @@
   <div class="d-flex flex-column bg justify-content-between">
     <BrandName form="Please log in" />
     <div class="mx-auto">
-      <div class="lead border rounded mx-auto p-5 white-container justify-content-center">
+      <div
+        class="lead border rounded mx-auto p-5 white-container justify-content-center"
+      >
         <div class="center">
           <div>
             <strong>Login:</strong>
@@ -10,27 +12,39 @@
           <b-form class="mx-auto mt-2 text-center">
             <b-form-input
               v-model="form.username"
-              placeholder="Enter your username">
+              placeholder="Enter your username"
+            >
             </b-form-input>
 
             <b-form-input
               class="mt-2"
               v-model="form.password"
               type="password"
-              placeholder="Enter your password">
+              placeholder="Enter your password"
+            >
             </b-form-input>
 
             <!-- <b-form-checkbox v-model="form.remember" class="mt-2">
               Remember me
             </b-form-checkbox> -->
 
-            <button @click.prevent="loginUser" type="submit" class="btn btn-primary mt-2 text-align">
+            <button
+              @click.prevent="loginUser"
+              type="submit"
+              class="btn btn-primary mt-2 text-align"
+            >
               Login
             </button>
           </b-form>
 
           <p class="lead mt-4">
-            Not a user?  <b-button class="btn btn-primary text-align" variant="primary" to="/register">Register!</b-button>
+            Not a user?
+            <b-button
+              class="btn btn-primary text-align"
+              variant="primary"
+              to="/register"
+              >Register!</b-button
+            >
           </p>
 
           <div class="mt-2 text-center mx-auto">
@@ -38,18 +52,23 @@
               Forgot your password ?
             </b-form-checkbox>
 
-              <div class="forgottenPass" v-if="passwordForgot">
-                <b-form-input
-                  v-model="emailForPassword"
-                  type="email"
-                  placeholder="Enter your email">
-                </b-form-input>
-              </div>
+            <div class="forgottenPass" v-if="passwordForgot">
+              <b-form-input
+                v-model="emailForPassword"
+                type="email"
+                placeholder="Enter your email"
+              >
+              </b-form-input>
+            </div>
 
-              <button v-if="passwordForgot" @click.prevent="forgottenPassword" type="submit" class="btn btn-primary mt-2 text-align">
+            <button
+              v-if="passwordForgot"
+              @click.prevent="forgottenPassword"
+              type="submit"
+              class="btn btn-wider btn-primary mt-2 text-align"
+            >
               Send email
             </button>
-
           </div>
         </div>
       </div>
@@ -59,10 +78,9 @@
 </template>
 
 <script>
-import BrandName from "../../components/BrandName"
+import BrandName from "../../components/BrandName";
 
-import styles from '../../static/style.css'
-
+import styles from "../../static/style.css";
 
 export default {
   name: "Index",
@@ -73,53 +91,60 @@ export default {
       meta: [
         {
           name: "viewport",
-          content: "width=device-width, initial-scale=1, shrink-to-fit=no",
-        },
-      ],
+          content: "width=device-width, initial-scale=1, shrink-to-fit=no"
+        }
+      ]
     };
   },
   data() {
     return {
       form: {
-        username: '',
-        password: '',
+        username: "",
+        password: ""
       },
       passwordForgot: false,
       emailForPassword: " "
     };
   },
   methods: {
-   async loginUser() {
+    async loginUser() {
       try {
         let response = await this.$axios.post(`account/login/`, this.form);
         this.$toast.show("Zahtjev uspješno poslan!", { duration: 8000 });
-        this.$store.commit('User/SET_LOGGED_USER', response.data.user);
+        this.$store.commit("User/SET_LOGGED_USER", response.data.user);
 
         // redirect to user profile
-        this.$router.push('/home')
-
+        this.$router.push("/home");
       } catch (e) {
-        if (e.response.status == 401) this.$toast.error(`Not a registered user!`, { duration: 8000 });
-        else this.$toast.error(`${e.response.status} ${e.response.statusText}`, { duration: 8000 });
-        this.$router.push('/login');
+        if (e.response.status == 401)
+          this.$toast.error(`Not a registered user!`, { duration: 8000 });
+        else
+          this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
+            duration: 8000
+          });
+        this.$router.push("/login");
       }
     },
-    async forgottenPassword(){
-      try{
-        if (this.passwordForgot == true){
-          let data = await this.$axios.post(`/password_reset/`,{email: this.emailForPassword});
+    async forgottenPassword() {
+      try {
+        if (this.passwordForgot == true) {
+          let data = await this.$axios.post(`/password_reset/`, {
+            email: this.emailForPassword
+          });
           this.$toast.show("Email sent!", { duration: 8000 });
         }
-      }catch(e){
-        if (e.response.status == 400) this.$toast.error(`Not a registered user!`, { duration: 8000 });
-        else this.$toast.error(`${e.response.status} ${e.response.statusText}`, { duration: 8000 });
-        this.$router.push('/login');
+      } catch (e) {
+        if (e.response.status == 400)
+          this.$toast.error(`Not a registered user!`, { duration: 8000 });
+        else
+          this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
+            duration: 8000
+          });
+        this.$router.push("/login");
       }
     }
   }
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

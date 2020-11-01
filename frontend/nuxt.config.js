@@ -15,6 +15,15 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push({
+        name: 'resetPassword',
+        path: '/resetpassword&token=:token',
+        component: resolve(__dirname, 'pages/login/resetpassword.vue')
+      })
+    }
+  },
   /*
   ** Customize the progress-bar color
   */
