@@ -5,8 +5,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 
-from .models import User
-from .serializers import UserSerializer
+from .models import User, Post
+from .serializers import UserSerializer, PostSerializer
 from rest_framework.response import Response
 
 
@@ -92,3 +92,15 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
         user.following.add(user_to_follow)
         user.save()
         return Response(status=status.HTTP_200_OK)
+
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    @action(detail=True, methods=['GET'], name='followed_posts')
+    def get_followed_posts(self, request):
+        user = self.get_object()
+        posts = user.following.posts
+        serializer = PostSerializer(posts)
+        return Response(serializer.data, status=status.HTTP_200_OK)
