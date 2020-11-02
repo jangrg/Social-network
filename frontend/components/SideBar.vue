@@ -88,6 +88,7 @@ export default {
       newPost: {
         name: "",
         content: "",
+        owner: this.$store.state.User.user
       },
     };
   },
@@ -98,7 +99,7 @@ export default {
   },
   methods: {
     postForm() {
-        console.log(this.form);
+        console.log(this.newPost.name + " " + this.newPost.content + " " + this.newPost.owner.username);
         //let response = await this.$axios.post(`account/create/post`, this.newPost);
         this.$toast.show("Zahtjev uspješno poslan!", { duration: 8000 });
     },

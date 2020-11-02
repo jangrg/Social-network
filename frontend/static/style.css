@@ -81,3 +81,16 @@ body {
   color: #24303d;
   letter-spacing: 1px;
 }
+
+.post-color {
+
+  background-color: #DCDCDC;
+  text-emphasis-color: white;
+  border: #182839;
+  border-radius: 3px;
+
+}
+
+.post-font {
+  font-size: 0.9em !important;
+}

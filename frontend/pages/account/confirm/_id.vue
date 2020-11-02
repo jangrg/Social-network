@@ -24,7 +24,6 @@
 </template>
 <script>
 import BrandName from "../../../components/BrandName";
-import styles from "../../../static/style.css";
 
 export default {
   name: "RegisterForm",
