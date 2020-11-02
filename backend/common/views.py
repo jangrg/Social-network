@@ -35,7 +35,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             kwargs['only_fields'] = ['id']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'retrieve':
-            kwargs['only_fields'] = ['id', 'last_login', 'username', 'first_name', 'last_name', 'email', 'date_joined']
+            kwargs['only_fields'] = ['id', 'username', 'first_name', 'last_name', 'email', 'birth_date']
             return super().get_serializer(*args, **kwargs)
         return super().get_serializer(*args, **kwargs)
 
@@ -74,7 +74,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
         if user is not None and user.is_active:
             auth.login(request, user)
             return Response(
-                {'user': UserSerializer(user, only_fields=['username', 'first_name', 'last_name', 'email',
+                {'user': UserSerializer(user, only_fields=['id', 'username', 'first_name', 'last_name', 'email',
                                                            'birth_date']).data},
                 status=status.HTTP_201_CREATED
             )
@@ -89,6 +89,8 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
     def follow(self, request, pk=None):
         user_to_follow = self.get_object()
         user = request.user
-        user.following.add(user_to_follow)
-        user.save()
-        return Response(status=status.HTTP_200_OK)
+        if user.id != user_to_follow.id
+            user.following.add(user_to_follow)
+            user.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(HTTP_400_BAD_REQUEST)
