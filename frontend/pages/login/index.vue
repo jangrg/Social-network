@@ -80,8 +80,6 @@
 <script>
 import BrandName from "../../components/BrandName";
 
-import styles from "../../static/style.css";
-
 export default {
   name: "Index",
   components: { BrandName },
@@ -147,4 +145,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+</style>

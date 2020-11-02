@@ -37,8 +37,6 @@ import { ButtonPlugin } from "bootstrap-vue";
 
 import TopBar from "../components/TopBar";
 
-import styles from "../static/style.css";
-
 export default {
   name: "Homepage",
   components: {TopBar},
@@ -53,6 +51,14 @@ export default {
       ],
     };
   },
+  //TODO - store resets at /, need to find a better solution, myb nuxt auth.
+  //created: function() {
+  //  {
+  //    console.log("Here in created!");
+  //    if(this.$store.state.User.user)
+  //      this.$router.push('/home')
+  //  }
+  //},
   computed: {
     user() {
       return this.$store.state.User.user;
@@ -61,5 +67,5 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 </style>

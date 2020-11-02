@@ -1,4 +1,4 @@
-from common.models import User, Post
+from common.models import User
 from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer
 
@@ -42,8 +42,3 @@ class UserSerializer(DynamicFieldsModelSerializer):
     def save(self):
         obj = User.objects.create_user(**self.validated_data)
         return obj
-
-class PostSerializer(ModelSerializer):
-    class Meta:
-        model = Post
-        fields = ['id', 'posted_by', 'content', 'photo', 'type_attr', 'likes_num', 'time']

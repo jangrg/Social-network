@@ -40,9 +40,7 @@
 .bg {
   /* The image used */
   background-image: url("/marrakech-4500910_1920.jpg");
-
   height: 100vh;
-
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -51,9 +49,7 @@
 .bg-pattern {
   /* The image used */
   background-image: url("/double-bubble-outline.png");
-
   height: 100vh;
-
   background-repeat: repeat;
 }
 
@@ -80,4 +76,25 @@ input {
 
 body {
   background-color: white;
+}
+
+.user-data {
+  text-align: center;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 300;
+  font-size: 75px;
+  color: #24303d;
+  letter-spacing: 1px;
+}
+
+.post-color {
+  background-color: #dcdcdc;
+  text-emphasis-color: white;
+  border: #182839;
+  border-radius: 3px;
+}
+
+.post-font {
+  font-size: 0.9em !important;
 }

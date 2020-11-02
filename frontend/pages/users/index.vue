@@ -3,7 +3,7 @@
     <div>
       <div class="container-fluid">
         <b-navbar variant="warning">
-          <b-button class="btn btn-primary btn-lg text-align mx-1" to="/">Home</b-button>
+          <b-button class="btn btn-primary btn-lg text-align mx-1" to="/home">Home</b-button>
           <b-button class="btn btn-primary btn-lg text-align mx-1" @click.prevent="logOut">Logout</b-button>
         </b-navbar>
       </div>
@@ -50,15 +50,4 @@ export default {
 </script>
 
 <style>
-    .user-data {
-        text-align: center;
-
-        font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-        font-weight: 300;
-        font-size: 75px;
-        color: #24303d;
-        letter-spacing: 1px;
-    }
-
 </style>

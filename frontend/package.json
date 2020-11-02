@@ -10,6 +10,11 @@
     "start": "nuxt start",
     "generate": "nuxt generate"
   },
+  "eslintConfig": {
+    "rules": {
+      "no-console": "off"
+    }
+  },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/toast": "^3.3.1",
