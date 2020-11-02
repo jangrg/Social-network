@@ -37,7 +37,6 @@
 
           <button
             @click.prevent="postForm"
-            :disabled="allowSubmit"
             type="submit"
             class="btn btn-primary mt-2 text-align"
           >
