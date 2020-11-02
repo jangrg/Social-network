@@ -163,7 +163,7 @@ export default {
         // this.$store.commit('User/SET_LOGGED_USER', response.data);
 
         // redirect to user profile
-        this.$router.push("/");
+        this.$router.push("/users");
       } catch (e) {
         this.$toast.error(e, { duration: 8000 });
       }
