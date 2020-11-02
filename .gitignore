@@ -95,3 +95,5 @@ sw.*
 # Vim swap files
 *.swp
 
+# VSC Settings
+backend/.vscode/settings.json
