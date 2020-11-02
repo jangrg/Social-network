@@ -68,7 +68,7 @@
 export default {
   name: "Post",
   props: {
-    post: Object,
+    post: String,
   },
 };
 </script>

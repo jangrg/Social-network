@@ -49,14 +49,14 @@
     </div>
     <div class="container">
       <form
-        v-if="this.$store.state.User.user"
+        v-if="this.user"
         class="form-inline navbar-form mt-xs-2 ml-auto"
       >
-        <input type="search" class="form-control" />
+        <input type="search" class="form-control" v-model="searchQuery"/>
         <b-button
           class="btn btn-primary btn-lg text-align mt-1"
-          @click.prevent="search"
-          v-if="this.$store.state.User.user"
+          :to="{name:'search-keyword', params: {keyword: this.searchQuery}}"
+          v-if="this.user"
           >Search</b-button
         >
       </form>
@@ -64,15 +64,15 @@
     <div class="container mt-3">
       <nuxt-link
         class="btn btn-primary btn-lg"
-        to="/users"
-        v-if="this.$store.state.User.user"
+        :to="{name:'users-id', params: {id: this.user.id}}"
+        v-if="this.user"
       >
         Profile
       </nuxt-link>
       <button
         class="btn btn-primary btn-lg"
         @click.prevent="logOut"
-        v-if="this.$store.state.User.user"
+        v-if="this.user"
       >
         Logout
       </button>
@@ -90,6 +90,7 @@ export default {
         content: "",
         owner: this.$store.state.User.user
       },
+      searchQuery: ""
     };
   },
   computed: {
@@ -108,6 +109,9 @@ export default {
       this.$store.commit("User/RESET_USER");
       this.$router.push("/");
     },
+    allowSubmit() {
+      
+    }
   },
 };
 </script>
