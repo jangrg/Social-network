@@ -4,7 +4,8 @@
 }
 
 .title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   display: block;
   font-weight: 300;
   font-size: 75px;
@@ -30,6 +31,10 @@
 
 .btn-primary {
   background-color: #182839;
+}
+
+.btn-wider {
+  width: 200px;
 }
 
 .bg {
@@ -75,7 +80,8 @@ body {
 
 .user-data {
   text-align: center;
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 300;
   font-size: 75px;
   color: #24303d;
@@ -83,12 +89,10 @@ body {
 }
 
 .post-color {
-
-  background-color: #DCDCDC;
+  background-color: #dcdcdc;
   text-emphasis-color: white;
   border: #182839;
   border-radius: 3px;
-
 }
 
 .post-font {
