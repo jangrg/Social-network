@@ -2,7 +2,7 @@ from django.contrib import auth
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 
-from rest_framework import viewsets, mixins, status
+from rest_framework import viewsets, mixins, status, filters, generics
 from rest_framework.decorators import action
 
 from .models import User, Post
@@ -16,8 +16,10 @@ class OnlyFieldsSerializerMixin:
         return super().get_serializer(*args, **kwargs)
 
 
-class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet, generics.ListAPIView):
     queryset = User.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'email']
 
     def get_serializer_class(self):
         return UserSerializer
@@ -94,7 +96,6 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             user.save()
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class PostViewSet(viewsets.ModelViewSet):
