@@ -89,8 +89,8 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
     def follow(self, request, pk=None):
         user_to_follow = self.get_object()
         user = request.user
-        if user.id != user_to_follow.id
+        if user.id != user_to_follow.id:
             user.following.add(user_to_follow)
             user.save()
             return Response(status=status.HTTP_200_OK)
-        return Response(HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
