@@ -7,10 +7,9 @@
       <div class="col-md-2"></div>
       <div class="col-md-8 white-container rounded">
         <h3>Search result({{searchResult.length}}):</h3>
-        <!-- Samo za demonstraciju -->
-        <SearchResult post="1"/>
-        <SearchResult post="2"/>
-        <SearchResult post="3"/>
+        <SearchResult userId="1"/>
+        <SearchResult userId="2"/>
+        <SearchResult userId="3"/>
       </div>
       
       <div class="col-md-2"></div>
@@ -44,14 +43,22 @@ export default {
     data() {
       return {
         keyword: this.$route.params.keyword,
-        searchResult: ["", "", ""]
+        searchResult: []
       }
     },
 
-    /* search result fetching
     async mounted() {
-    } */
-}
+       try{
+        let result = await this.$axios.get(`/account/`, {params: {search: this.keyword}})
+        this.searchResult = result.data
+      }catch(e) {
+        this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
+        duration: 8000});
+        this.$router.push("/home");
+      }
+      
+    }
+  }
 </script>
 
 <style scoped>
