@@ -34,14 +34,16 @@
               </b-form-input>
 
               <span v-if="passwordsDontMatch">Passwords are not equal!</span>
-              <button
-                @click.prevent="changePassword"
-                :disabled="allowSubmit"
-                type="submit"
-                class="btn btn-primary btn-wider mt-2 text-align"
-              >
-                Change password
-              </button>
+              <div>
+                <button
+                  @click.prevent="changePassword"
+                  :disabled="allowSubmit"
+                  type="submit"
+                  class="btn btn-primary btn-wider mt-2 text-align"
+                >
+                  Change password
+                </button>
+              </div>
             </b-form>
           </div>
           <div class="mt-2 text-center mx-auto">
@@ -148,8 +150,12 @@ export default {
         console.log(response);
         this.$toast.show(response.data.message, { duration: 8000 });
         this.$router.push("/login");
-      } catch (e) {
-        this.$toast.error(e, { duration: 8000 });
+      } catch (error) {
+        this.$toast.error(`${error.response.data.password}`, {
+          duration: 8000
+        });
+        this.form.password = "";
+        this.repeatedPassword = "";
       }
     },
     async forgottenPassword() {
