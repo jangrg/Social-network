@@ -9,7 +9,7 @@
         <h3>New posts today:</h3>
 
       <!-- <div v-for="post in posts" :key="post.id"> -->
-        <Post post=""/>
+        <Post />
       <!-- </div> -->
       </div>
       
