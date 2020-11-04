@@ -1,5 +1,5 @@
 <template>
-  <b-sidebar id="sidebar" title="Menu" shadow>
+  <b-sidebar id="sidebar-right" title="Menu" right shadow>
     <div class="card">
       <div class="card-body">
         <h4 class="card-title lead">Hello {{ user.username }}!</h4>
@@ -42,14 +42,14 @@
     </div>
     <div class="container">
       <form
-        v-if="this.$store.state.User.user"
+        v-if="this.user"
         class="form-inline navbar-form mt-xs-2 ml-auto"
       >
-        <input type="search" class="form-control" />
+        <input type="search" class="form-control" v-model="searchQuery"/>
         <b-button
           class="btn btn-primary btn-lg text-align mt-1"
-          @click.prevent="search"
-          v-if="this.$store.state.User.user"
+          :to="{name:'search-keyword', params: {keyword: this.searchQuery}}"
+          v-if="this.user"
           >Search</b-button
         >
       </form>
@@ -57,15 +57,15 @@
     <div class="container mt-3">
       <nuxt-link
         class="btn btn-primary btn-lg"
-        to="/users"
-        v-if="this.$store.state.User.user"
+        :to="{name:'users-id', params: {id: this.user.id}}"
+        v-if="this.user"
       >
         Profile
       </nuxt-link>
       <button
         class="btn btn-primary btn-lg"
         @click.prevent="logOut"
-        v-if="this.$store.state.User.user"
+        v-if="this.user"
       >
         Logout
       </button>
@@ -85,13 +85,22 @@ export default {
         type_attr: null,
         likes_num: 0,
       },
-      posts : []
+      posts : [],
+      searchQuery: ""
     };
   },
+  //Užasan, užasan način za primanje svih postova i
+  //usernamea, ali trenutačno ne znam drugi. Možda na backendu dati da se u postu i nalazi username.
   created: async function () {
     let response = await this.$axios.get(`post/`);
-    console.log(response.data);
-    this.posts = response.data;
+    //console.log(response.data);
+    this.posts = response.data.reverse();
+    //stvarno sporo i neefektivno
+    for(var i = 0; i < this.posts.length; i++) {
+      let response = await this.$axios.get(`account/${this.posts[i].posted_by}/`);
+      //console.log(response);
+      this.posts[i].username = response.data.username;
+    }
     this.$emit("posts", this.posts);
   },
   computed: {
@@ -113,7 +122,8 @@ export default {
         console.log(res);
         if (res.status == 201) {
           this.$toast.show("Post uspješno objavljen!", { duration: 8000 });
-          this.posts.push(this.newPost);
+          this.newPost.username = this.$store.state.User.user.username;
+          this.posts.unshift(this.newPost);
           this.$emit("posts", this.posts);
         }
       } catch (e) {
@@ -127,6 +137,9 @@ export default {
       this.$store.commit("User/RESET_USER");
       this.$router.push("/");
     },
+    allowSubmit() {
+      
+    }
   },
 };
 </script>

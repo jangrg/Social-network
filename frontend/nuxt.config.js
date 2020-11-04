@@ -71,6 +71,6 @@ export default {
     extend(config, ctx) {
       // Added Line
     }
-  }
+  },
 }
 

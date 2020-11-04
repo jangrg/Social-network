@@ -6,7 +6,7 @@
         <button
           v-if="this.$store.state.User.user"
           class="btn btn-primary btn-lg ml-auto"
-          v-b-toggle.sidebar
+          v-b-toggle.sidebar-right
         >
           Menu
         </button>

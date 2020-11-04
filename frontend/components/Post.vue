@@ -3,8 +3,8 @@
     <div class="media-body post-color p-1">
       <h5 class="lead mt-0">
         <strong
-          ><nuxt-link to="users">
-             Need to fetch username!
+          ><nuxt-link :to="{name:'users-id', params: { id: post.posted_by }}">
+             {{post.username}}
           </nuxt-link></strong
         >
       </h5>
@@ -54,12 +54,6 @@ export default {
       }
     },
   },
-  created: async function () {
-    let response = await this.$axios.get(`account/${post.posted_by}`);
-    console.log(response.data);
-    this.posts = response.data;
-    this.$emit("posts", this.posts);
-  }
 };
 </script>
 
