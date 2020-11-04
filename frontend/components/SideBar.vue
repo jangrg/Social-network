@@ -54,7 +54,14 @@
         >
       </form>
     </div>
-    <div class="container mt-3">
+    <div class="container-fluid mt-3">
+      <nuxt-link
+        class="btn btn-primary btn-lg"
+        to="/home"
+        v-if="this.user"
+      >
+      Home
+      </nuxt-link>
       <nuxt-link
         class="btn btn-primary btn-lg"
         :to="{name:'users-id', params: {id: this.user.id}}"
