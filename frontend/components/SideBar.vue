@@ -19,12 +19,6 @@
       <b-collapse id="postForm" class="mt-1 mb-1 col-md-11">
         <b-form>
           <label>New post:</label>
-          <b-form-input
-            type="text"
-            placeholder="Name of post?"
-            v-model="newPost.name"
-          >
-          </b-form-input>
 
           <div class="form-group">
             <label for=""></label>
@@ -85,11 +79,20 @@ export default {
   data() {
     return {
       newPost: {
-        name: "",
+        posted_by: this.$store.state.User.user.id,
         content: "",
-        owner: this.$store.state.User.user
+        photo: null,
+        type_attr: null,
+        likes_num: 0,
       },
+      posts : []
     };
+  },
+  created: async function () {
+    let response = await this.$axios.get(`post/`);
+    console.log(response.data);
+    this.posts = response.data;
+    this.$emit("posts", this.posts);
   },
   computed: {
     user() {
@@ -97,10 +100,27 @@ export default {
     },
   },
   methods: {
-    postForm() {
-        console.log(this.newPost.name + " " + this.newPost.content + " " + this.newPost.owner.username);
-        //let response = await this.$axios.post(`account/create/post`, this.newPost);
-        this.$toast.show("Zahtjev uspješno poslan!", { duration: 8000 });
+    async postForm() {
+      console.log(
+        this.newPost.posted_by +
+          " " +
+          this.newPost.content +
+          " " +
+          this.newPost.likes_num
+      );
+      try {
+        let res = await this.$axios.post(`post/`, this.newPost);
+        console.log(res);
+        if (res.status == 201) {
+          this.$toast.show("Post uspješno objavljen!", { duration: 8000 });
+          this.posts.push(this.newPost);
+          this.$emit("posts", this.posts);
+        }
+      } catch (e) {
+        this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
+          duration: 8000,
+        });
+      }
     },
     logOut() {
       // send request to backend to logout!

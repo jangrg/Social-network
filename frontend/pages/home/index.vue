@@ -1,19 +1,19 @@
 <template>
   <div class="d-flex flex-column bg-pattern">
     <TopBar />
-    <SideBar />
+    <SideBar @posts = "setPosts"/>
 
-    <div class="container-fluid row  mx-auto">
+    <div class="container-fluid row mx-auto">
       <div class="col-md-2"></div>
       <div class="col-md-8 white-container rounded">
-        <h3>New posts today:</h3>
+        <h3>Recent posts:</h3>
 
-      <!-- <div v-for="post in posts" :key="post.id"> -->
-        <Post />
-      <!-- </div> -->
+        <div v-for="post in posts" :key="post.id">
+          <Post :post="post" />
+        </div>
+
+        <div class="col-md-2"></div>
       </div>
-      
-      <div class="col-md-2"></div>
     </div>
   </div>
 </template>
@@ -43,16 +43,18 @@ export default {
   },
   data() {
     return {
-      postList: "" //Will require to give posts here. Probably a JSON list, needs to be fetched from server in mounted function
-    }
+      posts: [],
+    };
   },
-  mounted: function() {
-      // postList = await this.$axios.post(`account/posts/`);
+  methods: {
+    setPosts(parameters) {
+      this.posts = parameters;
+    }
   },
   computed: {
     user() {
       return this.$store.state.User.user;
-    }
+    },
   },
 };
 </script>
