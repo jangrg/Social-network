@@ -2,64 +2,31 @@
   <div class="media border p-1">
     <div class="media-body post-color p-1">
       <h5 class="lead mt-0">
-        <strong> Title goes here! Username link or whatever.</strong>
+        <strong
+          ><nuxt-link :to="{name:'users-id', params: { id: post.posted_by }}">
+             {{post.username}}
+          </nuxt-link></strong
+        >
       </h5>
+
       <p class="lead">
-        Content can go here. Photos etc. Lorem, ipsum dolor sit amet consectetur
-        adipisicing elit. Ex voluptatum enim fuga voluptas natus suscipit
-        dolores consectetur in iure eveniet eos, sequi ducimus cumque, eius
-        nostrum molestiae excepturi quibusdam quis.
+        {{ post.content }}
       </p>
 
+      <div class="container-fluid">
+        <span> Likes: {{ post.likes_num }}</span>
+        <span> Comments: {{ 0 }} </span>
+        <button class="btn-sm btn-secondary" @click="likePost">
+          <span v-if="!liked">Like this!</span>
+          <span v-else>Dislike this!</span>
+        </button>
+        <button class="btn-sm btn-secondary">Comment!</button>
+      </div>
       <hr />
 
-      <div class="ml-5">
-        <div class="media">
-          <div class="media-body" :class="{ 'post-font' : true}">
-            <h5 class="mt-0">
-              <strong
-                >And look at this, we can make nested comments User can answer
-                here for an instance!</strong
-              >
-            </h5>
-            <p class="">
-              Content can go here. Photos etc. Lorem, ipsum dolor sit amet
-              consectetur adipisicing elit. Ex voluptatum enim fuga voluptas
-              natus suscipit dolores consectetur in iure eveniet eos, sequi
-              ducimus cumque, eius nostrum molestiae excepturi quibusdam quis.
-            </p>
-
-            <hr>
-
-            <div class="ml-5">
-              <div class="media">
-                <div class="media-body" :class="{ 'post-font' : true}">
-                  <h5 class=" mt-0">
-                    <strong
-                      >And look at this, we can make EVEN MORE nested
-                      comments!!!!!!</strong
-                    >
-                  </h5>
-                  <p class="">
-                    Content can go here. Photos etc. Lorem, ipsum dolor sit amet
-                    consectetur adipisicing elit. Ex voluptatum enim fuga
-                    voluptas natus suscipit dolores consectetur in iure eveniet
-                    eos, sequi ducimus cumque, eius nostrum molestiae excepturi
-                    quibusdam quis.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="ml-5" v-for="comment in comments" :key="comment.Id">
+        <Post :post="comment"/>
       </div>
-
-      <!-- Post hierarchy
-      <div class="ml-5" v-for="comment in post.comments" :key="comment.Id">
-        <Post post=""/>
-      </div>
-      -->
-      
     </div>
   </div>
 </template>
@@ -68,7 +35,24 @@
 export default {
   name: "Post",
   props: {
-    post: String,
+    post: Object,
+    depth: Number,
+    comments: Object,
+  },
+  data() {
+    return {
+      username: "",
+      liked: false,
+    };
+  },
+  methods: {
+    likePost() {
+      if (!this.liked) {
+        this.liked = true;
+      } else {
+        this.liked = false;
+      }
+    },
   },
 };
 </script>

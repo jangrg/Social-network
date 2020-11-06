@@ -1,5 +1,5 @@
 <template>
-  <b-sidebar id="sidebar" title="Menu" shadow>
+  <b-sidebar id="sidebar-right" title="Menu" right shadow>
     <div class="card">
       <div class="card-body">
         <h4 class="card-title lead">Hello {{ user.username }}!</h4>
@@ -19,12 +19,6 @@
       <b-collapse id="postForm" class="mt-1 mb-1 col-md-11">
         <b-form>
           <label>New post:</label>
-          <b-form-input
-            type="text"
-            placeholder="Name of post?"
-            v-model="newPost.name"
-          >
-          </b-form-input>
 
           <div class="form-group">
             <label for=""></label>
@@ -60,7 +54,14 @@
         >
       </form>
     </div>
-    <div class="container mt-3">
+    <div class="container-fluid mt-3">
+      <nuxt-link
+        class="btn btn-primary btn-lg"
+        to="/home"
+        v-if="this.user"
+      >
+      Home
+      </nuxt-link>
       <nuxt-link
         class="btn btn-primary btn-lg"
         :to="{name:'users-id', params: {id: this.user.id}}"
@@ -85,12 +86,29 @@ export default {
   data() {
     return {
       newPost: {
-        name: "",
+        posted_by: this.$store.state.User.user.id,
         content: "",
-        owner: this.$store.state.User.user
+        photo: null,
+        type_attr: null,
+        likes_num: 0,
       },
+      posts : [],
       searchQuery: ""
     };
+  },
+  //Užasan, užasan način za primanje svih postova i
+  //usernamea, ali trenutačno ne znam drugi. Možda na backendu dati da se u postu i nalazi username.
+  created: async function () {
+    let response = await this.$axios.get(`post/`);
+    //console.log(response.data);
+    this.posts = response.data.reverse();
+    //stvarno sporo i neefektivno
+    for(var i = 0; i < this.posts.length; i++) {
+      let response = await this.$axios.get(`account/${this.posts[i].posted_by}/`);
+      //console.log(response);
+      this.posts[i].username = response.data.username;
+    }
+    this.$emit("posts", this.posts);
   },
   computed: {
     user() {
@@ -98,10 +116,28 @@ export default {
     },
   },
   methods: {
-    postForm() {
-        console.log(this.newPost.name + " " + this.newPost.content + " " + this.newPost.owner.username);
-        //let response = await this.$axios.post(`account/create/post`, this.newPost);
-        this.$toast.show("Zahtjev uspješno poslan!", { duration: 8000 });
+    async postForm() {
+      console.log(
+        this.newPost.posted_by +
+          " " +
+          this.newPost.content +
+          " " +
+          this.newPost.likes_num
+      );
+      try {
+        let res = await this.$axios.post(`post/`, this.newPost);
+        console.log(res);
+        if (res.status == 201) {
+          this.$toast.show("Post uspješno objavljen!", { duration: 8000 });
+          this.newPost.username = this.$store.state.User.user.username;
+          this.posts.unshift(this.newPost);
+          this.$emit("posts", this.posts);
+        }
+      } catch (e) {
+        this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
+          duration: 8000,
+        });
+      }
     },
     logOut() {
       // send request to backend to logout!
