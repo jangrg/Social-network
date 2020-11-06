@@ -6,7 +6,7 @@
         <b-button class="btn btn-primary btn-lg text-align mx-1" @click.prevent="logOut">Logout</b-button>
       </b-navbar>
     </div>
-    <div class="container-fluid row  mx-auto">
+    <div v-if="this.loaded" class="container-fluid row  mx-auto">
       <div class="col-md-2 my-4">
         <b-avatar size="16rem" src=""></b-avatar>
         <h1 class="profile-username">{{user.username}}</h1>
@@ -67,17 +67,18 @@ export default {
 
     data() {
       return {
+        loaded: false,
         id: this.$route.params.id,
         currentUser: "",
         posts: []
       } 
     },
 
-    async mounted() {
+    async created() {
       try{
         let response = await this.$axios.get(`/account/${this.id}/`)
         this.currentUser = response.data
-
+        this.loaded = true
       }catch(e) {
         this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
         duration: 8000});
