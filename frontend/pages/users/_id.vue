@@ -89,11 +89,11 @@ export default {
         if(this.anotherUser)
           return this.currentUser
         else
-          return this.$store.state.User.user
+          return this.$auth.user
       },
 
       anotherUser() {
-        return this.id !== this.$store.state.User.user.id
+        return this.id !== this.$auth.user.id
       }
     },
     methods: {

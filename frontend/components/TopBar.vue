@@ -4,7 +4,7 @@
       <b-navbar-brand class="lead"><strong>Welcome!</strong></b-navbar-brand>
       <div class="container-fluid float-right">
         <button
-          v-if="this.$store.state.User.user"
+          v-if="this.$auth.user"
           class="btn btn-primary btn-lg ml-auto"
           v-b-toggle.sidebar-right
         >

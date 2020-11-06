@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.state.User.user;
+      return this.$auth.user;
     },
   },
 };

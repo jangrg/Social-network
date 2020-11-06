@@ -107,10 +107,10 @@ export default {
   methods: {
     async loginUser() {
       try {
-        let response = await this.$axios.post(`account/login/`, this.form);
-        this.$toast.show("Zahtjev uspješno poslan!", { duration: 8000 });
-        this.$store.commit("User/SET_LOGGED_USER", response.data.user);
-
+        await this.$auth.loginWith('local', {
+           data: this.form
+         })
+         
         // redirect to user profile
         this.$router.push("/home");
       } catch (e) {

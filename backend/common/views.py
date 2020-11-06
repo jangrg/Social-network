@@ -28,15 +28,12 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
         if self.action == 'create':
             kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'birth_date']
             return super().get_serializer(*args, **kwargs)
-        elif self.action == 'confirm' or self.action == 'logout':
+        elif self.action == 'confirm':
             return None
-        elif self.action == 'login':
-            kwargs['only_fields'] = ['password', 'username']
-            return super().get_serializer(*args, **kwargs)
         elif self.action == 'follow':
             kwargs['only_fields'] = ['id']
             return super().get_serializer(*args, **kwargs)
-        elif self.action == 'retrieve':
+        elif self.action == 'retrieve' or self.action == 'logged_user_data':
             kwargs['only_fields'] = ['id', 'username', 'first_name', 'last_name', 'email', 'birth_date']
             return super().get_serializer(*args, **kwargs)
         return super().get_serializer(*args, **kwargs)
@@ -70,23 +67,6 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-    @action(detail=False, methods=['POST'], name='login')
-    def login(self, request, *args, **kwargs):
-        user = auth.authenticate(username=request.data.get('username'), password=request.data.get('password'))
-        if user is not None and user.is_active:
-            auth.login(request, user)
-            return Response(
-                {'user': UserSerializer(user, only_fields=['id', 'username', 'first_name', 'last_name', 'email',
-                                                           'birth_date']).data},
-                status=status.HTTP_201_CREATED
-            )
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
-
-    @action(detail=False, methods=['GET'], name='logout')
-    def logout(self, request, *args, **kwargs):
-        auth.logout(request)
-        return Response(status=status.HTTP_200_OK)
-
     @action(detail=True, methods=['POST'], name='add_following')
     def follow(self, request, pk=None):
         user_to_follow = self.get_object()
@@ -96,6 +76,16 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             user.save()
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['GET'], name='logged_user_data')
+    def logged_user_data(self, request, *args, **kwargs):
+        user = request.user
+        if user.is_authenticated:
+            return Response(
+                {'user': self.get_serializer(user).data},
+                status = status.HTTP_200_OK
+            )
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
 class PostViewSet(viewsets.ModelViewSet):

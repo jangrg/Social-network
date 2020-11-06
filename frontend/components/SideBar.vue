@@ -86,7 +86,7 @@ export default {
   data() {
     return {
       newPost: {
-        posted_by: this.$store.state.User.user.id,
+        posted_by: this.$auth.user,
         content: "",
         photo: null,
         type_attr: null,
@@ -112,7 +112,7 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.state.User.user;
+      return this.$auth.user;
     },
   },
   methods: {
@@ -129,7 +129,7 @@ export default {
         console.log(res);
         if (res.status == 201) {
           this.$toast.show("Post uspješno objavljen!", { duration: 8000 });
-          this.newPost.username = this.$store.state.User.user.username;
+          this.newPost.username = this.$auth.user.username;
           this.posts.unshift(this.newPost);
           this.$emit("posts", this.posts);
         }
@@ -140,8 +140,7 @@ export default {
       }
     },
     logOut() {
-      // send request to backend to logout!
-      this.$store.commit("User/RESET_USER");
+      this.$auth.logout()
       this.$router.push("/");
     },
     allowSubmit() {
