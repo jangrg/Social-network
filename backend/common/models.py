@@ -30,19 +30,6 @@ class User(AbstractUser):
     following = models.ManyToManyField('User', blank=True, related_name='followers', symmetrical=False)
 
 
-class Post(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    posted_by = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
-    content = models.TextField()
-    photo = models.CharField(null=True, blank=True, max_length=255)
-    type_attr = models.CharField(null=True, blank=True, max_length=255)
-    likes_num = models.IntegerField(null=True, blank=True)
-    time = models.DateTimeField(auto_now_add=True)
-
-    page = models.ForeignKey(Page, related_name="posts", null=True)
-    user = models.ForeignKey(User, related_name="posts", null=True)
-
-
 class Category(models.Model):
     name = models.CharField(max_length=100)
     pages = models.ForeignKey
@@ -57,6 +44,19 @@ class Page(models.Model):
     categories = models.ManyToManyField(Category, related_name="pages")
 
     owner = models.ForeignKey(User, related_name="pages")
+
+
+class Post(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    posted_by = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
+    content = models.TextField()
+    photo = models.CharField(null=True, blank=True, max_length=255)
+    type_attr = models.CharField(null=True, blank=True, max_length=255)
+    likes_num = models.IntegerField(null=True, blank=True)
+    time = models.DateTimeField(auto_now_add=True)
+
+    page = models.ForeignKey(Page, related_name="posts", null=True)
+    user = models.ForeignKey(User, related_name="posts", null=True)
 
 
 class Item(models.Model):
