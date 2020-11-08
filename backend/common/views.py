@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets, mixins, status, filters, generics
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 
 from .models import User, Post
 from .serializers import UserSerializer, PostSerializer
@@ -92,6 +93,21 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
+    permission_classes_by_action = {'create': [IsAuthenticated],
+                                    'read': [IsAuthenticated],
+                                    'update': [IsAuthenticated],
+                                    'partial_update': [IsAuthenticated],
+                                    'delete': [IsAuthenticated],
+                                    'followed_posts': [IsAuthenticated]}
+
+    def get_permissions(self):
+        try:
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError:
+            return [permission() for permission in self.permission_classes]
+
     @action(detail=False, methods=['GET'], name='followed_posts')
     def followed_posts(self, request):
+        # needs to be fixed after database is populated
+        print(request.user.following)
         return Response(self.get_serializer(request.user.following.posts, many=True).data, status=status.HTTP_200_OK)
