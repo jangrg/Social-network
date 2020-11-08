@@ -94,7 +94,4 @@ class PostViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['GET'], name='followed_posts')
     def followed_posts(self, request):
-        user = request.user
-        posts = user.following.posts
-        serializer = PostSerializer(posts)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(self.get_serializer(request.user.following.posts, many=True).data, status=status.HTTP_200_OK)
