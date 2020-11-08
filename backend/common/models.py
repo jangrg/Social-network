@@ -36,12 +36,12 @@ class Category(models.Model):
 
 class Page(models.Model):
     # Not sure what field type this should be
-    work_time = models.CharField(null=True)
+    work_time = models.CharField(null=True, max_length=100)
     name = models.CharField(max_length=100)
-    date_created = models.DateTimeField(default=timezone.now())
+    date_created = models.DateTimeField(default=timezone.now)
     location = models.CharField(max_length=100)
     categories = models.ManyToManyField(Category, related_name="pages")
-    owner = models.ForeignKey(User, related_name="pages")
+    owner = models.ForeignKey(User, related_name="pages", on_delete=models.CASCADE)
 
 
 class Post(models.Model):
@@ -52,8 +52,7 @@ class Post(models.Model):
     type_attr = models.CharField(null=True, blank=True, max_length=255)
     likes_num = models.IntegerField(null=True, blank=True)
     time = models.DateTimeField(auto_now_add=True)
-    page = models.ForeignKey(Page, related_name="posts", null=True)
-    user = models.ForeignKey(User, related_name="posts", null=True)
+    page = models.ForeignKey(Page, related_name="posts", null=True, on_delete=models.CASCADE)
 
 
 class Item(models.Model):
@@ -63,9 +62,9 @@ class Item(models.Model):
     rating = models.FloatField(null=True)
     text_content = models.TextField()
     quantity_left = models.IntegerField()
-    category = models.ForeignKey(Category, related_name="items_in_category")
-    user_seller = models.ForeignKey(User, related_name="items_for_sale", null=True)
-    page_seller = models.ForeignKey(Page, related_name="items_for_sale", null=True)
+    category = models.ForeignKey(Category, related_name="items_in_category", on_delete=models.CASCADE)
+    user_seller = models.ForeignKey(User, related_name="items_for_sale", null=True, on_delete=models.CASCADE)
+    page_seller = models.ForeignKey(Page, related_name="items_for_sale", null=True, on_delete=models.CASCADE)
 
 
 class Review(models.Model):
@@ -73,29 +72,29 @@ class Review(models.Model):
     rating = models.FloatField(null=True)
     text = models.TextField()
     sellers_answer = models.TextField(null=True)
-    item = models.ForeignKey(Item, related_name="review")
+    item = models.ForeignKey(Item, related_name="review", on_delete=models.CASCADE)
 
 
 class Message(models.Model):
-    time_sent = models.DateTimeField(default=timezone.now())
+    time_sent = models.DateTimeField(default=timezone.now)
     photo = models.URLField(null=True)
     text_content = models.TextField()
-    sender = models.ForeignKey(User, related_name="sent_messages")
-    receiver = models.ForeignKey(User, related_name="received_messages")
+    sender = models.ForeignKey(User, related_name="sent_messages", on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name="received_messages", on_delete=models.CASCADE)
 
 
 class Notification(models.Model):
-    time_created = models.DateTimeField(default=timezone.now())
+    time_created = models.DateTimeField(default=timezone.now)
     text_content = models.TextField()
     marked_as_read = models.BooleanField(default=False)
     # Not sure what field type this should be
-    color = models.CharField(null=True)
-    user = models.ForeignKey(User, related_name="notifications")
+    color = models.CharField(max_length=100, null=True)
+    user = models.ForeignKey(User, related_name="notifications", on_delete=models.CASCADE)
 
 
 class Comment(models.Model):
     text = models.TextField()
     likes_num = models.IntegerField(null=True)
-    post = models.ForeignKey(Post, related_name="comments")
-    user = models.ForeignKey(User, related_name="comments")
-    parent_comment = models.ForeignKey("replies", related_name="comment")
+    post = models.ForeignKey(Post, related_name="comments", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="comments", on_delete=models.CASCADE)
+    parent_comment = models.ForeignKey("Comment", related_name="comment", on_delete=models.CASCADE)
