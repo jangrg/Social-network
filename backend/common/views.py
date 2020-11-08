@@ -7,7 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 
 from .models import User, Post
-from .serializers import UserSerializer, PostSerializer
+from .serializers import UserSerializer, ListPostSerializer, CreatePostSerializer
 from rest_framework.response import Response
 
 
@@ -84,14 +84,26 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
         if user.is_authenticated:
             return Response(
                 {'user': self.get_serializer(user).data},
-                status = status.HTTP_200_OK
+                status=status.HTTP_200_OK
             )
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
-    serializer_class = PostSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CreatePostSerializer
+        else:
+            return ListPostSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        if self.action == 'create':
+            return super().get_serializer(*args, **kwargs)
+        elif self.action == 'list':
+            return super().get_serializer(*args, **kwargs)
+        return super().get_serializer(*args, **kwargs)
 
     permission_classes_by_action = {'create': [IsAuthenticated],
                                     'read': [IsAuthenticated],
@@ -106,8 +118,21 @@ class PostViewSet(viewsets.ModelViewSet):
         except KeyError:
             return [permission() for permission in self.permission_classes]
 
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        serializer = self.get_serializer(data=data)
+        if serializer.is_valid():
+            data['posted_by'] = request.user
+            post = Post.objects.create(**data)
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def list(self, request, *args, **kwargs):
+        return Response(self.get_serializer(Post.objects.all(), many=True).data, status=status.HTTP_200_OK)
+
     @action(detail=False, methods=['GET'], name='followed_posts')
     def followed_posts(self, request):
-        # needs to be fixed after database is populated
-        print(request.user.following)
-        return Response(self.get_serializer(request.user.following.posts, many=True).data, status=status.HTTP_200_OK)
+        return Response(
+            self.get_serializer(Post.objects.filter(posted_by__in=request.user.following.all()),many=True).data,
+            status=status.HTTP_200_OK
+        )

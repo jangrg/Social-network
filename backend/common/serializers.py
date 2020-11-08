@@ -36,9 +36,15 @@ class UserSerializer(DynamicFieldsModelSerializer):
         return obj
 
 
-class PostSerializer(ModelSerializer):
-    posted_by = UserSerializer(many=True, read_only=True, only_fields=['id', 'username'])
+class ListPostSerializer(ModelSerializer):
+    posted_by = UserSerializer(only_fields=['id', 'username'], read_only=True)
 
     class Meta:
         model = Post
         fields = ['id', 'posted_by', 'content', 'photo', 'type_attr', 'likes_num', 'time']
+
+
+class CreatePostSerializer(ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['content', 'photo', 'type_attr']
