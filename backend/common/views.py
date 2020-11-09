@@ -124,7 +124,7 @@ class PostViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             data['posted_by'] = request.user
             post = Post.objects.create(**data)
-            return Response(post, status=status.HTTP_201_CREATED)
+            return Response(ListPostSerializer(post).data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request, *args, **kwargs):
@@ -133,6 +133,6 @@ class PostViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['GET'], name='followed_posts')
     def followed_posts(self, request):
         return Response(
-            self.get_serializer(Post.objects.filter(posted_by__in=request.user.following.all()),many=True).data,
+            self.get_serializer(Post.objects.filter(posted_by__in=request.user.following.all()), many=True).data,
             status=status.HTTP_200_OK
         )
