@@ -124,7 +124,7 @@ class PostViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             data['posted_by'] = request.user
             post = Post.objects.create(**data)
-            return Response(status=status.HTTP_201_CREATED)
+            return Response(post, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request, *args, **kwargs):
