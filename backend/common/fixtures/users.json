@@ -1,0 +1,213 @@
+[
+  {
+    "model": "common.user",
+    "pk": "614997e6-c249-431a-b272-bff4ca616fdb",
+    "fields": {
+      "username": "wjacobovitz0",
+      "password": "AU0EYAhp",
+      "first_name": "Willamina",
+      "last_name": "Jacobovitz",
+      "email": "wjacobovitz0@nydailynews.com",
+      "is_staff": "False",
+      "is_active": "True",
+      "date_joined": "2020-11-05T04:47:27Z",
+      "is_superuser": "False",
+      "groups": [],
+      "user_permissions": [],
+      "following": [
+        "66b1d1ed-a53e-4736-a798-a7158bec7dab",
+        "c3220951-dfcc-404a-8f12-8c624540accd"
+      ]
+    }
+  },
+  {
+    "model": "common.user",
+    "pk": "8d09ede5-a847-45ea-8484-64fa4a0fb8c2",
+    "fields": {
+      "username": "ghadye1",
+      "password": "8VE4Dp3",
+      "first_name": "Gal",
+      "last_name": "Hadye",
+      "email": "ghadye1@naver.com",
+      "is_staff": "False",
+      "is_active": "True",
+      "date_joined": "2020-11-08T03:52:33Z",
+      "is_superuser": "False",
+      "groups": [],
+      "user_permissions": [],
+      "following": [
+        "614997e6-c249-431a-b272-bff4ca616fdb",
+        "c3220951-dfcc-404a-8f12-8c624540accd"
+
+      ]
+    }
+  },
+  {
+    "model": "common.user",
+    "pk": "cd9f0f9f-fb53-499a-9e82-5e122b178f7b",
+    "fields": {
+      "username": "csaur2",
+      "password": "tpj994IX0qxF",
+      "first_name": "Colin",
+      "last_name": "Saur",
+      "email": "csaur2@hc360.com",
+      "is_staff": "False",
+      "is_active": "True",
+      "date_joined": "2020-11-07T16:38:50Z",
+      "is_superuser": "False",
+      "groups": [],
+      "user_permissions": [],
+      "following": [
+        "614997e6-c249-431a-b272-bff4ca616fdb",
+        "8d09ede5-a847-45ea-8484-64fa4a0fb8c2"
+      ]
+    }
+  },
+  {
+    "model": "common.user",
+    "pk": "c3220951-dfcc-404a-8f12-8c624540accd",
+    "fields": {
+      "username": "ablei3",
+      "password": "dkodEuhW",
+      "first_name": "Ashley",
+      "last_name": "Blei",
+      "email": "ablei3@timesonline.co.uk",
+      "is_staff": "False",
+      "is_active": "True",
+      "date_joined": "2020-11-07T03:20:07Z",
+      "is_superuser": "False",
+      "groups": [],
+      "user_permissions": [],
+      "following": [
+        "614997e6-c249-431a-b272-bff4ca616fdb",
+        "8d09ede5-a847-45ea-8484-64fa4a0fb8c2"
+      ]
+    }
+  },
+  {
+    "model": "common.user",
+    "pk": "2f618afa-e8b7-48bf-af74-d7728702586f",
+    "fields": {
+      "username": "lliepins4",
+      "password": "bHlIOxIIYLrE",
+      "first_name": "Lindsey",
+      "last_name": "Liepins",
+      "email": "lliepins4@lycos.com",
+      "is_staff": "False",
+      "is_active": "True",
+      "date_joined": "2020-11-08T05:12:38Z",
+      "is_superuser": "False",
+      "groups": [],
+      "user_permissions": [],
+      "following": [
+        "614997e6-c249-431a-b272-bff4ca616fdb",
+        "8d09ede5-a847-45ea-8484-64fa4a0fb8c2"
+      ]
+    }
+  },
+  {
+    "model": "common.user",
+    "pk": "04341682-25a1-47da-b606-cbfd62766fb1",
+    "fields": {
+      "username": "nbahde5",
+      "password": "j3LoNLGMiTXg",
+      "first_name": "Nadean",
+      "last_name": "Bahde",
+      "email": "nbahde5@redcross.org",
+      "is_staff": "False",
+      "is_active": "True",
+      "date_joined": "2020-11-05T00:11:51Z",
+      "is_superuser": "False",
+      "groups": [],
+      "user_permissions": [],
+      "following": [
+        "614997e6-c249-431a-b272-bff4ca616fdb",
+        "8d09ede5-a847-45ea-8484-64fa4a0fb8c2"
+      ]
+    }
+  },
+  {
+    "model": "common.user",
+    "pk": "3ed3ec13-b8f5-4f89-84f8-082f67a0c5b8",
+    "fields": {
+      "username": "umccoll6",
+      "password": "EpRBmLvUwd",
+      "first_name": "Urbano",
+      "last_name": "McColl",
+      "email": "umccoll6@alexa.com",
+      "is_staff": "False",
+      "is_active": "True",
+      "date_joined": "2020-11-07T13:07:49Z",
+      "is_superuser": "False",
+      "groups": [],
+      "user_permissions": [],
+      "following": [
+        "614997e6-c249-431a-b272-bff4ca616fdb",
+        "8d09ede5-a847-45ea-8484-64fa4a0fb8c2"
+      ]
+    }
+  },
+  {
+    "model": "common.user",
+    "pk": "3e718e0c-d832-482a-a686-57132a7ae36c",
+    "fields": {
+      "username": "ehandlin7",
+      "password": "N6TDEQN",
+      "first_name": "Ellynn",
+      "last_name": "Handlin",
+      "email": "ehandlin7@utexas.edu",
+      "is_staff": "False",
+      "is_active": "True",
+      "date_joined": "2020-11-07T13:36:05Z",
+      "is_superuser": "False",
+      "groups": [],
+      "user_permissions": [],
+      "following": [
+        "614997e6-c249-431a-b272-bff4ca616fdb",
+        "8d09ede5-a847-45ea-8484-64fa4a0fb8c2"
+      ]
+    }
+  },
+  {
+    "model": "common.user",
+    "pk": "66b1d1ed-a53e-4736-a798-a7158bec7dab",
+    "fields": {
+      "username": "tcoughtrey8",
+      "password": "VhgLXN",
+      "first_name": "Troy",
+      "last_name": "Coughtrey",
+      "email": "tcoughtrey8@imageshack.us",
+      "is_staff": "False",
+      "is_active": "True",
+      "date_joined": "2020-11-07T06:48:53Z",
+      "is_superuser": "False",
+      "groups": [],
+      "user_permissions": [],
+      "following": [
+        "614997e6-c249-431a-b272-bff4ca616fdb",
+        "8d09ede5-a847-45ea-8484-64fa4a0fb8c2"
+      ]
+    }
+  },
+  {
+    "model": "common.user",
+    "pk": "df10cff2-f16f-4bbf-87dd-254a04d6f6f6",
+    "fields": {
+      "username": "ttwigger9",
+      "password": "TPzEM6h",
+      "first_name": "Town",
+      "last_name": "Twigger",
+      "email": "ttwigger9@instagram.com",
+      "is_staff": "False",
+      "is_active": "True",
+      "date_joined": "2020-11-07T23:43:10Z",
+      "is_superuser": "False",
+      "groups": [],
+      "user_permissions": [],
+      "following": [
+        "614997e6-c249-431a-b272-bff4ca616fdb",
+        "8d09ede5-a847-45ea-8484-64fa4a0fb8c2"
+      ]
+    }
+  }
+]
