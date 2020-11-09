@@ -52,7 +52,7 @@ class Post(models.Model):
     type_attr = models.CharField(null=True, blank=True, max_length=255)
     likes_num = models.IntegerField(null=True, blank=True, default=0)
     time = models.DateTimeField(auto_now_add=True)
-    page = models.ForeignKey(Page, related_name="posts", null=True, on_delete=models.CASCADE)
+    page = models.ForeignKey(Page, related_name="posts", null=True, blank=True, on_delete=models.CASCADE)
 
 
 class Item(models.Model):
