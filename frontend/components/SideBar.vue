@@ -101,9 +101,7 @@ export default {
   },
   created: async function () {
     let response = await this.$axios.get(`post/`);
-    //debugger
-
-    console.log($nuxt.$route.path);
+    debugger
 
     this.posts = response.data.reverse();
 
@@ -126,13 +124,11 @@ export default {
       try {
         let res = await this.$axios.post(`post/`, this.newPost);
 
-        //debugger
-
         console.log(res);
         if (res.status == 201) {
           this.$toast.show("Post uspješno objavljen!", { duration: 8000 });
-          this.newPost.posted_by = {username: this.$auth.user.username, id: this.$auth.user.id};
-          this.posts.unshift(this.newPost);
+          let createdPost = res.data;
+          this.posts.unshift(createdPost);
           this.$emit("posts", this.posts);
         }
       } catch (e) {
