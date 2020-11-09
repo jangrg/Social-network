@@ -25,7 +25,7 @@ import SearchResult from "../../components/SearchResult";
 export default {
     name: "Home",
     components: { TopBar, SideBar, SearchResult },
-
+    middleware: ['auth-notLoggedIn'],
     head() {
       return {
         title: "Login",

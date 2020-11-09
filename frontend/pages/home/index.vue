@@ -21,15 +21,18 @@
 <script>
 import { ButtonPlugin } from "bootstrap-vue";
 
-import TopBar from "../../components/TopBar";
+import TopBar from "@/components/TopBar";
 
-import SideBar from "../../components/SideBar";
+import SideBar from "@/components/SideBar";
 
-import Post from "../../components/Post";
+import Post from "@/components/Post";
+
+import Footer from "@/components/Footer";
 
 export default {
   name: "Home",
-  components: { TopBar, SideBar, Post },
+  components: { TopBar, SideBar, Post, Footer },
+  middleware: ['auth-notLoggedIn'],
   head() {
     return {
       title: "Home",

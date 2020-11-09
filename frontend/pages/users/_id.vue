@@ -15,8 +15,8 @@
       <div class="col-md-8 white-container rounded my-4">
         <h3>{{user.username}}'s posts:</h3>
         <!-- Just as an example -->
-        <Post post=""/>
-        <Post post=""/>
+        <!-- <Post post=""/>
+        <Post post=""/> Morao zakomentirati da radi. -->
       </div>
       
       <div class="col-md-2 my-4">
@@ -53,6 +53,7 @@ import Post from "../../components/Post";
 export default {
     name: "User",
     components: { Post },
+    middleware: ['auth-notLoggedIn'],
     head() {
         return {
         title: "User",

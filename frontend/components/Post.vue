@@ -3,8 +3,10 @@
     <div class="media-body post-color p-1">
       <h5 class="lead mt-0">
         <strong
-          ><nuxt-link :to="{name:'users-id', params: { id: post.posted_by }}">
-             {{post.username}}
+          ><nuxt-link
+            :to="{ name: 'users-id', params: { id: post.posted_by.id } }"
+          >
+            {{ post.posted_by.username }}
           </nuxt-link></strong
         >
       </h5>
@@ -16,16 +18,18 @@
       <div class="container-fluid">
         <span> Likes: {{ post.likes_num }}</span>
         <span> Comments: {{ 0 }} </span>
-        <button class="btn-sm btn-secondary" @click="likePost">
-          <span v-if="!liked">Like this!</span>
-          <span v-else>Dislike this!</span>
-        </button>
-        <button class="btn-sm btn-secondary">Comment!</button>
+        <div class="d-inline float-right">
+          <button class="btn-sm btn-warning" @click="likePost">
+            <span v-if="!liked">Like this!</span>
+            <span v-else>Dislike this!</span>
+          </button>
+          <button class="btn-sm btn-warning">Comment!</button>
+        </div>
       </div>
       <hr />
 
-      <div class="ml-5" v-for="comment in comments" :key="comment.Id">
-        <Post :post="comment"/>
+      <div class="ml-5" v-for="comment in post.comments" :key="comment.Id">
+        <Post :post="null" />
       </div>
     </div>
   </div>
@@ -37,7 +41,6 @@ export default {
   props: {
     post: Object,
     depth: Number,
-    comments: Object,
   },
   data() {
     return {

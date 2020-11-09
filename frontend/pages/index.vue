@@ -1,21 +1,14 @@
 <template>
-  <div
-    class="bg"
-    :class="{
-      'd-flex': !user,
-      'flex-column': !user,
-      'justify-content-between': !user,
-    }"
-  >
+  <div class="bg d-flex flex-column justify-content-between">
     <TopBar />
     <div class="mx-auto" v-if="!user">
       <div
         class="lead border rounded mx-auto p-4 white-container justify-content-center"
       >
-        <div class="d-flex flex-column container">
-          <h1 class="title">Welcome to our Social Network</h1>
+        <div class="d-flex flex-column container-fluid">
+          <h1 class="title">Welcome to <strong>WeShare</strong></h1>
           <h2 class="subtitle">Feel free to register now!</h2>
-          <div class="links">
+          <div class="links mx-auto">
             <b-button class="btn btn-primary btn-lg text-align" to="/register"
               >Register</b-button
             >
@@ -28,18 +21,21 @@
         </div>
       </div>
     </div>
-    <div></div>
+    <Footer />
   </div>
 </template>
 
 <script>
 import { ButtonPlugin } from "bootstrap-vue";
 
-import TopBar from "../components/TopBar";
+import TopBar from "@/components/TopBar";
+
+import Footer from "@/components/Footer";
 
 export default {
   name: "Homepage",
-  components: {TopBar},
+  components: { TopBar, Footer },
+  middleware: ["auth-loggedIn"],
   head() {
     return {
       title: "Homepage",
@@ -51,19 +47,11 @@ export default {
       ],
     };
   },
-  //TODO - store resets at /, need to find a better solution, myb nuxt auth.
-  //created: function() {
-  //  {
-  //    console.log("Here in created!");
-  //    if(this.$store.state.User.user)
-  //      this.$router.push('/home')
-  //  }
-  //},
   computed: {
     user() {
       return this.$auth.user;
-    }
-  }
+    },
+  },
 };
 </script>
 

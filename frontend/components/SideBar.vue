@@ -1,5 +1,5 @@
 <template>
-  <b-sidebar id="sidebar-right" title="Menu" right shadow>
+  <b-sidebar id="sidebar-right" title="WeShare" right shadow>
     <div class="card">
       <div class="card-body">
         <h4 class="card-title lead">Hello {{ user.username }}!</h4>
@@ -47,30 +47,33 @@
       >
         <input type="search" class="form-control" v-model="searchQuery"/>
         <b-button
-          class="btn btn-primary btn-lg text-align mt-1"
+          class="btn btn-primary mt-2"
           :to="{name:'search-keyword', params: {keyword: this.searchQuery}}"
           v-if="this.user"
           >Search</b-button
         >
       </form>
+
+    <hr>
+
     </div>
-    <div class="container-fluid mt-3">
+    <div class="d-flex mt-4 p-1 justify-content-around">
       <nuxt-link
-        class="btn btn-primary btn-lg"
+        class="btn btn-primary"
         to="/home"
-        v-if="this.user"
+        v-if="this.user && $nuxt.$route.path != '/home'"
       >
       Home
       </nuxt-link>
       <nuxt-link
-        class="btn btn-primary btn-lg"
+        class="btn btn-primary"
         :to="{name:'users-id', params: {id: this.user.id}}"
         v-if="this.user"
       >
         Profile
       </nuxt-link>
       <button
-        class="btn btn-primary btn-lg"
+        class="btn btn-primary"
         @click.prevent="logOut"
         v-if="this.user"
       >
@@ -86,28 +89,24 @@ export default {
   data() {
     return {
       newPost: {
-        posted_by: this.$auth.user,
         content: "",
         photo: null,
         type_attr: null,
         likes_num: 0,
+        posted_by: this.$auth.user.id,
       },
       posts : [],
       searchQuery: ""
     };
   },
-  //Užasan, užasan način za primanje svih postova i
-  //usernamea, ali trenutačno ne znam drugi. Možda na backendu dati da se u postu i nalazi username.
   created: async function () {
     let response = await this.$axios.get(`post/`);
-    //console.log(response.data);
+    //debugger
+
+    console.log($nuxt.$route.path);
+
     this.posts = response.data.reverse();
-    //stvarno sporo i neefektivno
-    for(var i = 0; i < this.posts.length; i++) {
-      let response = await this.$axios.get(`account/${this.posts[i].posted_by}/`);
-      //console.log(response);
-      this.posts[i].username = response.data.username;
-    }
+
     this.$emit("posts", this.posts);
   },
   computed: {
@@ -126,10 +125,13 @@ export default {
       );
       try {
         let res = await this.$axios.post(`post/`, this.newPost);
+
+        //debugger
+
         console.log(res);
         if (res.status == 201) {
           this.$toast.show("Post uspješno objavljen!", { duration: 8000 });
-          this.newPost.username = this.$auth.user.username;
+          this.newPost.posted_by = {username: this.$auth.user.username, id: this.$auth.user.id};
           this.posts.unshift(this.newPost);
           this.$emit("posts", this.posts);
         }

@@ -104,7 +104,7 @@ import BrandName from "../../components/BrandName";
 export default {
   name: "RegisterForm",
   components: { BrandName },
-
+  middleware: ['auth-loggedIn'],
   head() {
     return {
       title: "Register",
