@@ -1,15 +1,19 @@
 <template>
   <div class="container-fluid sticky-top">
-    <b-navbar variant="warning">
-      <b-navbar-brand class="lead"><strong>Welcome!</strong></b-navbar-brand>
-      <div class="container-fluid float-right">
-        <button
-          v-if="this.$auth.user"
-          class="btn btn-primary btn-lg ml-auto"
-          v-b-toggle.sidebar-right
+    <b-navbar variant="warning" class="top-bar">
+      <div class="cont">
+        <b-navbar-brand class="lead lead-text"
+          ><strong>WeShare</strong></b-navbar-brand
         >
-          Menu
-        </button>
+        <div class="container-fluid float-right">
+          <button
+            v-if="this.$auth.user"
+            class="btn btn-dark btn-lg ml-auto"
+            v-b-toggle.sidebar-right
+          >
+            Menu
+          </button>
+        </div>
       </div>
     </b-navbar>
   </div>
@@ -17,9 +21,8 @@
 
 <script>
 export default {
-  name: "TopBar",
+  name: "TopBar"
 };
 </script>
 
-<style>
-</style>
+<style></style>
