@@ -14,9 +14,9 @@
       </div>
       <div class="col-md-8 white-container rounded my-4">
         <h3>{{user.username}}'s posts:</h3>
-        <!-- Just as an example -->
-        <!-- <Post post=""/>
-        <Post post=""/> Morao zakomentirati da radi. -->
+        <div v-for="post in posts" :key="post.id">
+          <Post :post="post" />
+        </div>
       </div>
       
       <div class="col-md-2 my-4">
@@ -66,7 +66,7 @@ export default {
         };
     },
 
-    data() {
+    data: function() {
       return {
         loaded: false,
         id: this.$route.params.id,
@@ -75,16 +75,27 @@ export default {
       } 
     },
 
-    async created() {
+    created: async function() {
       try{
         let response = await this.$axios.get(`/account/${this.id}/`)
         this.currentUser = response.data
-        this.loaded = true
+        debugger
+
       }catch(e) {
         this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
         duration: 8000});
         this.$router.push("/home");
       }
+
+       /* Na backednu treba napraviti filtriranje postova*/
+      let response = await this.$axios.get(`post/`);
+      debugger
+      for(let post of response.data.reverse()) {
+        if(post.posted_by.username == this.user.username)
+          this.posts.push(post)
+      }
+      debugger
+      this.loaded = true
     },
     computed: {
       user() {
