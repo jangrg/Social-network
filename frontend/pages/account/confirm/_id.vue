@@ -3,16 +3,16 @@
     <BrandName form="Verify your email" />
     <div class="mx-auto">
       <div
-        class="lead border rounded mx-auto p-5 white-container justify-content-center"
+        class="font-theme border-theme mx-auto p-5 bg-color justify-content-center"
       >
-        <div class="center">
+        <div class="center text-white">
           <div class="d-flex align-items-center justify-content-center">
             <strong>{{ this.header }}</strong>
           </div>
           <b-button
             type="button"
             to="/login"
-            class="btn-wider btn btn-primary mt-2 text-align"
+            class="btn-wider btn btn-warning mt-2 text-align"
           >
             Continue to WeShare
           </b-button>
@@ -28,22 +28,22 @@ import BrandName from "../../../components/BrandName";
 export default {
   name: "RegisterForm",
   components: { BrandName },
-  middleware: ['auth-loggedIn'],
+  middleware: ["auth-loggedIn"],
   head() {
     return {
       title: "Register",
       meta: [
         {
           name: "viewport",
-          content: "width=device-width, initial-scale=1, shrink-to-fit=no"
-        }
-      ]
+          content: "width=device-width, initial-scale=1, shrink-to-fit=no",
+        },
+      ],
     };
   },
   data() {
     return {
       id: this.$route.params.id,
-      header: "Verifying your account ..."
+      header: "Verifying your account ...",
     };
   },
   async mounted() {
@@ -58,6 +58,6 @@ export default {
     } catch (e) {
       this.header = "Cannot find id!";
     }
-  }
+  },
 };
 </script>

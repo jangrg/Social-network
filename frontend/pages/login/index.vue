@@ -3,11 +3,11 @@
     <BrandName form="Please log in" />
     <div class="mx-auto">
       <div
-        class="lead border rounded mx-auto p-5 white-container justify-content-center"
+        class="border-theme font-theme mx-auto p-5 bg-color justify-content-center text-white"
       >
         <div class="center">
           <div>
-            <strong>Login:</strong>
+            <strong class="text-theme">Login:</strong>
           </div>
           <b-form class="mx-auto mt-2 text-center">
             <b-form-input
@@ -31,17 +31,16 @@
             <button
               @click.prevent="loginUser"
               type="submit"
-              class="btn btn-primary mt-2 text-align"
+              class="btn btn-outline-warning mt-2 text-align"
             >
               Login
             </button>
           </b-form>
 
           <p class="lead mt-4">
-            Not a user?
+            <span class="p-2">Not a user?</span>
             <b-button
-              class="btn btn-primary text-align"
-              variant="primary"
+              variant="btn btn-outline-warning text-align"
               to="/register"
               >Register!</b-button
             >

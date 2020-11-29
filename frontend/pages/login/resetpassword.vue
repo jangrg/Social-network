@@ -3,11 +3,11 @@
     <BrandName form="Please log in" />
     <div class="mx-auto">
       <div
-        class="lead border rounded mx-auto p-5 white-container justify-content-center"
+        class="font-theme border-theme rounded mx-auto p-5 bg-color justify-content-center"
       >
         <div class="center">
           <div>
-            <strong>{{ this.header }}</strong>
+            <strong class="text-theme">{{ this.header }}</strong>
           </div>
           <div v-if="showReset" class="center">
             <b-form class="mx-auto mt-2 text-center">

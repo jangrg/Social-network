@@ -1,41 +1,43 @@
 <template>
-  <div class="d-flex flex-column bg-pattern">
-    <div class="container-fluid sticky-top">
-      <b-navbar variant="warning">
-        <b-button class="btn btn-primary btn-lg text-align mx-1" to="/home">Home</b-button>
-        <b-button class="btn btn-primary btn-lg text-align mx-1" @click.prevent="logOut">Logout</b-button>
-      </b-navbar>
-    </div>
-    <div v-if="this.loaded" class="container-fluid row  mx-auto">
-      <div class="col-md-2 my-4">
-        <b-avatar size="16rem" src=""></b-avatar>
-        <h1 class="profile-username">{{user.username}}</h1>
-        <h2 class="profile-email">{{user.email}}</h2>
+  <div class="d-flex flex-column bg-pattern font-theme">
+    <TopBar @post="addPost" />
+    <div v-if="this.loaded" class="container-fluid row text-theme mx-auto">
+      <div class="col-md-2 my-4 text-center">
+        <div class="container-fluid post-theme p-1">
+          <b-avatar size="16rem" src=""></b-avatar>
+          <h1 class="profile-username">{{ user.username }}</h1>
+          <h2 class="profile-email">{{ user.email }}</h2>
+          <button
+            v-if="anotherUser"
+            class="btn btn-outline-warning btn-lg text-align p-1"
+          >
+            Follow
+          </button>
+          <button
+            v-if="anotherUser"
+            class="btn btn-outline-warning btn-lg text-align p-1"
+          >
+            Message
+          </button>
+        </div>
       </div>
-      <div class="col-md-8 white-container rounded my-4">
-        <h3>{{user.username}}'s posts:</h3>
+      <div class="col-md-8 rounded my-4 text-theme">
         <div v-for="post in posts" :key="post.id">
           <Post :post="post" />
         </div>
       </div>
-      
-      <div class="col-md-2 my-4">
-        <b-button v-if="anotherUser" class="btn btn-primary btn-lg text-align mx-1">Follow</b-button>
-        <b-button v-if="anotherUser" class="btn btn-secondary btn-lg text-align mx-1">Message</b-button>
-        <div class="my-4">
-          <h1 class="subtitle">See also:</h1>
 
-          <div class="media border p-1">
-            <div class="media-body post-color p-1">
+      <div class="col-md-2 my-4">
+        <div class="my-4">
+          <div class="media post-theme p-1">
+            <div class="media-body bg-color text-theme-secondary p-2">
               <div class="d-flex align-items">
                 <b-avatar class="mx-1"></b-avatar>
                 <h5 class="lead mt-0">
-                <strong> Other user/shop username</strong>
+                  <strong> Other user/shop username</strong>
                 </h5>
               </div>
-              <p class="lead">
-                Other user/shop profile information.
-              </p>
+              <p class="font-theme">Other user/shop profile information.</p>
             </div>
           </div>
         </div>
@@ -49,76 +51,81 @@
 
 <script>
 import Post from "../../components/Post";
+import TopBar from "@/components/TopBar";
 
 export default {
-    name: "User",
-    components: { Post },
-    middleware: ['auth-notLoggedIn'],
-    head() {
-        return {
-        title: "User",
-        meta: [
-            {
-            name: "viewport",
-            content: "width=device-width, initial-scale=1, shrink-to-fit=no",
-            },
-        ],
-        };
-    },
-
-    data: function() {
-      return {
-        loaded: false,
-        id: this.$route.params.id,
-        currentUser: "",
-        posts: []
-      } 
-    },
-
-    created: async function() {
-      try{
-        let response = await this.$axios.get(`/account/${this.id}/`)
-        this.currentUser = response.data
-        debugger
-
-      }catch(e) {
-        this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
-        duration: 8000});
-        this.$router.push("/home");
-      }
-
-       /* Na backednu treba napraviti filtriranje postova*/
-      let response = await this.$axios.get(`post/`);
-      debugger
-      for(let post of response.data.reverse()) {
-        if(post.posted_by.username == this.user.username)
-          this.posts.push(post)
-      }
-      debugger
-      this.loaded = true
-    },
-    computed: {
-      user() {
-        if(this.anotherUser)
-          return this.currentUser
-        else
-          return this.$auth.user
+  name: "User",
+  components: { Post, TopBar },
+  middleware: ["auth-notLoggedIn"],
+  head() {
+    return {
+      title: "User",
+      bodyAttrs: {
+        class: "body-theme",
       },
+      meta: [
+        {
+          name: "viewport",
+          content: "width=device-width, initial-scale=1, shrink-to-fit=no",
+        },
+      ],
+    };
+  },
 
-      anotherUser() {
-        return this.id !== this.$auth.user.id
-      }
-    },
-    methods: {
-        logOut() {
-            this.$store.commit('User/RESET_USER')
-            this.$router.push('/')
-        }
+  data: function () {
+    return {
+      loaded: false,
+      id: this.$route.params.id,
+      currentUser: "",
+      posts: [],
+    };
+  },
+
+  created: async function () {
+    try {
+      let response = await this.$axios.get(`/account/${this.id}/`);
+      this.currentUser = response.data;
+      debugger;
+    } catch (e) {
+      this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
+        duration: 8000,
+      });
+      this.$router.push("/home");
+    }
+
+    /* Na backednu treba napraviti filtriranje postova*/
+    let response = await this.$axios.get(`post/`);
+    debugger;
+    for (let post of response.data.reverse()) {
+      if (post.posted_by.username == this.user.username) this.posts.push(post);
+    }
+    debugger;
+    this.loaded = true;
+  },
+
+  computed: {
+    user() {
+      if (this.anotherUser) return this.currentUser;
+      else return this.$auth.user;
     },
 
-}
+    anotherUser() {
+      return this.id !== this.$auth.user.id;
+    },
+  },
+
+  methods: {
+    logOut() {
+      this.$store.commit("User/RESET_USER");
+      this.$router.push("/");
+    },
+
+    addPost(parameters) {
+      if (parameters.posted_by.id == this.id) this.posts.unshift(parameters);
+    },
+  },
+};
 </script>
 
 <style scoped>
-
 </style>

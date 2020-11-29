@@ -1,10 +1,11 @@
 <template>
-  <div class="media p-1">
-    <div class="media-body post-color p-5">
-      <h5 class="lead mt-1">
+  <div class="media p-1 font-theme">
+    <div class="media-body post-theme p-5">
+      <h5 class="lead">
+        <b-avatar class="mb-2"></b-avatar>
         <strong
           ><nuxt-link
-            class="text-dark"
+            class="text-theme"
             :to="{ name: 'users-id', params: { id: post.posted_by.id } }"
           >
             {{ post.posted_by.username }}
@@ -13,7 +14,7 @@
         <span class="three-dots"><strong>...</strong></span>
       </h5>
 
-      <hr class="mt-0" />
+      <hr class="mt-0 post-separator-theme" />
 
       <p class="lead">
         {{ post.content }}
@@ -33,7 +34,7 @@
           <!-- <button class="btn-sm btn-warning">Comment!</button> -->
         </div>
       </div>
-      <hr />
+      <hr class="post-separator-theme"/>
       <div class="ml-5 comment">Add a comment ...</div>
       <div class="ml-5" v-for="comment in post.comments" :key="comment.Id">
         <Post :post="null" />

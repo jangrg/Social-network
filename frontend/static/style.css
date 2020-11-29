@@ -37,6 +37,14 @@
   width: 200px;
 }
 
+.btn-fill {
+  width: 100%;
+}
+
+.collapsible-fill {
+  max-width: 100%;
+}
+
 .bg {
   /* The image used */
   background-image: url("/marrakech-4500910_1920.jpg");
@@ -44,12 +52,6 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-}
-
-.bg-pattern {
-  /* The image used */
-  background-image: url("/double-bubble-outline.png");
-  background-repeat: repeat;
 }
 
 .white-container {
@@ -90,7 +92,7 @@ body {
 }
 
 .post-color {
-  background-color: white;
+  background-color: #EFEFEF;
   text-emphasis-color: white;
   border: 1px solid rgb(167, 167, 167);
   border-radius: 5px;
@@ -99,6 +101,7 @@ body {
 
 .post-font {
   font-size: 0.9em !important;
+  color: white;
 }
 
 .profile-username {
@@ -110,24 +113,11 @@ body {
 .profile-email {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 1.5em;
+  font-size: 2.5em;
 }
 
 .no-border {
   border: none;
-}
-
-.like-img {
-  height: 26px;
-  width: 30px;
-  background-image: url("./empty_heart.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-.like-img:hover,
-.like {
-  background-image: url("./full_heart.png");
 }
 
 .three-dots {
@@ -146,11 +136,10 @@ body {
 
 .lead-text {
   font-size: 30px;
-  font-family: "Quicksand", sans-serif;
 }
 
 .top-bar {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #260F26;
 }
 .profile-username {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
@@ -162,4 +151,8 @@ body {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 120%;
+}
+
+.full-page {
+  height: 100vh;
 }

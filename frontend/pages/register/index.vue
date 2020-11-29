@@ -1,13 +1,13 @@
 <template>
-  <div class="d-flex flex-column bg justify-content-between">
+  <div class="d-flex flex-column bg  justify-content-between">
     <BrandName form="Feel free to register" />
-    <div class="mx-auto">
+    <div class="mx-auto font-theme">
       <div
-        class="lead border rounded mx-auto p-5 white-container justify-content-center"
+        class="lead border-theme mx-auto p-5 bg-color justify-content-center"
       >
-        <div class="center">
+        <div class="center text-white">
           <div>
-            <strong>Register:</strong>
+            <strong class="text-theme">Register:</strong>
           </div>
           <b-form class="mx-auto mt-2 text-center">
             <b-form-input
@@ -76,7 +76,7 @@
               @click.prevent="register"
               :disabled="allowSubmit"
               type="submit"
-              class="btn btn-primary mt-2 text-align"
+              class="btn btn-warning mt-2 text-align"
             >
               Submit
             </button>
@@ -84,8 +84,7 @@
             <p class="lead mt-4">
               Already a user?
               <b-button
-                class="btn btn-primary text-align"
-                variant="primary"
+                variant="btn btn-outline-warning text-align"
                 to="/login"
                 >Login</b-button
               >

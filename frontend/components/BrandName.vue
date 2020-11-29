@@ -1,7 +1,7 @@
 <template>
 <div class="container-fluid">
-    <b-navbar variant="warning">
-        <b-navbar-brand class="lead"><strong>Social Network - {{ form }}</strong></b-navbar-brand>
+    <b-navbar class="top-bar-theme">
+        <b-navbar-brand class="lead-text font-theme-top-bar"><strong>WeShare - {{ form }}</strong></b-navbar-brand>
     </b-navbar>
 </div>
   

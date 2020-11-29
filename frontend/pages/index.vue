@@ -3,17 +3,21 @@
     <TopBar />
     <div class="mx-auto" v-if="!user">
       <div
-        class="lead border rounded mx-auto p-4 white-container justify-content-center"
+        class="border-theme font-theme rounded mx-auto p-4 bg-color justify-content-center text-white"
       >
         <div class="d-flex flex-column container-fluid">
-          <h1 class="title">Welcome to <strong>WeShare</strong></h1>
+          <h1 class="title text-light">
+            Welcome to <strong class="text-warning">WeShare</strong>
+          </h1>
           <h2 class="subtitle">Feel free to register now!</h2>
           <div class="links mx-auto">
-            <b-button class="btn btn-primary btn-lg text-align" to="/register"
+            <b-button
+              variant="btn btn-outline-warning text-align btn-lg p-2"
+              to="/register"
               >Register</b-button
             >
             <b-button
-              variant="btn btn-outline-primary btn-lg text-align"
+              variant="btn btn-outline-warning text-align btn-lg p-2"
               to="/login"
               >Login</b-button
             >
