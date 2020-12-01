@@ -7,21 +7,8 @@
       >
         <div class="d-flex flex-column container-fluid">
           <h1 class="title text-light">
-            Welcome to <strong class="text-warning">WeShare</strong>
+            Welcome
           </h1>
-          <h2 class="subtitle">Feel free to register now!</h2>
-          <div class="links mx-auto">
-            <b-button
-              variant="btn btn-outline-warning text-align btn-lg p-2"
-              to="/register"
-              >Register</b-button
-            >
-            <b-button
-              variant="btn btn-outline-warning text-align btn-lg p-2"
-              to="/login"
-              >Login</b-button
-            >
-          </div>
         </div>
       </div>
     </div>
@@ -46,18 +33,17 @@ export default {
       meta: [
         {
           name: "viewport",
-          content: "width=device-width, initial-scale=1, shrink-to-fit=no",
-        },
-      ],
+          content: "width=device-width, initial-scale=1, shrink-to-fit=no"
+        }
+      ]
     };
   },
   computed: {
     user() {
       return this.$auth.user;
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

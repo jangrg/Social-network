@@ -1,44 +1,98 @@
 <template>
   <div class="container-fluid sticky-top font-theme-top-bar">
     <b-navbar class="top-bar top-bar-theme">
-      <div class="row container-fluid">
-        <b-navbar-brand class="lead-text col-3"
-          ><strong>WeShare</strong></b-navbar-brand
+      <div class="row container-fluid center inline-block">
+        <b-navbar class="col-2"
+          ><nuxt-link class="logo" to="/home">
+            WeShare
+          </nuxt-link></b-navbar
         >
-        <div class="col-7"></div>
-        <div class="container-fluid col-2">
-          <button
-            v-if="this.$auth.user"
-            class="btn btn-outline-dark btn-lg ml-auto"
-            v-b-toggle.sidebar-right
+        <div class=" col-4">
+          <b-form class="navbar-form fix">
+            <input
+              type="search"
+              class="form-control w-100 input-grey"
+              v-model="searchQuery"
+              placeholder="Search"
+            />
+            <b-button
+              variant="btn search-btn"
+              :to="{
+                name: 'search-keyword',
+                params: { keyword: this.searchQuery }
+              }"
+              type="submit"
+              >🔎</b-button
+            >
+          </b-form>
+        </div>
+        <div class="links" v-if="!this.$auth.user">
+          <b-button variant="btn btn-purple text-align btn-lg" to="/register"
+            >Register</b-button
           >
+          <b-button variant="btn btn-purple text-align btn-lg" to="/login"
+            >Login</b-button
+          >
+        </div>
+        <!-- <div class="col-2" v-if="this.$auth.user">
+          <button class="btn btn-lg ml-auto" v-b-toggle.sidebar-right>
             <i class="fa fa-bars"></i>
           </button>
+        </div-->
+        <div class="col-2 avatar" v-if="this.$auth.user">
+          <b-button
+            variant="btn btn-purple text-align btn-lg"
+            @click.prevent="logOut"
+            v-if="this.user"
+            >Logout</b-button
+          >
+          <b-avatar
+            class="mb-2 usericon"
+            :to="{ name: 'users-id', params: { id: this.user.id } }"
+            v-if="this.user"
+          ></b-avatar>
+          <span>{{ this.user.username }}</span>
         </div>
       </div>
     </b-navbar>
-    <SideBar @post="emitPost" v-if="this.$auth.user" />
+    <!-- <SideBar @post="emitPost" v-if="this.$auth.user" /> -->
   </div>
 </template>
 
 <script>
-
-import SideBar from '@/components/SideBar';
+import SideBar from "@/components/SideBar";
 
 export default {
   name: "TopBar",
-  components: {SideBar},
+  data() {
+    return {
+      posts: [],
+      searchQuery: ""
+    };
+  },
+  computed: {
+    user() {
+      return this.$auth.user;
+    }
+  },
+  components: { SideBar },
   head: {
     link: [
       {
-        rel: 'stylesheet',
-        href: 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'
+        rel: "stylesheet",
+        href:
+          "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       }
     ]
   },
   methods: {
     emitPost(parameters) {
-      this.$emit('post', parameters);
+      this.$emit("post", parameters);
+    },
+    allowSubmit() {},
+    logOut() {
+      this.$auth.logout();
+      this.$router.push("/");
     }
   }
 };

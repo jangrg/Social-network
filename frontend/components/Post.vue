@@ -34,7 +34,7 @@
           <!-- <button class="btn-sm btn-warning">Comment!</button> -->
         </div>
       </div>
-      <hr class="post-separator-theme"/>
+      <hr class="post-separator-theme" />
       <div class="ml-5 comment">Add a comment ...</div>
       <div class="ml-5" v-for="comment in post.comments" :key="comment.Id">
         <Post :post="null" />

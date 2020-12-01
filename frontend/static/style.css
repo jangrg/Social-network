@@ -21,10 +21,6 @@
   padding-bottom: 15px;
 }
 
-.links {
-  padding-top: 15px;
-}
-
 .btn {
   width: 100px;
 }
@@ -92,11 +88,11 @@ body {
 }
 
 .post-color {
-  background-color: #EFEFEF;
+  background-color: #efefef;
   text-emphasis-color: white;
   border: 1px solid rgb(167, 167, 167);
   border-radius: 5px;
-  margin: 10px;
+  margin: 20px;
 }
 
 .post-font {
@@ -138,8 +134,20 @@ body {
   font-size: 30px;
 }
 
+.logo {
+  font-size: 25px;
+  color: rgb(121, 63, 165);
+  font-weight: bold;
+}
+
+.logo:hover {
+  text-decoration: none;
+  color: rgb(121, 63, 165);
+}
+
 .top-bar {
-  border-bottom: 1px solid #260F26;
+  height: 8vh;
+  border-bottom: 1px solid #260f26;
 }
 .profile-username {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
@@ -155,4 +163,84 @@ body {
 
 .full-page {
   height: 100vh;
+}
+
+.search-btn {
+  float: left;
+  height: 40px;
+  top: 10px;
+  position: relative;
+  width: 40px;
+}
+
+.fix {
+  display: flex;
+}
+
+.input-grey {
+  background-color: #272525;
+  width: 30vw;
+  height: 5vh;
+  border: 1px black solid;
+}
+
+@media screen and (max-width: 800px) {
+  .links,
+  .avatar {
+    width: 20vw;
+    display: flex;
+  }
+
+  .links .btn {
+    width: 65px;
+    height: 30px;
+    font-size: 8px;
+    position: relative;
+    margin-left: 5px;
+  }
+
+  .avatar span {
+    display: none;
+  }
+
+  .avatar .btn {
+    width: 65px;
+    height: 30px;
+    font-size: 8px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .links .btn {
+    position: relative;
+    right: 5px;
+  }
+}
+
+.avatar .usericon {
+  margin-left: 10px;
+  width: 30px;
+  height: 30px;
+}
+.new-post {
+  color: white;
+  background-color: #151414;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.new-post textarea {
+  background-color: #2b2828;
+  border: none;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 98%;
+}
+
+.avatar span {
+  text-align: center;
+  position: relative;
+  font-size: 16px;
+  font-weight: bold;
 }
