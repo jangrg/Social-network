@@ -22,7 +22,7 @@
                 params: { keyword: this.searchQuery }
               }"
               type="submit"
-              >🔎</b-button
+              ></b-button
             >
           </b-form>
         </div>
@@ -40,6 +40,12 @@
           </button>
         </div-->
         <div class="col-2 avatar" v-if="this.$auth.user">
+          <b-button
+            variant="btn btn-purple text-align btn-lg"
+            to="/home"
+            v-if="this.user"
+            >Home</b-button
+          >
           <b-button
             variant="btn btn-purple text-align btn-lg"
             @click.prevent="logOut"

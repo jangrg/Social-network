@@ -171,6 +171,10 @@ body {
   top: 10px;
   position: relative;
   width: 40px;
+  background-image: url("./search-icon.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .fix {
@@ -243,4 +247,9 @@ body {
   position: relative;
   font-size: 16px;
   font-weight: bold;
+}
+
+.profile-icon {
+  width: 12em;
+  height: 12em;
 }
