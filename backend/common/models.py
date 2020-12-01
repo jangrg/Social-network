@@ -93,8 +93,8 @@ class Notification(models.Model):
 
 
 class Comment(models.Model):
-    text = models.TextField()
+    comment_text = models.TextField()
     likes_num = models.IntegerField(null=True)
     post = models.ForeignKey(Post, related_name="comments", on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name="comments", on_delete=models.CASCADE)
-    parent_comment = models.ForeignKey("Comment", related_name="comment", on_delete=models.CASCADE)
+    # parent_comment = models.ForeignKey("Comment", related_name="comment", on_delete=models.CASCADE)

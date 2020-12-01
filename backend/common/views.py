@@ -6,8 +6,8 @@ from rest_framework import viewsets, mixins, status, filters, generics
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 
-from .models import User, Post
-from .serializers import UserSerializer, ListPostSerializer, CreatePostSerializer
+from .models import User, Post, Comment
+from .serializers import UserSerializer, PostSerializer, CommentSerializer
 from rest_framework.response import Response
 
 
@@ -31,6 +31,9 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'confirm':
             return None
+        elif self.action == 'comment':
+            kwargs['only_fields'] = ['text', 'likes_num', 'post']
+            return super().get_serializer(*args, **kwargs)
         elif self.action == 'follow':
             kwargs['only_fields'] = ['id']
             return super().get_serializer(*args, **kwargs)
@@ -95,24 +98,30 @@ class PostViewSet(viewsets.ModelViewSet):
         return Post.objects.all()
 
     def get_serializer_class(self):
-        if self.action == 'create':
-            return CreatePostSerializer
+        if self.action == 'comment':
+            return CommentSerializer
         else:
-            return ListPostSerializer
+            return PostSerializer
 
     def get_serializer(self, *args, **kwargs):
         if self.action == 'create':
+            kwargs['only_fields'] = ['content', 'photo', 'type_attr']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'list':
             return super().get_serializer(*args, **kwargs)
+        elif self.action == 'comment':
+            return super().get_serializer(*args, **kwargs)
         return super().get_serializer(*args, **kwargs)
 
-    permission_classes_by_action = {'create': [IsAuthenticated],
-                                    'read': [IsAuthenticated],
-                                    'update': [IsAuthenticated],
-                                    'partial_update': [IsAuthenticated],
-                                    'delete': [IsAuthenticated],
-                                    'followed_posts': [IsAuthenticated]}
+    permission_classes_by_action = {
+        'create': [IsAuthenticated],
+        'read': [IsAuthenticated],
+        'update': [IsAuthenticated],
+        'partial_update': [IsAuthenticated],
+        'delete': [IsAuthenticated],
+        'followed_posts': [IsAuthenticated],
+        'comment': [IsAuthenticated],
+        }
 
     def get_permissions(self):
         try:
@@ -126,7 +135,7 @@ class PostViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             data['posted_by'] = request.user
             post = Post.objects.create(**data)
-            return Response(ListPostSerializer(post).data, status=status.HTTP_201_CREATED)
+            return Response(PostSerializer(post).data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request, *args, **kwargs):
@@ -143,3 +152,20 @@ class PostViewSet(viewsets.ModelViewSet):
             self.get_serializer(Post.objects.filter(posted_by__in=request.user.following.all()), many=True).data,
             status=status.HTTP_200_OK
         )
+
+    @action(detail=False, methods=['POST'], name='comment')
+    def comment(self, request):
+        data = request.data
+        serializer = self.get_serializer(data=data)
+        if serializer.is_valid():
+            data['user'] = request.user
+            data['post'] = Post.objects.filter(id=data['post']).first()
+            comment = Comment.objects.create(**data)
+            return Response(CommentSerializer(comment).data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['GET'], name='comment')
+    def get_comment(self, request):
+        return Response(CommentSerializer(Comment.objects.all(), many=True).data)
+
+

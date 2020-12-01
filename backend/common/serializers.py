@@ -1,4 +1,4 @@
-from common.models import User, Post
+from common.models import User, Post, Comment
 from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer
 
@@ -36,15 +36,25 @@ class UserSerializer(DynamicFieldsModelSerializer):
         return obj
 
 
-class ListPostSerializer(ModelSerializer):
+class CommentSerializer(DynamicFieldsModelSerializer):
+    user = UserSerializer(only_fields=['id', 'username'], read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ['comment_text', 'likes_num', 'post', 'user']
+
+
+class PostSerializer(DynamicFieldsModelSerializer):
     posted_by = UserSerializer(only_fields=['id', 'username'], read_only=True)
+    comments = SerializerMethodField()
 
     class Meta:
         model = Post
-        fields = ['id', 'posted_by', 'content', 'photo', 'type_attr', 'likes_num', 'time']
+        fields = ['id', 'posted_by', 'content', 'photo', 'type_attr', 'likes_num', 'time', 'comments']
 
-
-class CreatePostSerializer(ModelSerializer):
-    class Meta:
-        model = Post
-        fields = ['content', 'photo', 'type_attr']
+    def get_comments(self, obj):
+        return CommentSerializer(
+            Comment.objects.filter(post=obj.id).all(),
+            many=True,
+            only_fields=['comment_text', 'likes_num', 'user']
+        ).data
