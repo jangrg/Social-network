@@ -57,7 +57,6 @@
             :to="{ name: 'users-id', params: { id: this.user.id } }"
             v-if="this.user"
           ></b-avatar>
-          <span>{{ this.user.username }}</span>
         </div>
       </div>
     </b-navbar>
