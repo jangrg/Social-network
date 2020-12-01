@@ -94,6 +94,8 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
 
 class PostViewSet(viewsets.ModelViewSet):
 
+    serializer_class = Post
+
     def get_queryset(self):
         return Post.objects.all()
 
@@ -110,6 +112,9 @@ class PostViewSet(viewsets.ModelViewSet):
         elif self.action == 'list':
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'comment':
+            return super().get_serializer(*args, **kwargs)
+        elif self.action == 'like':
+            kwargs['only_fields'] = ['id']
             return super().get_serializer(*args, **kwargs)
         return super().get_serializer(*args, **kwargs)
 
@@ -168,4 +173,12 @@ class PostViewSet(viewsets.ModelViewSet):
     def get_comment(self, request):
         return Response(CommentSerializer(Comment.objects.all(), many=True).data)
 
+    @action(detail=True, methods=['POST'], name='like')
+    def like(self, request, pk=None):
+        post = self.get_object()
+        if post is not None:
+            post.likes_num += 1
+            post.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
