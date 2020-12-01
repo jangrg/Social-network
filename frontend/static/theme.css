@@ -1,92 +1,128 @@
 @font-face {
-    font-family: Montserrat-Regular;
-    src: url('./font/Montserrat-Regular.ttf')
+  font-family: Montserrat-Regular;
+  src: url("./font/Montserrat-Regular.ttf");
 }
 
 @font-face {
-    font-family: Montserrat-TopBar;
-    src: url('./font/Montserrat-Light.ttf')
+  font-family: Montserrat-TopBar;
+  src: url("./font/Montserrat-Light.ttf");
 }
 
 .top-bar-theme {
-    background-color: #E09D00;
+  background-color: #151414;
+  color: rgb(121, 63, 165);
 }
 
 .text-theme {
-    color: #ffc107;
-    font-size: 1.5rem;
+  color: rgb(121, 63, 165);
+  font-size: 1.5rem;
 }
 
 .text-theme-secondary {
-    color:white;
-    font-size: 1.5rem;
+  color: white;
+  font-size: 1rem;
 }
 
 .sidebar-link-theme {
-    color: white;
-    border-top: 1px, solid, white ;
-    background-color: transparent;
+  color: white;
+  border-top: 1px, solid, white;
+  background-color: transparent;
 }
 
 hr {
-    background-color: #ffc107;
+  background-color: rgb(121, 63, 165);
 }
 
 .bg-color {
-    background-color: #232020 !important;
+  background-color: #232020 !important;
 }
 
 .btn-theme {
-    background-color: #232020;
-    color: white;
+  background-color: #232020;
+  color: white;
 }
 
 .post-theme {
-    color: white;
-    background-color: #151414;
-    border: #FFB947 solid 2px;
-    border-radius: 10px;
+  color: white;
+  background-color: #151414;
+  border: rgb(86, 19, 142) solid 1px;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.post-theme:hover {
+  border: rgb(121, 63, 165) solid 1px;
 }
 
 .sidebar-theme {
-    background-color: #232020;
-    border-bottom: #FFB947 solid 2px ;
-    color:white;
-    text-align: left;
+  background-color: #232020;
+  border-bottom: rgb(121, 63, 165) solid 2px;
+  color: white;
+  text-align: left;
 }
 
 .close-sidebar-theme {
-    color: #ffc107;
+  color: rgb(121, 63, 165);
 }
 
 .body-theme {
-    background-image: url("patterns/webb-dark.png");
-    background-repeat: repeat;
+  /* background-image: url("patterns/webb-dark.png"); */
+  /* background-repeat: repeat; */
+  background-color: black;
 }
 
 .border-theme {
-    border: 1px solid black;
-    border-radius: 3px;
+  border: 1px solid black;
+  border-radius: 3px;
 }
 
 .font-theme {
-    font-family: 'Montserrat-Regular';
-    font-size: 1.25rem;
+  font-family: "Montserrat-Regular";
+  font-size: 1rem;
 }
 
 .font-theme-top-bar {
-    font-family: 'Montserrat-TopBar';
+  font-family: "Montserrat-TopBar";
 }
 
-.like-img{
-    height: 26px;
-    width: 30px;
-    background-image: url("./empty_heart_theme.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-  }
-  
-  .like-img:hover,
-  .like {
-    background-image: url("./full_heart.png");
-  }
+.like-img {
+  height: 26px;
+  width: 30px;
+  background-image: url("./empty_heart_theme.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.like-img:hover,
+.like {
+  background-image: url("./full_heart.png");
+}
+
+.btn-purple {
+  background-color: rgb(86, 19, 142);
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.btn-purple:hover {
+  background-color: rgb(77, 39, 105);
+  color: white;
+}
+
+.center-vertical {
+  position: relative;
+  top: 13vh;
+}
+
+.text-title {
+  font-size: 2em;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.input-style {
+  font-size: 13px;
+}

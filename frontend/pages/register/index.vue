@@ -1,16 +1,16 @@
 <template>
   <div class="d-flex flex-column bg  justify-content-between">
-    <BrandName form="Feel free to register" />
-    <div class="mx-auto font-theme">
+    <div class="mx-auto font-theme center-vertical">
       <div
-        class="lead border-theme mx-auto p-5 bg-color justify-content-center"
+        class="border-theme mx-auto p-5 bg-color justify-content-center text-white"
       >
-        <div class="center text-white">
-          <div>
-            <strong class="text-theme">Register:</strong>
+        <div class="center">
+          <div class="text-center">
+            <strong class="text-theme text-title">WeShare</strong>
           </div>
           <b-form class="mx-auto mt-2 text-center">
             <b-form-input
+              class="input-style"
               v-model="form.email"
               type="email"
               placeholder="Enter your email"
@@ -18,6 +18,7 @@
             </b-form-input>
 
             <b-form-input
+              class="input-style"
               v-model="form.first_name"
               type="text"
               placeholder="Enter your first name"
@@ -25,6 +26,7 @@
             </b-form-input>
 
             <b-form-input
+              class="input-style"
               v-model="form.last_name"
               type="text"
               placeholder="Enter your lastname"
@@ -32,6 +34,7 @@
             </b-form-input>
 
             <b-form-input
+              class="input-style"
               v-model="form.username"
               type="text"
               placeholder="Enter your username"
@@ -39,6 +42,7 @@
             </b-form-input>
 
             <b-form-input
+              class="input-style"
               v-model="form.password"
               type="password"
               placeholder="Enter a password"
@@ -51,6 +55,7 @@
             >
 
             <b-form-input
+              class="input-style"
               :disabled="passCheck"
               v-model="repeatedPassword"
               type="password"
@@ -62,6 +67,7 @@
             <span v-if="passwordsDontMatch">Passwords are not equal!</span>
 
             <b-form-input
+              class="input-style"
               v-model="form.birth_date"
               type="date"
               placeholder="Enter your date of birth"
@@ -76,16 +82,14 @@
               @click.prevent="register"
               :disabled="allowSubmit"
               type="submit"
-              class="btn btn-warning mt-2 text-align"
+              class="btn btn-purple mt-2 text-align"
             >
               Submit
             </button>
 
             <p class="lead mt-4">
               Already a user?
-              <b-button
-                variant="btn btn-outline-warning text-align"
-                to="/login"
+              <b-button variant="btn btn-purple text-align" to="/login"
                 >Login</b-button
               >
             </p>
@@ -103,7 +107,7 @@ import BrandName from "../../components/BrandName";
 export default {
   name: "RegisterForm",
   components: { BrandName },
-  middleware: ['auth-loggedIn'],
+  middleware: ["auth-loggedIn"],
   head() {
     return {
       title: "Register",

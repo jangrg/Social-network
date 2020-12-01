@@ -1,23 +1,27 @@
 <template>
   <div class="d-flex flex-column bg justify-content-between">
-    <BrandName form="Please log in" />
-    <div class="mx-auto">
+    <!-- <BrandName form="Please log in" /> -->
+    <div class="mx-auto center-vertical">
       <div
         class="border-theme font-theme mx-auto p-5 bg-color justify-content-center text-white"
       >
         <div class="center">
-          <div>
-            <strong class="text-theme">Login:</strong>
+          <div class="text-center">
+            <strong class="text-theme text-title">WeShare</strong>
           </div>
+          <!-- <div>
+            <strong class="text-theme">Login:</strong>
+          </div> -->
           <b-form class="mx-auto mt-2 text-center">
             <b-form-input
+              class="input-style"
               v-model="form.username"
               placeholder="Enter your username"
             >
             </b-form-input>
 
             <b-form-input
-              class="mt-2"
+              class="mt-2 input-style"
               v-model="form.password"
               type="password"
               placeholder="Enter your password"
@@ -31,7 +35,7 @@
             <button
               @click.prevent="loginUser"
               type="submit"
-              class="btn btn-outline-warning mt-2 text-align"
+              class="btn btn-purple mt-2 text-align"
             >
               Login
             </button>
@@ -39,20 +43,19 @@
 
           <p class="lead mt-4">
             <span class="p-2">Not a user?</span>
-            <b-button
-              variant="btn btn-outline-warning text-align"
-              to="/register"
+            <b-button variant="btn btn-purple text-align" to="/register"
               >Register!</b-button
             >
           </p>
 
           <div class="mt-2 text-center mx-auto">
             <b-form-checkbox v-model="passwordForgot" class="mt-2">
-              Forgot your password ?
+              Forgot your password?
             </b-form-checkbox>
 
             <div class="forgottenPass" v-if="passwordForgot">
               <b-form-input
+                class="input-style"
                 v-model="emailForPassword"
                 type="email"
                 placeholder="Enter your email"
@@ -64,7 +67,7 @@
               v-if="passwordForgot"
               @click.prevent="forgottenPassword"
               type="submit"
-              class="btn btn-wider btn-primary mt-2 text-align"
+              class="btn btn-wider btn-purple mt-2 text-align"
             >
               Send email
             </button>
@@ -82,10 +85,10 @@ import BrandName from "../../components/BrandName";
 export default {
   name: "Index",
   components: { BrandName },
-  middleware: ['auth-loggedIn'],
+  middleware: ["auth-loggedIn"],
   head() {
     return {
-      title: "Login",
+      title: "WeShare",
       meta: [
         {
           name: "viewport",
@@ -107,10 +110,10 @@ export default {
   methods: {
     async loginUser() {
       try {
-        await this.$auth.loginWith('local', {
-           data: this.form
-         })
-         
+        await this.$auth.loginWith("local", {
+          data: this.form
+        });
+
         // redirect to user profile
         this.$router.push("/home");
       } catch (e) {
