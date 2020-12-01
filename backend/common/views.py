@@ -90,7 +90,9 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
+
+    def get_queryset(self):
+        return Post.objects.all()
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -128,7 +130,12 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request, *args, **kwargs):
-        return Response(self.get_serializer(Post.objects.all(), many=True).data, status=status.HTTP_200_OK)
+        queryset = self.get_queryset()
+        user_id = self.request.query_params.get('by_user', None)
+        if user_id is not None:
+            user = User.objects.get(id=user_id)
+            queryset = queryset.filter(posted_by=user)
+        return Response(self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'], name='followed_posts')
     def followed_posts(self, request):
