@@ -131,8 +131,9 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        user = User.objects.get(id=self.request.query_params.get('by_user', None))
-        if user is not None:
+        user_id = self.request.query_params.get('by_user', None)
+        if user_id is not None:
+            user = User.objects.get(id=user_id)
             queryset = queryset.filter(posted_by=user)
         return Response(self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
 
