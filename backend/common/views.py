@@ -163,7 +163,7 @@ class PostViewSet(viewsets.ModelViewSet):
         data = request.data
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
-            data['user'] = request.user
+            data['posted_by'] = request.user
             data['post'] = Post.objects.filter(id=data['post']).first()
             comment = Comment.objects.create(**data)
             return Response(CommentSerializer(comment).data, status=status.HTTP_201_CREATED)

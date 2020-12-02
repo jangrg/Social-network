@@ -37,11 +37,11 @@ class UserSerializer(DynamicFieldsModelSerializer):
 
 
 class CommentSerializer(DynamicFieldsModelSerializer):
-    user = UserSerializer(only_fields=['id', 'username'], read_only=True)
+    posted_by = UserSerializer(only_fields=['id', 'username'], read_only=True)
 
     class Meta:
         model = Comment
-        fields = ['comment_text', 'likes_num', 'post', 'user']
+        fields = ['comment_text', 'likes_num', 'post', 'posted_by']
 
 
 class PostSerializer(DynamicFieldsModelSerializer):
@@ -56,5 +56,5 @@ class PostSerializer(DynamicFieldsModelSerializer):
         return CommentSerializer(
             Comment.objects.filter(post=obj.id).all(),
             many=True,
-            only_fields=['comment_text', 'likes_num', 'user']
+            only_fields=['comment_text', 'likes_num', 'posted_by']
         ).data
