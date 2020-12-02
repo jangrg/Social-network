@@ -113,7 +113,7 @@ export default {
   created: async function() {
     let response = await this.$axios.get(`post/`);
 
-    this.posts = response.data.reverse();
+    this.posts = response.data;
   }
 };
 </script>

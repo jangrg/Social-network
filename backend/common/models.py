@@ -54,6 +54,9 @@ class Post(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     page = models.ForeignKey(Page, related_name="posts", null=True, blank=True, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['-time']
+
 
 class Item(models.Model):
     size = models.IntegerField()
