@@ -22,6 +22,7 @@
         </div>
       </div>
       <div class="col-md-8 rounded my-4 text-theme">
+        <div v-if="!anotherUser"><PostForm @post="setPost" /></div>
         <div v-for="post in posts" :key="post.id">
           <Post :post="post" />
         </div>
@@ -30,14 +31,14 @@
       <div class="col-md-2 my-4">
         <div class="my-4">
           <div class="container-fluid post-theme p-1">
-              <div class="bg-color text-theme-secondary p-2">
-                <b-avatar class="usericon"></b-avatar>
-                <h5 class="lead mt-0">
-                  <strong> Other user/shop username</strong>
-                </h5>
-              </div>
-              <hr>
-              <p class="font-theme mx-2">Other user/shop profile information.</p>
+            <div class="bg-color text-theme-secondary p-2">
+              <b-avatar class="usericon"></b-avatar>
+              <h5 class="lead mt-0">
+                <strong> Other user/shop username</strong>
+              </h5>
+            </div>
+            <hr />
+            <p class="font-theme mx-2">Other user/shop profile information.</p>
           </div>
         </div>
       </div>
@@ -51,10 +52,11 @@
 <script>
 import Post from "../../components/Post";
 import TopBar from "@/components/TopBar";
+import PostForm from "@/components/PostForm";
 
 export default {
   name: "User",
-  components: { Post, TopBar },
+  components: { Post, TopBar, PostForm },
   middleware: ["auth-notLoggedIn"],
   head() {
     return {
@@ -93,12 +95,10 @@ export default {
     }
 
     /* Na backednu treba napraviti filtriranje postova*/
-    let response = await this.$axios.get(`post/`);
+    let response = await this.$axios.get(`post/?by_user=${this.id}`);
     debugger;
-    for (let post of response.data.reverse()) {
-      if (post.posted_by.username == this.user.username) this.posts.push(post);
-    }
-    debugger;
+    this.posts = response.data;
+
     this.loaded = true;
   },
 
@@ -114,13 +114,8 @@ export default {
   },
 
   methods: {
-    logOut() {
-      this.$store.commit("User/RESET_USER");
-      this.$router.push("/");
-    },
-
-    addPost(parameters) {
-      if (parameters.posted_by.id == this.id) this.posts.unshift(parameters);
+    setPost(parameters) {
+      this.posts.unshift(parameters);
     },
   },
 };

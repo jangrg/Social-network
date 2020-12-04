@@ -3,12 +3,10 @@
     <b-navbar class="top-bar top-bar-theme">
       <div class="row container-fluid center inline-block">
         <b-navbar class="col-2"
-          ><nuxt-link class="logo" to="/home">
-            WeShare
-          </nuxt-link></b-navbar
+          ><nuxt-link class="logo" to="/home"> WeShare </nuxt-link></b-navbar
         >
-        <div class=" col-4">
-          <b-form class="navbar-form fix">
+        <div class="col-4">
+          <b-form class="navbar-form fix form-theme">
             <input
               type="search"
               class="form-control w-100 input-grey"
@@ -17,13 +15,13 @@
             />
             <b-button
               variant="btn search-btn"
+              :disabled="search"
               :to="{
                 name: 'search-keyword',
-                params: { keyword: this.searchQuery }
+                params: { keyword: this.searchQuery },
               }"
               type="submit"
-              ></b-button
-            >
+            ></b-button>
           </b-form>
         </div>
         <div class="links" v-if="!this.$auth.user">
@@ -72,12 +70,15 @@ export default {
   data() {
     return {
       posts: [],
-      searchQuery: ""
+      searchQuery: "",
     };
   },
   computed: {
     user() {
       return this.$auth.user;
+    },
+    search() {
+      return this.searchQuery == "";
     }
   },
   components: { SideBar },
@@ -86,20 +87,19 @@ export default {
       {
         rel: "stylesheet",
         href:
-          "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-      }
-    ]
+          "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
+      },
+    ],
   },
   methods: {
     emitPost(parameters) {
       this.$emit("post", parameters);
     },
-    allowSubmit() {},
     logOut() {
       this.$auth.logout();
       this.$router.push("/");
-    }
-  }
+    },
+  },
 };
 </script>
 

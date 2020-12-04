@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex flex-column bg  justify-content-between">
-    <div class="mx-auto font-theme center-vertical">
+  <div class="d-flex flex-column bg">
+    <div class="mx-auto font-theme mt-2">
       <div
         class="border-theme mx-auto p-5 bg-color justify-content-center text-white"
       >
@@ -97,7 +97,6 @@
         </div>
       </div>
     </div>
-    <div></div>
   </div>
 </template>
 
