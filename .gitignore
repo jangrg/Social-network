@@ -1,4 +1,5 @@
 backend/.idea/
+backend/media/
 backend/venv/
 frontend/.vscode/
 .idea/
