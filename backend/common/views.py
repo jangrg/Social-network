@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets, mixins, status, filters, generics
 from rest_framework.decorators import action
+from rest_framework.parsers import FileUploadParser
 from rest_framework.permissions import IsAuthenticated
 
 from .models import User, Post, Comment
@@ -95,6 +96,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
 class PostViewSet(viewsets.ModelViewSet):
 
     serializer_class = Post
+    parser_class = (FileUploadParser,)
 
     def get_queryset(self):
         return Post.objects.all()
@@ -107,7 +109,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def get_serializer(self, *args, **kwargs):
         if self.action == 'create':
-            kwargs['only_fields'] = ['content', 'photo', 'type_attr']
+            kwargs['only_fields'] = ['content', 'image']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'list':
             return super().get_serializer(*args, **kwargs)
@@ -138,8 +140,7 @@ class PostViewSet(viewsets.ModelViewSet):
         data = request.data
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
-            data['posted_by'] = request.user
-            post = Post.objects.create(**data)
+            post = serializer.save(posted_by=request.user)
             return Response(PostSerializer(post).data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 

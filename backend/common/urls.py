@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path, re_path, include
 from common import views
 from rest_framework import routers
@@ -24,5 +25,5 @@ urlpatterns += router.urls
 if settings.DEBUG:
     urlpatterns += [
         path('schema/', schema_view),
-        path('docs/', include_docs_urls(title=API_TITLE, description=API_DESCRIPTION))
+        path('docs/', include_docs_urls(title=API_TITLE, description=API_DESCRIPTION)),
     ]

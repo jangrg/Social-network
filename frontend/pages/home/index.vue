@@ -64,8 +64,8 @@ export default {
   },
   created: async function() {
     let response = await this.$axios.get(`post/`);
-
     this.posts = response.data;
+    console.log(this.posts)
   }
 };
 </script>

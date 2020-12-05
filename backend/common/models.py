@@ -48,7 +48,7 @@ class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     posted_by = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
     content = models.TextField()
-    photo = models.CharField(null=True, blank=True, max_length=255)
+    image = models.ImageField(upload_to='images/', null=True)
     type_attr = models.CharField(null=True, blank=True, max_length=255)
     likes_num = models.IntegerField(null=True, blank=True, default=0)
     time = models.DateTimeField(auto_now_add=True)

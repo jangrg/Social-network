@@ -8,6 +8,7 @@
         v-model="newPost.content"
         placeholder="Write a new post"
       ></textarea>
+      <input id="file" name="image" type="file" accept="image/*" ref="file" v-on:change="handleFileUpload()">
     </div>
 
     <button
@@ -28,26 +29,38 @@ export default {
     return {
       newPost: {
         content: "",
-        photo: null,
-        type_attr: null,
-        likes_num: 0,
-        posted_by: this.$auth.user.id,
+        image: null,
       },
     };
   },
   methods: {
+    handleFileUpload(){
+      this.newPost.image = this.$refs.file.files[0];
+    },
     async postForm() {
-      console.log(
-        this.newPost.posted_by +
-          " " +
-          this.newPost.content +
-          " " +
-          this.newPost.likes_num
-      );
+      // console.log(
+      //   this.newPost.posted_by +
+      //     " " +
+      //     this.newPost.content +
+      //     " " +
+      //     this.newPost.likes_num
+      // );
       try {
-        let res = await this.$axios.post(`post/`, this.newPost);
+        let formData = new FormData();
+        formData.append("content", this.newPost.content)
+        if(this.newPost.image)
+          formData.append("image", this.newPost.image)
 
-        console.log(res);
+        let response = await this.$axios.post(
+          `post/`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
+          }
+        );
+
         if (res.status == 201) {
           this.$toast.show("Post uspješno objavljen!", { duration: 8000 });
           let createdPost = res.data;
@@ -55,9 +68,10 @@ export default {
           this.$emit("post", createdPost);
         }
       } catch (e) {
-        this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
-          duration: 8000,
-        });
+        console.log(e)
+        // this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
+        //   duration: 8000,
+        // });
       }
     },
     
