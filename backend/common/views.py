@@ -98,6 +98,12 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = Post
     parser_class = (FileUploadParser,)
 
+    def get_serializer_context(self):
+        context = super(PostViewSet, self).get_serializer_context()
+        if self.request:
+            context.update({'user': self.request.user})
+        return context
+
     def get_queryset(self):
         return Post.objects.all()
 
