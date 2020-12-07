@@ -28,9 +28,8 @@
         </div>
       </div>
 
-      <div class="col-md-2 my-4">
-        <div class="my-4">
-          <div class="container-fluid post-theme p-1">
+      <div class="container-fluid col-md-2 my-4">
+          <div class="post-theme p-3">
             <div class="bg-color text-theme-secondary p-2">
               <b-avatar class="usericon"></b-avatar>
               <h5 class="lead mt-0">
@@ -40,7 +39,6 @@
             <hr />
             <p class="font-theme mx-2">Other user/shop profile information.</p>
           </div>
-        </div>
       </div>
     </div>
     <div>

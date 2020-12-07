@@ -80,11 +80,9 @@
 </template>
 
 <script>
-import BrandName from "../../components/BrandName";
 
 export default {
   name: "Index",
-  components: { BrandName },
   middleware: ["auth-loggedIn"],
   head() {
     return {

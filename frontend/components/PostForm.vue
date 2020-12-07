@@ -8,7 +8,7 @@
         v-model="newPost.content"
         placeholder="Write a new post"
       ></textarea>
-      <input id="file" name="image" type="file" accept="image/*" ref="file" v-on:change="handleFileUpload()">
+      <input id="file" class="image-upload" name="image" type="file" accept="image/*" ref="file" v-on:change="handleFileUpload()">
     </div>
 
     <button

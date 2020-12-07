@@ -2,14 +2,14 @@
   <div class="container-fluid sticky-top font-theme-top-bar">
     <b-navbar class="top-bar top-bar-theme">
       <div class="row container-fluid center inline-block">
-        <b-navbar class="col-2"
+        <b-navbar class="col-2 topbar-logo"
           ><nuxt-link class="logo" to="/home"> WeShare </nuxt-link></b-navbar
         >
         <div class="col-4">
           <b-form class="navbar-form fix form-theme">
             <input
               type="search"
-              class="form-control w-100 input-grey"
+              class="form-control search-bar input-grey"
               v-model="searchQuery"
               placeholder="Search"
             />
@@ -37,9 +37,9 @@
             <i class="fa fa-bars"></i>
           </button>
         </div-->
-        <div class="col-2 avatar" v-if="this.$auth.user">
+        <div class="topbar-buttons col-2 avatar d-flex justify-content-end" v-if="this.$auth.user">
           <b-button
-            variant="btn btn-purple text-align btn-lg"
+            variant="btn btn-purple mx-2 text-align btn-lg"
             to="/home"
             v-if="this.user"
             >Home</b-button
