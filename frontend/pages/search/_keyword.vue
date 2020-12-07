@@ -1,26 +1,18 @@
 <template>
-  <div
-    class="d-flex flex-column font-theme h-100"
-  >
+  <div class="d-flex flex-column font-theme">
     <TopBar />
-
-    <div class="container-fluid row mx-auto mt-2">
+    <div class="container-fluid row mx-auto">
       <div class="col-md-2"></div>
-      <div v-if="loaded" class="col-md-8 rounded post-theme">
-        <h3 class="text-theme-secondary">
-          Search result ({{ searchResult.length }}):
-        </h3>
-        <SearchResult
-          v-for="result in searchResult"
-          :key="result.id"
-          :user="result"
-        />
+      <div class="col-md-8 no-border">
+        <div v-for="result in searchResult" :key="result.id">
+          <SearchResult :user="result" />
+        </div>
+        <div class="col-md-2"></div>
       </div>
-
-      <div class="col-md-2"></div>
     </div>
   </div>
 </template>
+
 
 <script>
 import TopBar from "../../components/TopBar";
@@ -50,7 +42,7 @@ export default {
 
   data() {
     return {
-      loaded: false,
+      // loaded: false,
       keyword: this.$route.params.keyword,
       searchResult: []
     };
@@ -62,12 +54,12 @@ export default {
         params: { search: this.keyword },
       });
       this.searchResult = result.data;
-      this.loaded = true;
+      // this.loaded = true;
     } catch (e) {
-      this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
-        duration: 8000,
-      });
-      this.$router.push("/home");
+      // this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
+      //   duration: 8000,
+      // });
+      console.log(e);
     }
   },
 

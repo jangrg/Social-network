@@ -41,19 +41,19 @@
           <b-button
             variant="btn btn-purple mx-2 text-align btn-lg"
             to="/home"
-            v-if="this.user"
+            v-if="this.$auth.user"
             >Home</b-button
           >
           <b-button
             variant="btn btn-purple text-align btn-lg"
             @click.prevent="logOut"
-            v-if="this.user"
+            v-if="this.$auth.user"
             >Logout</b-button
           >
           <b-avatar
             class="mb-2 usericon"
-            :to="{ name: 'users-id', params: { id: this.user.id } }"
-            v-if="this.user"
+            :to="{ name: 'users-id', params: { id: this.$auth.user.id } }"
+            v-if="this.$auth.user"
           ></b-avatar>
         </div>
       </div>
@@ -63,25 +63,25 @@
 </template>
 
 <script>
-import SideBar from "@/components/SideBar";
+// import SideBar from "@/components/SideBar";
 
 export default {
   name: "TopBar",
   data() {
     return {
-      posts: [],
+      // posts: [],
       searchQuery: "",
     };
   },
   computed: {
-    user() {
-      return this.$auth.user;
-    },
+    // user() {
+    //   return this.$auth.user;
+    // },
     search() {
       return this.searchQuery == "";
     }
   },
-  components: { SideBar },
+  // components: { SideBar },
   head: {
     link: [
       {
@@ -92,9 +92,9 @@ export default {
     ],
   },
   methods: {
-    emitPost(parameters) {
-      this.$emit("post", parameters);
-    },
+    // emitPost(parameters) {
+    //   this.$emit("post", parameters);
+    // },
     logOut() {
       this.$auth.logout();
       this.$router.push("/");

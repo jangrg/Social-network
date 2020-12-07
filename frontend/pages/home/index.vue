@@ -1,6 +1,7 @@
 <template>
   <div class="d-flex flex-column font-theme">
-    <TopBar @post="setPost" />
+    <!-- <TopBar @post="setPost" /> -->
+    <TopBar/>
     <div class="container-fluid row mx-auto">
       <div class="col-md-2"></div>
       <div class="col-md-8 no-border">
