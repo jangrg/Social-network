@@ -1,7 +1,6 @@
 <template>
   <div class="d-flex flex-column bg justify-content-between">
-    <TopBar />
-    <div class="mx-auto">
+    <div class="mx-auto center-vertical">
       <div
         class="font-theme border-theme rounded mx-auto p-5 bg-color justify-content-center"
       >
@@ -71,6 +70,7 @@
     <div></div>
   </div>
 </template>
+
 <script>
 import TopBar from "@/components/TopBar";
 import styles from "@/static/style.css";

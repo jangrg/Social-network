@@ -45,6 +45,7 @@ export default {
     handleFileUpload(){
       this.newPost.image = this.$refs.file.files[0];
     },
+
     async postForm() {
       // console.log(
       //   this.newPost.posted_by +
@@ -69,9 +70,9 @@ export default {
           }
         );
 
-        if (res.status == 201) {
+        if (response.status == 201) {
           this.$toast.show("Post uspješno objavljen!", { duration: 8000 });
-          let createdPost = res.data;
+          let createdPost = response.data;
           document.getElementById("form").reset();
           this.$emit("post", createdPost);
         }
