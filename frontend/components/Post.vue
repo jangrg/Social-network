@@ -14,11 +14,15 @@
         <span class="three-dots"><strong>...</strong></span>
       </h5>
 
-      <hr class="mt-0 post-separator-theme" />
+      <hr class="mt-2 post-separator-theme" />
 
       <p class="lead">
         {{ post.content }}
       </p>
+
+      <div class="post-image">
+        <img :src="post.image" />
+      </div>
 
       <div class="container-fluid">
         <span>Likes: {{ post.likes_num }}</span>
@@ -26,14 +30,15 @@
         <span> Posted on: {{ date }} </span>
         <div class="d-inline float-right">
           <div :id="post.id" class="like-img" @click="likePost"></div>
-          <!-- <button class="btn-sm btn-warning" @click="likePost"> -->
-          <!-- <span v-if="!liked">Like this!</span>
-          <span v-else>Dislike this!</span> -->
+          <!-- <button class="btn-sm btn-warning" @click="likePost">
+            -->
+          <!-- <span v-if="!liked">Like this!</span> -->
+          <!-- <span v-else>Dislike this!</span> -->
           <!-- </button> -->
           <!-- <button class="btn-sm btn-warning">Comment!</button> -->
         </div>
       </div>
-      <hr class="post-separator-theme" />
+      <hr class="mt-4 post-separator-theme" />
       <b-form class="container-fluid form-theme">
         <textarea
           type="text"
@@ -155,5 +160,3 @@ export default {
   }
 };
 </script>
-
-<style></style>

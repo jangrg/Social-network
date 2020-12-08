@@ -43,10 +43,18 @@ export default {
         comment: Object,
     },
     data() {
-    return {
-      liked: false,
-    };
-  },
+      return {
+        liked: false,
+      }
+    },
+
+    methods: {
+      async likeComment() {
+
+      },
+
+    },
+
 }
 </script>
 

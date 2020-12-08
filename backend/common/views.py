@@ -28,7 +28,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
 
     def get_serializer(self, *args, **kwargs):
         if self.action == 'create':
-            kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'birth_date']
+            kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'birth_date', 'is_private']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'confirm':
             return None
@@ -39,7 +39,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             kwargs['only_fields'] = ['id']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'retrieve' or self.action == 'logged_user_data':
-            kwargs['only_fields'] = ['id', 'username', 'first_name', 'last_name', 'email', 'birth_date']
+            kwargs['only_fields'] = ['id', 'username', 'first_name', 'last_name', 'email', 'birth_date', 'is_private']
             return super().get_serializer(*args, **kwargs)
         return super().get_serializer(*args, **kwargs)
 
@@ -98,6 +98,12 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = Post
     parser_class = (FileUploadParser,)
 
+    def get_serializer_context(self):
+        context = super(PostViewSet, self).get_serializer_context()
+        if self.request:
+            context.update({'user': self.request.user})
+        return context
+
     def get_queryset(self):
         return Post.objects.all()
 
@@ -115,7 +121,7 @@ class PostViewSet(viewsets.ModelViewSet):
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'comment':
             return super().get_serializer(*args, **kwargs)
-        elif self.action == 'like':
+        elif self.action == 'like' or self.action == 'unlike':
             kwargs['only_fields'] = ['id']
             return super().get_serializer(*args, **kwargs)
         return super().get_serializer(*args, **kwargs)
@@ -141,7 +147,7 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             post = serializer.save(posted_by=request.user)
-            return Response(PostSerializer(post).data, status=status.HTTP_201_CREATED)
+            return Response(data=PostSerializer(post, context={'request': request}).data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request, *args, **kwargs):
@@ -176,10 +182,30 @@ class PostViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'], name='like')
     def like(self, request, pk=None):
-        post = self.get_object()
-        if post is not None:
-            post.likes_num += 1
-            post.save()
-            return Response(status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        user = request.user
+        if user.is_authenticated:
+            post = self.get_object()
+            if post is not None:
+                user = post.liked_by.filter(id=request.user.id)
+                if not user:
+                    post.likes_num += 1
+                    post.liked_by.add(request.user)
+                post.save()
+                return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+    @action(detail=True, methods=['POST'], name='like')
+    def unlike(self, request, pk=None):
+        user = request.user
+        if user.is_authenticated:
+            post = self.get_object()
+            if post is not None:
+                user = post.liked_by.filter(id=request.user.id)
+                if user:
+                    post.likes_num -= 1
+                    post.liked_by.remove(request.user)
+                post.save()
+                return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)

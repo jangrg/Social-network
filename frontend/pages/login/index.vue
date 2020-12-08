@@ -80,11 +80,8 @@
 </template>
 
 <script>
-import BrandName from "../../components/BrandName";
-
 export default {
   name: "Index",
-  components: { BrandName },
   middleware: ["auth-loggedIn"],
   head() {
     return {
@@ -115,7 +112,7 @@ export default {
         });
 
         // redirect to user profile
-        this.$router.push("/home");
+        this.$router.push("/following");
       } catch (e) {
         if (e.response.status == 401)
           this.$toast.error(`Not a registered user!`, { duration: 8000 });

@@ -8,35 +8,64 @@
         v-model="newPost.content"
         placeholder="Write a new post"
       ></textarea>
-      <input id="file" name="image" type="file" accept="image/*" ref="file" v-on:change="handleFileUpload()">
+      <div v-if="!canUploadImage" class="image-upload">
+        <label for="file">
+          <h5 class="font-theme lead">
+            <img class="image image-upload-picture" src="../static/upload_picture_icon.png">
+            <strong>Upload photo</strong>
+          </h5>
+        </label>
+        <input id="file" name="image" type="file" accept="image/*" ref="file" v-on:change="handleFileUpload()">
+      </div>
+    </div>
+
+    <div v-if="canUploadImage" class="small-img-preview">
+       <img :src="imgUrl">
     </div>
 
     <button
       @click.prevent="postForm"
       type="submit"
       class="btn btn-purple btn-fill mt-2 text-align btn-post"
-      :disabled="allowSubmit"
+      :disabled="disableSubmit"
     >
       Post
     </button>
+    <div v-if="openPreview">
+        <ImagePreview :post="this.newPost" @post="setImage" />
+    </div>
   </b-form>
 </template>
 
 <script>
+import ImagePreview from './ImagePreview.vue';
+
 export default {
+  components: { ImagePreview },
   name: "PostForm",
   data() {
     return {
+      openPreview: false,
       newPost: {
         content: "",
         image: null,
       },
+      canUploadImage: false
     };
   },
   methods: {
     handleFileUpload(){
       this.newPost.image = this.$refs.file.files[0];
+      this.openPreview = true;
     },
+
+    setImage(canUploadImage) {
+      this.openPreview = false,
+      this.canUploadImage = canUploadImage
+      if(!canUploadImage)
+        this.newPost.image = null
+    },
+
     async postForm() {
       // console.log(
       //   this.newPost.posted_by +
@@ -50,7 +79,6 @@ export default {
         formData.append("content", this.newPost.content)
         if(this.newPost.image)
           formData.append("image", this.newPost.image)
-
         let response = await this.$axios.post(
           `post/`,
           formData,
@@ -61,24 +89,27 @@ export default {
           }
         );
 
-        if (res.status == 201) {
+        if (response.status == 201) {
           this.$toast.show("Post uspješno objavljen!", { duration: 8000 });
-          let createdPost = res.data;
+          //Ovaj response ne vraca sliku prvi put!!
+          let createdPost = response.data;
           document.getElementById("form").reset();
+          this.canUploadImage = false;
           this.$emit("post", createdPost);
         }
       } catch (e) {
         console.log(e)
-        // this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
-        //   duration: 8000,
-        // });
       }
     },
     
   },
   computed: {
-    allowSubmit() {
-        return this.newPost.content == "";
+    disableSubmit() {
+        return this.newPost.content == ""
+    },
+
+    imgUrl() {
+      return URL.createObjectURL(this.newPost.image);
     }
   }
 };

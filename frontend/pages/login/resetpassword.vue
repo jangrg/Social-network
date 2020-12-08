@@ -1,7 +1,6 @@
 <template>
   <div class="d-flex flex-column bg justify-content-between">
-    <BrandName form="Please log in" />
-    <div class="mx-auto">
+    <div class="mx-auto center-vertical">
       <div
         class="font-theme border-theme rounded mx-auto p-5 bg-color justify-content-center"
       >
@@ -39,7 +38,7 @@
                   @click.prevent="changePassword"
                   :disabled="allowSubmit"
                   type="submit"
-                  class="btn btn-primary btn-wider mt-2 text-align"
+                  class="btn btn-purple btn-wider mt-2 text-align"
                 >
                   Change password
                 </button>
@@ -71,14 +70,14 @@
     <div></div>
   </div>
 </template>
-<script>
-import BrandName from "../../components/BrandName";
 
-import styles from "../../static/style.css";
+<script>
+import TopBar from "@/components/TopBar";
+import styles from "@/static/style.css";
 
 export default {
   name: "RegisterForm",
-  components: { BrandName },
+  components: {TopBar},
   middleware: ['auth-loggedIn'],
   head() {
     return {
