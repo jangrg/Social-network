@@ -1,4 +1,4 @@
-from common.models import User, Post, Comment
+from common.models import User, Post, Comment, Message
 from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer
 
@@ -38,10 +38,11 @@ class UserSerializer(DynamicFieldsModelSerializer):
 
 class CommentSerializer(DynamicFieldsModelSerializer):
     posted_by = UserSerializer(only_fields=['id', 'username'], read_only=True)
+    liked_by = UserSerializer(only_fields=['id', 'username'], many=True)
 
     class Meta:
         model = Comment
-        fields = ['comment_text', 'likes_num', 'post', 'posted_by']
+        fields = ['id', 'comment_text', 'likes_num', 'post', 'posted_by', 'liked_by']
 
 
 class PostSerializer(DynamicFieldsModelSerializer):
@@ -59,7 +60,7 @@ class PostSerializer(DynamicFieldsModelSerializer):
         return CommentSerializer(
             Comment.objects.filter(post=obj.id).all(),
             many=True,
-            only_fields=['comment_text', 'likes_num', 'posted_by']
+            # only_fields=['id', 'comment_text', 'likes_num', 'posted_by', 'liked_by']
         ).data
 
     def get_logged_user_liked(self, obj):
@@ -67,6 +68,12 @@ class PostSerializer(DynamicFieldsModelSerializer):
             if self.context.get('user') in obj.liked_by.all():
                 return True
         return False
+
+
+class MessageSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Message
+        fields = '__all__'
 
     # def get_image(self, obj):
     #     request = self.context.get('request')

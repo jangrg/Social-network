@@ -1,14 +1,15 @@
 from django.contrib import auth
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 from rest_framework import viewsets, mixins, status, filters, generics
 from rest_framework.decorators import action
 from rest_framework.parsers import FileUploadParser
 from rest_framework.permissions import IsAuthenticated
 
-from .models import User, Post, Comment
-from .serializers import UserSerializer, PostSerializer, CommentSerializer
+from .models import User, Post, Comment, Message
+from .serializers import UserSerializer, PostSerializer, CommentSerializer, MessageSerializer
 from rest_framework.response import Response
 
 
@@ -41,6 +42,12 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
         elif self.action == 'retrieve' or self.action == 'logged_user_data':
             kwargs['only_fields'] = ['id', 'username', 'first_name', 'last_name', 'email', 'birth_date', 'is_private']
             return super().get_serializer(*args, **kwargs)
+        elif self.action == 'send_message':
+            kwargs['only_fields'] = ['sender', 'receiver', 'text_content', 'photo']
+            return MessageSerializer(*args, **kwargs)
+        elif self.action == 'get_messages':
+            kwargs['only_fields'] = []
+            return MessageSerializer(*args, **kwargs)
         return super().get_serializer(*args, **kwargs)
 
     def create(self, request, *args, **kwargs):
@@ -92,6 +99,27 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             )
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+    @action(detail=True, methods=['POST'], name='send_message')
+    def send_message(self, request, pk=None):
+        user=request.user
+        if user.is_authenticated:
+            serializer = self.get_serializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                print('asdfasdf')
+                print(serializer)
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    @action(detail=True, methods=['POST'], name='send_message')
+    def get_messages(self, request, pk=None):
+        user = request.user
+        if user.is_authenticated:
+            messages = Message.objects.filter(Q(sender=user) | Q(receiver=user))
+            serializer = MessageSerializer(messages, many=True)
+            return Response(serializer.data)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
 
 class PostViewSet(viewsets.ModelViewSet):
 
@@ -124,6 +152,9 @@ class PostViewSet(viewsets.ModelViewSet):
         elif self.action == 'like' or self.action == 'unlike':
             kwargs['only_fields'] = ['id']
             return super().get_serializer(*args, **kwargs)
+        elif self.action == 'like_comment' or self.action == 'unlike_comment':
+            kwargs['only_fields'] = ['id']
+            return CommentSerializer(*args, **kwargs)
         return super().get_serializer(*args, **kwargs)
 
     permission_classes_by_action = {
@@ -179,6 +210,44 @@ class PostViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['GET'], name='comment')
     def get_comment(self, request):
         return Response(CommentSerializer(Comment.objects.all(), many=True).data)
+
+    @action(detail=False, methods=['GET'], name='comment')
+    def like_comment(self, request):
+        comment_id = request.GET['id']
+        user = request.user
+        if user.is_authenticated:
+            comment = Comment.objects.get(id=comment_id)
+            if comment is not None:
+                user = comment.liked_by.filter(id=request.user.id)
+                if not user:
+                    if comment.likes_num:
+                        comment.likes_num += 1
+                    else:
+                        comment.likes_num = 1
+                    comment.liked_by.add(user)
+                comment.save()
+                return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    @action(detail=False, methods=['GET'], name='comment')
+    def unlike_comment(self, request):
+        comment_id = request.GET['id']
+        user = request.user
+        if user.is_authenticated:
+            comment = Comment.objects.get(id=comment_id)
+            if comment is not None:
+                user = comment.liked_by.filter(id=request.user.id)
+                if user:
+                    if comment.likes_num:
+                        comment.likes_num -= 1
+                    else:
+                        comment.likes_num = 0
+                    comment.liked_by.remove(request.user)
+                comment.save()
+                return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     @action(detail=True, methods=['POST'], name='like')
     def like(self, request, pk=None):
