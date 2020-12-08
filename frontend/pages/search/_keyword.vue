@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="d-flex flex-column font-theme h-100"
-  >
+  <div class="d-flex flex-column font-theme h-100">
     <TopBar />
 
     <div class="container-fluid row mx-auto mt-2">
@@ -25,8 +23,6 @@
 <script>
 import TopBar from "../../components/TopBar";
 
-import SideBar from "../../components/SideBar";
-
 import SearchResult from "../../components/SearchResult";
 
 export default {
@@ -39,11 +35,11 @@ export default {
       meta: [
         {
           name: "viewport",
-          content: "width=device-width, initial-scale=1, shrink-to-fit=no",
-        },
+          content: "width=device-width, initial-scale=1, shrink-to-fit=no"
+        }
       ],
       bodyAttrs: {
-        class: "body-theme",
+        class: "body-theme"
       }
     };
   },
@@ -59,20 +55,18 @@ export default {
   async created() {
     try {
       let result = await this.$axios.get(`/account/`, {
-        params: { search: this.keyword },
+        params: { search: this.keyword }
       });
       this.searchResult = result.data;
       this.loaded = true;
     } catch (e) {
       this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
-        duration: 8000,
+        duration: 8000
       });
       this.$router.push("/home");
     }
-  },
-
+  }
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

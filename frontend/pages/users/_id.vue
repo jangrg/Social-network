@@ -10,6 +10,7 @@
           <button
             v-if="anotherUser"
             class="btn btn-outline-warning btn-lg text-align p-1"
+            @click="follow"
           >
             Follow
           </button>
@@ -62,34 +63,34 @@ export default {
     return {
       title: "User",
       bodyAttrs: {
-        class: "body-theme",
+        class: "body-theme"
       },
       meta: [
         {
           name: "viewport",
-          content: "width=device-width, initial-scale=1, shrink-to-fit=no",
-        },
-      ],
+          content: "width=device-width, initial-scale=1, shrink-to-fit=no"
+        }
+      ]
     };
   },
 
-  data: function () {
+  data: function() {
     return {
       loaded: false,
       id: this.$route.params.id,
       currentUser: "",
-      posts: [],
+      posts: []
     };
   },
 
-  created: async function () {
+  created: async function() {
     try {
       let response = await this.$axios.get(`/account/${this.id}/`);
       this.currentUser = response.data;
       debugger;
     } catch (e) {
       this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
-        duration: 8000,
+        duration: 8000
       });
       this.$router.push("/home");
     }
@@ -110,13 +111,18 @@ export default {
 
     anotherUser() {
       return this.id !== this.$auth.user.id;
-    },
+    }
   },
 
   methods: {
     setPost(parameters) {
       this.posts.unshift(parameters);
     },
-  },
+
+    async follow() {
+      let response = await this.$axios.post(`account/${this.id}/follow/`);
+      console.log(response.data);
+    }
+  }
 };
 </script>

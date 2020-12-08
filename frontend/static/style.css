@@ -222,10 +222,12 @@ body {
 }
 
 .avatar .usericon {
-  margin-left: 10px;
+  /* margin-left: 10px; */
   width: 30px;
   height: 30px;
+  margin-top: 5px;
 }
+
 .new-post {
   color: white;
   background-color: #151414;
@@ -252,4 +254,50 @@ body {
 .profile-icon {
   width: 12em;
   height: 12em;
+}
+
+.btn-logout {
+  margin-left: 10px;
+}
+
+.button-home {
+  background-color: transparent;
+  background-image: url("./topbar/black_home.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: 30px;
+  height: 30px;
+}
+
+.home-clicked {
+  background-image: url("./topbar/purple_home.png");
+}
+
+.button-explore {
+  background-color: transparent;
+  background-image: url("./topbar/black_globe.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: 30px;
+  height: 30px;
+}
+
+.explore-clicked {
+  background-image: url("./topbar/purple_globe.png");
+}
+
+.button-message {
+  background-color: transparent;
+  background-image: url("./topbar/black_message.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: 30px;
+  height: 30px;
+}
+
+.message-clicked {
+  background-image: url("./topbar/purple_message.png");
 }
