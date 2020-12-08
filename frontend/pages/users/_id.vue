@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column bg-pattern font-theme">
-    <TopBar @post="addPost" />
+    <TopBar />
     <div class="container-fluid row text-theme mx-auto">
       <div class="container-fluid col-md-2 my-4 text-center">
         <div class="post-theme p-3">
