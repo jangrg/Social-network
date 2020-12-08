@@ -10,6 +10,7 @@
           <button
             v-if="anotherUser"
             class="btn btn-purple btn-lg text-align p-1 m-1 my-1"
+            @click="follow"
           >
             Follow
           </button>
@@ -33,16 +34,16 @@
       </div>
 
       <div class="container-fluid col-md-2 my-4">
-          <div class="post-theme p-3">
-            <div class="bg-color text-theme-secondary p-2">
-               <h5 class="font-theme lead">
-                <b-avatar class="usericon"></b-avatar>
-                <strong> Other user</strong>
-              </h5>
-            </div>
-            <hr />
-            <h5 class="font-theme mx-2">Other user profile information.</h5>
+        <div class="post-theme p-3">
+          <div class="bg-color text-theme-secondary p-2">
+            <h5 class="font-theme lead">
+              <b-avatar class="usericon"></b-avatar>
+              <strong> Other user</strong>
+            </h5>
           </div>
+          <hr />
+          <h5 class="font-theme mx-2">Other user profile information.</h5>
+        </div>
       </div>
     </div>
   </div>
@@ -61,34 +62,32 @@ export default {
     return {
       title: "User",
       bodyAttrs: {
-        class: "body-theme",
+        class: "body-theme"
       },
       meta: [
         {
           name: "viewport",
-          content: "width=device-width, initial-scale=1, shrink-to-fit=no",
-        },
-      ],
+          content: "width=device-width, initial-scale=1, shrink-to-fit=no"
+        }
+      ]
     };
   },
 
-  data: function () {
+  data: function() {
     return {
       id: this.$route.params.id,
       currentUser: "",
-      posts: [],
+      posts: []
     };
   },
 
-  created: async function () {
+  created: async function() {
     try {
       let response = await this.$axios.get(`/account/${this.id}/`);
       this.currentUser = response.data;
 
-      
       response = await this.$axios.get(`post/?by_user=${this.id}`);
       this.posts = response.data;
-
     } catch (e) {
       // this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
       //   duration: 8000,
@@ -96,7 +95,6 @@ export default {
       // this.$router.push("/home");
       consol.log(e);
     }
-
   },
 
   computed: {
@@ -107,13 +105,18 @@ export default {
 
     anotherUser() {
       return this.id !== this.$auth.user.id;
-    },
+    }
   },
 
   methods: {
     setPost(parameters) {
       this.posts.unshift(parameters);
     },
-  },
+
+    async follow() {
+      let response = await this.$axios.post(`account/${this.id}/follow/`);
+      console.log(response.data);
+    }
+  }
 };
 </script>

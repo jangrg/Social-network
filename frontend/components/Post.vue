@@ -21,7 +21,7 @@
       </p>
 
       <div class="post-image">
-        <img :src="post.image">
+        <img :src="post.image" />
       </div>
 
       <div class="container-fluid">
@@ -30,9 +30,10 @@
         <span> Posted on: {{ date }} </span>
         <div class="d-inline float-right">
           <div :id="post.id" class="like-img" @click="likePost"></div>
-          <!-- <button class="btn-sm btn-warning" @click="likePost"> -->
-          <!-- <span v-if="!liked">Like this!</span>
-          <span v-else>Dislike this!</span> -->
+          <!-- <button class="btn-sm btn-warning" @click="likePost">
+            -->
+          <!-- <span v-if="!liked">Like this!</span> -->
+          <!-- <span v-else>Dislike this!</span> -->
           <!-- </button> -->
           <!-- <button class="btn-sm btn-warning">Comment!</button> -->
         </div>
@@ -71,7 +72,7 @@ export default {
   name: "Post",
   components: { Comment },
   props: {
-    post: Object,
+    post: Object
   },
   data() {
     return {
@@ -80,8 +81,8 @@ export default {
       comment: {
         comment_text: "",
         likes_num: 0,
-        post: this.post.id,
-      },
+        post: this.post.id
+      }
     };
   },
   methods: {
@@ -90,7 +91,7 @@ export default {
       if (this.liked) {
         this.liked = false;
         this.post.likes_num--;
-        this.$toast.show("Post dislajkan!", { duration: 8000 });
+        this.$toast.show("Post unliked!", { duration: 8000 });
         var post = document
           .getElementById(`${this.post.id}`)
           .classList.toggle("like");
@@ -98,11 +99,13 @@ export default {
         this.liked = true;
         let res = await this.$axios.post(`post/${this.post.id}/like/`);
         if (res.status == 200) {
-          this.$toast.show("Post lajkan!", { duration: 8000 });
+          this.$toast.show("Post liked!", { duration: 8000 });
           this.post.likes_num++;
           document.getElementById(`${this.post.id}`).classList.toggle("like");
         } else {
-          this.$toast.show("Post nije uspješno lajkan...", { duration: 8000 });
+          this.$toast.show("Post not successfully likes...", {
+            duration: 8000
+          });
         }
       }
     },
@@ -113,7 +116,7 @@ export default {
         debugger;
         console.log(res);
         if (res.status == 201) {
-          this.$toast.show("Komentar uspješno objavljen!", { duration: 8000 });
+          this.$toast.show("Comment successfully posted!", { duration: 8000 });
           let createdComment = res.data;
           debugger;
           this.comment.comment_text = "";
@@ -121,10 +124,10 @@ export default {
         }
       } catch (e) {
         this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
-          duration: 8000,
+          duration: 8000
         });
       }
-    },
+    }
   },
   computed: {
     date() {
@@ -149,11 +152,11 @@ export default {
       if (post.comments) {
         return post.comments > 5;
       }
-    },
+    }
   },
   mounted() {
     var classname = this.post.id;
     //document.getElementById(this.post.id).classList.toggle(classname);
-  },
+  }
 };
 </script>

@@ -80,7 +80,6 @@
 </template>
 
 <script>
-
 export default {
   name: "Index",
   middleware: ["auth-loggedIn"],
@@ -113,7 +112,7 @@ export default {
         });
 
         // redirect to user profile
-        this.$router.push("/home");
+        this.$router.push("/following");
       } catch (e) {
         if (e.response.status == 401)
           this.$toast.error(`Not a registered user!`, { duration: 8000 });

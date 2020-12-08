@@ -13,11 +13,8 @@
   </div>
 </template>
 
-
 <script>
 import TopBar from "../../components/TopBar";
-
-import SideBar from "../../components/SideBar";
 
 import SearchResult from "../../components/SearchResult";
 
@@ -31,11 +28,11 @@ export default {
       meta: [
         {
           name: "viewport",
-          content: "width=device-width, initial-scale=1, shrink-to-fit=no",
-        },
+          content: "width=device-width, initial-scale=1, shrink-to-fit=no"
+        }
       ],
       bodyAttrs: {
-        class: "body-theme",
+        class: "body-theme"
       }
     };
   },
@@ -51,7 +48,7 @@ export default {
   async created() {
     try {
       let result = await this.$axios.get(`/account/`, {
-        params: { search: this.keyword },
+        params: { search: this.keyword }
       });
       this.searchResult = result.data;
       // this.loaded = true;
@@ -61,10 +58,8 @@ export default {
       // });
       console.log(e);
     }
-  },
-
+  }
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

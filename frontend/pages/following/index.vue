@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column font-theme">
-    <TopBar />
+    <TopBar @post="setPost" />
     <div class="container-fluid row mx-auto">
       <div class="col-md-2"></div>
       <div class="col-md-8 no-border">
@@ -59,17 +59,14 @@ export default {
     }
   },
   created: async function() {
-    let response = await this.$axios.get(`post/`);
+    let response = await this.$axios.get(`post/followed_posts/`);
+    // followed_posts/
     this.posts = response.data;
     console.log(this.posts);
-    document
-      .getElementById(`button-explore`)
-      .classList.toggle("explore-clicked");
+    document.getElementById(`button-home`).classList.toggle("home-clicked");
   },
   beforeDestroyed: function() {
-    document
-      .getElementById(`button-explore`)
-      .classList.toggle("explore-clicked");
+    document.getElementById(`button-home`).classList.toggle("home-clicked");
   }
 };
 </script>

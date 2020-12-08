@@ -18,7 +18,7 @@
               :disabled="search"
               :to="{
                 name: 'search-keyword',
-                params: { keyword: this.searchQuery },
+                params: { keyword: this.searchQuery }
               }"
               type="submit"
             ></b-button>
@@ -37,59 +37,73 @@
             <i class="fa fa-bars"></i>
           </button>
         </div-->
-        <div class="topbar-buttons col-2 avatar d-flex justify-content-end" v-if="this.$auth.user">
+        <div
+          class="topbar-buttons col-2 avatar d-flex justify-content-end"
+          v-if="this.$auth.user"
+        >
           <b-button
-            variant="btn btn-purple mx-2 text-align btn-lg"
+            id="button-home"
+            class="button-home"
+            variant="btn text-align btn-lg"
+            to="/following"
+            v-if="this.user"
+          ></b-button>
+          <b-button
+            id="button-explore"
+            class="button-explore"
+            variant="btn text-align btn-lg"
             to="/home"
-            v-if="this.$auth.user"
-            >Home</b-button
-          >
+            v-if="this.user"
+          ></b-button>
           <b-button
-            variant="btn btn-purple text-align btn-lg"
-            @click.prevent="logOut"
-            v-if="this.$auth.user"
-            >Logout</b-button
-          >
+            id="button-message"
+            class="button-message"
+            variant="btn text-align btn-lg"
+            v-if="this.user"
+          ></b-button>
           <b-avatar
             class="mb-2 usericon"
-            :to="{ name: 'users-id', params: { id: this.$auth.user.id } }"
-            v-if="this.$auth.user"
+            variant="dark"
+            :to="{ name: 'users-id', params: { id: this.user.id } }"
+            v-if="this.user"
           ></b-avatar>
+          <b-button
+            variant="btn btn-purple text-align btn-lg btn-logout"
+            @click.prevent="logOut"
+            v-if="this.user"
+            >Logout</b-button
+          >
         </div>
       </div>
     </b-navbar>
-    <!-- <SideBar @post="emitPost" v-if="this.$auth.user" /> -->
   </div>
 </template>
 
 <script>
-// import SideBar from "@/components/SideBar";
-
 export default {
   name: "TopBar",
   data() {
     return {
       // posts: [],
-      searchQuery: "",
+      searchQuery: ""
     };
   },
   computed: {
-    // user() {
-    //   return this.$auth.user;
-    // },
+    user() {
+      return this.$auth.user;
+    },
     search() {
       return this.searchQuery == "";
     }
   },
-  // components: { SideBar },
   head: {
     link: [
       {
         rel: "stylesheet",
         href:
-          "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
-      },
-    ],
+          "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      }
+    ]
   },
   methods: {
     // emitPost(parameters) {
@@ -98,8 +112,8 @@ export default {
     logOut() {
       this.$auth.logout();
       this.$router.push("/");
-    },
-  },
+    }
+  }
 };
 </script>
 
