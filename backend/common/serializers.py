@@ -49,6 +49,7 @@ class PostSerializer(DynamicFieldsModelSerializer):
     liked_by = UserSerializer(only_fields=['id', 'username'], many=True)
     comments = SerializerMethodField()
     logged_user_liked = SerializerMethodField()
+    # image = SerializerMethodField()
 
     class Meta:
         model = Post
@@ -66,3 +67,8 @@ class PostSerializer(DynamicFieldsModelSerializer):
             if self.context.get('user') in obj.liked_by.all():
                 return True
         return False
+
+    # def get_image(self, obj):
+    #     request = self.context.get('request')
+    #     photo_url = obj.photo.url
+    #     return request.build_absolute_uri(photo_url)

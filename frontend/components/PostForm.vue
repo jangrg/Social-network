@@ -11,7 +11,7 @@
       <div v-if="!canUploadImage" class="image-upload">
         <label for="file">
           <h5 class="font-theme lead">
-            <img class="image image-upload-picture" src="..\static\upload_picture_icon.png">
+            <img class="image image-upload-picture" src="../static/upload_picture_icon.png">
             <strong>Upload photo</strong>
           </h5>
         </label>

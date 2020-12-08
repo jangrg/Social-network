@@ -147,7 +147,7 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             post = serializer.save(posted_by=request.user)
-            return Response(PostSerializer(post).data, status=status.HTTP_201_CREATED)
+            return Response(data=PostSerializer(post, context={'request': request}).data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request, *args, **kwargs):
