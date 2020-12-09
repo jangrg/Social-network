@@ -136,7 +136,7 @@ class PostViewSet(viewsets.ModelViewSet):
         return Post.objects.all()
 
     def get_serializer_class(self):
-        if self.action == 'comment':
+        if self.action == 'comment' or self.action == 'like_comment' or self.action == 'unlike_comment':
             return CommentSerializer
         else:
             return PostSerializer
@@ -155,7 +155,7 @@ class PostViewSet(viewsets.ModelViewSet):
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'like_comment' or self.action == 'unlike_comment':
             kwargs['only_fields'] = ['id']
-            return CommentSerializer(*args, **kwargs)
+            return super().get_serializer(*args, **kwargs)
         return super().get_serializer(*args, **kwargs)
 
     permission_classes_by_action = {
