@@ -148,7 +148,8 @@ class PostViewSet(viewsets.ModelViewSet):
         elif self.action == 'list':
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'comment':
-            return super().get_serializer(*args, **kwargs)
+            kwargs['only_fields'] = ['comment_text', 'post']
+            return CommentSerializer(*args, **kwargs)
         elif self.action == 'like' or self.action == 'unlike':
             kwargs['only_fields'] = ['id']
             return super().get_serializer(*args, **kwargs)
