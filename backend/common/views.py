@@ -29,7 +29,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
 
     def get_serializer(self, *args, **kwargs):
         if self.action == 'create':
-            kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'birth_date', 'is_private']
+            kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'birth_date']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'confirm':
             return None
@@ -40,7 +40,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             kwargs['only_fields'] = ['id']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'retrieve' or self.action == 'logged_user_data':
-            kwargs['only_fields'] = ['id', 'username', 'first_name', 'last_name', 'email', 'birth_date', 'is_private']
+            kwargs['only_fields'] = ['id', 'username', 'first_name', 'last_name', 'email', 'birth_date']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'send_message':
             kwargs['only_fields'] = ['sender', 'receiver', 'text_content', 'photo']
@@ -143,11 +143,12 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def get_serializer(self, *args, **kwargs):
         if self.action == 'create':
-            kwargs['only_fields'] = ['content', 'image']
+            kwargs['only_fields'] = ['content', 'image', 'is_private']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'list':
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'comment':
+            kwargs['only_fields'] = ['comment_text', 'post']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'like' or self.action == 'unlike':
             kwargs['only_fields'] = ['id']
@@ -187,12 +188,17 @@ class PostViewSet(viewsets.ModelViewSet):
         if user_id is not None:
             user = User.objects.get(id=user_id)
             queryset = queryset.filter(posted_by=user)
+        else:
+            queryset = queryset.filter(is_private=False)
         return Response(self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'], name='followed_posts')
     def followed_posts(self, request):
         return Response(
-            self.get_serializer(Post.objects.filter(posted_by__in=request.user.following.all()), many=True).data,
+            self.get_serializer(
+                Post.objects.filter(posted_by__in=request.user.following.all()) | Post.objects.filter(posted_by=request.user.id),
+                many=True
+            ).data,
             status=status.HTTP_200_OK
         )
 

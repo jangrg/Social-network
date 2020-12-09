@@ -27,7 +27,6 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     following = models.ManyToManyField('User', blank=True, related_name='followers', symmetrical=False)
-    is_private = models.BooleanField(default=False)
 
 
 class Category(models.Model):
@@ -55,6 +54,7 @@ class Post(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     page = models.ForeignKey(Page, related_name="posts", null=True, blank=True, on_delete=models.CASCADE)
     liked_by = models.ManyToManyField(User, related_name="liked_posts")
+    is_private = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-time']
