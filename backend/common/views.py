@@ -8,8 +8,8 @@ from rest_framework.decorators import action
 from rest_framework.parsers import FileUploadParser
 from rest_framework.permissions import IsAuthenticated
 
-from .models import User, Post, Comment, Message
-from .serializers import UserSerializer, PostSerializer, CommentSerializer, MessageSerializer
+from .models import User, Post, Comment, Message, Page
+from .serializers import UserSerializer, PostSerializer, CommentSerializer, MessageSerializer, PageSerializer
 from rest_framework.response import Response
 
 
@@ -101,7 +101,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
 
     @action(detail=True, methods=['POST'], name='send_message')
     def send_message(self, request, pk=None):
-        user=request.user
+        user = request.user
         if user.is_authenticated:
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
@@ -122,8 +122,6 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
 
 
 class PostViewSet(viewsets.ModelViewSet):
-
-    serializer_class = Post
     parser_class = (FileUploadParser,)
 
     def get_serializer_context(self):
@@ -166,7 +164,7 @@ class PostViewSet(viewsets.ModelViewSet):
         'delete': [IsAuthenticated],
         'followed_posts': [IsAuthenticated],
         'comment': [IsAuthenticated],
-        }
+    }
 
     def get_permissions(self):
         try:
@@ -179,7 +177,8 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             post = serializer.save(posted_by=request.user)
-            return Response(data=PostSerializer(post, context={'request': request}).data, status=status.HTTP_201_CREATED)
+            return Response(data=PostSerializer(post, context={'request': request}).data,
+                            status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request, *args, **kwargs):
@@ -196,7 +195,8 @@ class PostViewSet(viewsets.ModelViewSet):
     def followed_posts(self, request):
         return Response(
             self.get_serializer(
-                Post.objects.filter(posted_by__in=request.user.following.all()) | Post.objects.filter(posted_by=request.user.id),
+                Post.objects.filter(posted_by__in=request.user.following.all()) | Post.objects.filter(
+                    posted_by=request.user.id),
                 many=True
             ).data,
             status=status.HTTP_200_OK
@@ -284,3 +284,34 @@ class PostViewSet(viewsets.ModelViewSet):
                 return Response(status=status.HTTP_200_OK)
             return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
+class PageViewSet(viewsets.ModelViewSet):
+    def get_serializer_class(self):
+        return PageSerializer
+
+    def get_queryset(self):
+        return Page.objects.all()
+
+    permission_classes_by_action = {
+        'create': [IsAuthenticated],
+        'read': [IsAuthenticated],
+        'update': [IsAuthenticated],
+        'partial_update': [IsAuthenticated],
+        'delete': [IsAuthenticated]
+    }
+
+    def get_permissions(self):
+        try:
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError:
+            return [permission() for permission in self.permission_classes]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(owner=request.user)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
