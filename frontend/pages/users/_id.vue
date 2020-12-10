@@ -20,6 +20,13 @@
           >
             Message
           </button>
+          <button
+            v-if="!anotherUser"
+            class="btn btn-purple btn-outline btn-lg text-align p-1 m-1 my-1"
+            @click="changeTheme"
+          >
+            Change theme!
+          </button>
         </div>
       </div>
       <div class="col-md-8 no-border my-3">
@@ -111,6 +118,17 @@ export default {
   methods: {
     setPost(parameters) {
       this.posts.unshift(parameters);
+    },
+
+    changeTheme() {
+      debugger
+      var theme = this.$auth.$storage.getCookie("theme");
+      if(theme == "light") {
+        this.$auth.$storage.setCookie("theme", "dark");
+      } else {
+        this.$auth.$storage.setCookie("theme", "light");
+      }
+      location.reload();
     },
 
     async follow() {

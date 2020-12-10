@@ -26,7 +26,7 @@
 
       <div class="container-fluid">
         <span>Likes: {{ post.likes_num }}</span>
-        <span> Comments: {{ 0 }} |</span>
+        <span> Comments: {{ numberOfComments }} |</span>
         <span> Posted on: {{ date }} </span>
         <div class="d-inline float-right">
           <div :id="post.id" class="like-img" @click="likePost"></div>
@@ -72,7 +72,7 @@ export default {
   name: "Post",
   components: { Comment },
   props: {
-    post: Object
+    post: Object,
   },
   data() {
     return {
@@ -80,31 +80,41 @@ export default {
       liked: false,
       comment: {
         comment_text: "",
-        likes_num: 0,
-        post: this.post.id
-      }
+        post: this.post.id,
+      },
     };
   },
   methods: {
     async likePost() {
       var classname = this.post.id;
       if (this.liked) {
-        this.liked = false;
-        this.post.likes_num--;
-        this.$toast.show("Post unliked!", { duration: 8000 });
-        var post = document
-          .getElementById(`${this.post.id}`)
-          .classList.toggle("like");
-      } else {
-        this.liked = true;
-        let res = await this.$axios.post(`post/${this.post.id}/like/`);
+        let res = await this.$axios.post(
+          `post/${this.post.id}/unlike/`
+        );
         if (res.status == 200) {
-          this.$toast.show("Post liked!", { duration: 8000 });
+          this.liked = false;
+          this.post.likes_num--;
+          this.$toast.show("Comment unliked!", { duration: 8000 });
+          var post = document
+            .getElementById(`${this.post.id}`)
+            .classList.toggle("like");
+        } else {
+          this.$toast.show("Comment not successfully unliked...", {
+            duration: 8000,
+          });
+        }
+      } else {
+        let res = await this.$axios.post(
+          `post/${this.post.id}/like/`
+        );
+        if (res.status == 200) {
+          this.liked = true;
           this.post.likes_num++;
+          this.$toast.show("Comment liked!", { duration: 8000 });
           document.getElementById(`${this.post.id}`).classList.toggle("like");
         } else {
-          this.$toast.show("Post not successfully likes...", {
-            duration: 8000
+          this.$toast.show("Comment not successfully liked...", {
+            duration: 8000,
           });
         }
       }
@@ -124,10 +134,10 @@ export default {
         }
       } catch (e) {
         this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
-          duration: 8000
+          duration: 8000,
         });
       }
-    }
+    },
   },
   computed: {
     date() {
@@ -149,14 +159,11 @@ export default {
       return this.comment.comment_text == "";
     },
     numberOfComments() {
-      if (post.comments) {
-        return post.comments > 5;
-      }
-    }
+      return this.post.comments.length;
+    },
   },
   mounted() {
-    var classname = this.post.id;
-    //document.getElementById(this.post.id).classList.toggle(classname);
-  }
+    
+  },
 };
 </script>

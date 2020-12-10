@@ -33,7 +33,6 @@ export default {
   */
   css: [
     '@/static/style.css',
-    '@/static/theme.css'
   ],
   /*
   ** Plugins to load before mounting the App
@@ -65,6 +64,12 @@ export default {
   },
   //auth configuration
   auth: {
+    cookie: {
+      prefix: 'auth.',
+      options: {
+        expires: 4
+      }
+    },
     strategies: {
       local: {
         endpoints: {

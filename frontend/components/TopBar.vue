@@ -18,7 +18,7 @@
               :disabled="search"
               :to="{
                 name: 'search-keyword',
-                params: { keyword: this.searchQuery }
+                params: { keyword: this.searchQuery },
               }"
               type="submit"
             ></b-button>
@@ -85,7 +85,7 @@ export default {
   data() {
     return {
       // posts: [],
-      searchQuery: ""
+      searchQuery: "",
     };
   },
   computed: {
@@ -94,16 +94,24 @@ export default {
     },
     search() {
       return this.searchQuery == "";
-    }
+    },
   },
-  head: {
-    link: [
-      {
-        rel: "stylesheet",
-        href:
-          "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-      }
-    ]
+  head() {
+    debugger
+    var theme = this.$auth.$storage.getCookie("theme") == "dark" ? "/theme.css" : "/light-theme.css"
+    return {
+      link: [
+        {
+          rel: "stylesheet",
+          href:
+            "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
+        },
+        {
+          rel: "stylesheet",
+          href: theme
+        }
+      ],
+    }
   },
   methods: {
     // emitPost(parameters) {
@@ -112,8 +120,8 @@ export default {
     logOut() {
       this.$auth.logout();
       this.$router.push("/");
-    }
-  }
+    },
+  },
 };
 </script>
 

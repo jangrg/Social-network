@@ -31,7 +31,7 @@ export default {
   middleware: ["auth-loggedIn"],
   head() {
     return {
-      title: "Register",
+      title: "Confirm account",
       meta: [
         {
           name: "viewport",

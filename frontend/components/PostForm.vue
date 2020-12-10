@@ -12,7 +12,7 @@
         <label for="file">
           <h5 class="font-theme lead">
             <img class="image image-upload-picture" src="../static/upload_picture_icon.png">
-            <strong>Upload photo</strong>
+            <strong class="text-theme-secondary">Upload photo</strong>
           </h5>
         </label>
         <input id="file" name="image" type="file" accept="image/*" ref="file" v-on:change="handleFileUpload()">

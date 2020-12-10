@@ -77,17 +77,26 @@ import styles from "@/static/style.css";
 
 export default {
   name: "RegisterForm",
-  components: {TopBar},
-  middleware: ['auth-loggedIn'],
+  components: { TopBar },
+  middleware: ["auth-loggedIn"],
+  //theme
   head() {
+    var theme = this.$auth.$storage.getCookie("theme") == "dark" ? "/theme.css" : "/light-theme.css"
     return {
       title: "Register",
       meta: [
         {
           name: "viewport",
-          content: "width=device-width, initial-scale=1, shrink-to-fit=no"
-        }
-      ]
+          content: "width=device-width, initial-scale=1, shrink-to-fit=no",
+        },
+      ],
+      link: [
+        {
+          rel: "stylesheet",
+          href: theme,
+          //this.user.theme == "dark" ? "/theme.css" : "/light-theme.css"
+        },
+      ],
     };
   },
 
@@ -96,12 +105,12 @@ export default {
       header: "Verifying token ...",
       form: {
         password: "",
-        token: this.$route.params.token
+        token: this.$route.params.token,
       },
       repeatedPassword: "",
       showReset: false,
       resetAgain: false,
-      emailForPassword: ""
+      emailForPassword: "",
     };
   },
   computed: {
@@ -125,7 +134,7 @@ export default {
 
     allowSubmit() {
       return this.form.password !== this.repeatedPassword;
-    }
+    },
   },
   async mounted() {
     try {
@@ -151,7 +160,7 @@ export default {
         this.$router.push("/login");
       } catch (error) {
         this.$toast.error(`${error.response.data.password}`, {
-          duration: 8000
+          duration: 8000,
         });
         this.form.password = "";
         this.repeatedPassword = "";
@@ -160,7 +169,7 @@ export default {
     async forgottenPassword() {
       try {
         let data = await this.$axios.post(`/password_reset/`, {
-          email: this.emailForPassword
+          email: this.emailForPassword,
         });
         this.$toast.show("Email sent!", { duration: 8000 });
       } catch (e) {
@@ -168,12 +177,12 @@ export default {
           this.$toast.error(`Not a registered user!`, { duration: 8000 });
         else
           this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
-            duration: 8000
+            duration: 8000,
           });
         this.$router.push("/register");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
