@@ -74,7 +74,7 @@
             >
             </b-form-input>
 
-            <b-form-checkbox v-model="form.store" class="mt-3 mb-2">
+            <b-form-checkbox v-model="form.store" class="mt-3 mb-2  text-theme-secondary">
               Are you a store?</b-form-checkbox
             >
 
@@ -87,7 +87,7 @@
               Submit
             </button>
 
-            <p class="lead mt-4">
+            <p class="lead mt-4 text-theme-secondary">
               Already a user?
               <b-button variant="btn btn-purple text-align" to="/login"
                 >Login</b-button

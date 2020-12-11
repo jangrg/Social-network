@@ -29,8 +29,9 @@
       </div>
     </div>
 
-    <div v-if="canUploadImage" class="small-img-preview">
+    <div v-if="canUploadImage" class="small-img-preview container-fluid">
       <img :src="imgUrl" />
+      <button class="btn-purple btn" @click="discardImage">Discard</button>
     </div>
 
     <b-form-radio-group
@@ -76,6 +77,7 @@ export default {
         visibility: null,
         image: null,
       },
+
       canUploadImage: false,
     };
   },
@@ -88,6 +90,11 @@ export default {
     setImage(canUploadImage) {
       (this.openPreview = false), (this.canUploadImage = canUploadImage);
       if (!canUploadImage) this.newPost.image = null;
+    },
+
+    discardImage() {
+      this.newPost.image = null;
+      this.canUploadImage = false;
     },
 
     async postForm() {
@@ -107,12 +114,16 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         });
-
+        debugger;
         if (response.status == 201) {
           this.$toast.show("Post succesfully posted!", { duration: 8000 });
           //Ovaj response ne vraca sliku prvi put!!
           let createdPost = response.data;
-          document.getElementById("form").reset();
+          this.newPost = {
+            content: "",
+            visibility: null,
+            image: null,
+          };
           this.canUploadImage = false;
           this.$emit("post", createdPost);
         }

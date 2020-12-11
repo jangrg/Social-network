@@ -6,7 +6,7 @@
       </div>
     </div>
     <div v-for="post in posts" :key="post.id">
-      <Post :post="post" @PostDelete="deletePost" />
+      <Post :post="post" @PostDelete="deletePost" @edit="replacePost" />
     </div>
   </div>
 </template>
@@ -30,6 +30,17 @@ export default {
     setPost(parameters) {
       this.posts.unshift(parameters);
     },
+    //very costly, but im bad at programming therefore i dont know of any other way that doesnt mess with props.
+    replacePost(editedPost) {
+      debugger;
+      for(var i = 0; i < this.posts.length; i++) {
+        if(editedPost.id == this.posts[i].id) {
+          this.posts.splice(i, 1, editedPost);
+          break;
+        }
+      }
+    },
+    //also very costly, but again bad at programming therefore i dont know of any other way that doesnt mess with props.
     deletePost(parameters) {
       debugger;
       for (var i = 0; i < this.posts.length; i++) {
