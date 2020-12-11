@@ -1,5 +1,5 @@
 <template>
-  <div class="media p-2 font-theme">
+  <div class="media p-2 font-theme" :id="post.id">
     <div class="media-body post-theme p-5">
       <h5 class="lead">
         <b-avatar class="mb-2"></b-avatar>
@@ -11,7 +11,13 @@
             {{ post.posted_by.username }}
           </nuxt-link></strong
         >
-        <span class="three-dots"><strong>...</strong></span>
+        <b-dropdown size="sm" variant="link" class="float-right" no-caret v-if="postedByUser" >
+          <template #button-content>
+            <span class="text-decoration-none">...</span>
+          </template>
+          <b-dropdown-item @click="editPost">Edit</b-dropdown-item>
+          <b-dropdown-item @click="deletePost">Delete</b-dropdown-item>
+        </b-dropdown>
       </h5>
 
       <hr class="mt-2 post-separator-theme" />
@@ -29,7 +35,11 @@
         <span> Comments: {{ numberOfComments }} |</span>
         <span> Posted on: {{ date }} </span>
         <div class="d-inline float-right">
-          <div :id="post.id" class="like-img" @click="likePost"></div>
+          <div
+            :id="post.id + '-' + post.posted_by.username"
+            class="like-img"
+            @click="likePost"
+          ></div>
           <!-- <button class="btn-sm btn-warning" @click="likePost">
             -->
           <!-- <span v-if="!liked">Like this!</span> -->
@@ -88,32 +98,49 @@ export default {
     async likePost() {
       var classname = this.post.id;
       if (this.liked) {
-        let res = await this.$axios.post(
-          `post/${this.post.id}/unlike/`
-        );
+        let res = await this.$axios.post(`post/${this.post.id}/unlike/`);
         if (res.status == 200) {
           this.liked = false;
           this.post.likes_num--;
-          this.$toast.show("Comment unliked!", { duration: 8000 });
+          this.$toast.show("Post unliked!", { duration: 8000 });
           var post = document
-            .getElementById(`${this.post.id}`)
+            .getElementById(`${this.post.id}-${this.post.posted_by.username}`)
             .classList.toggle("like");
         } else {
-          this.$toast.show("Comment not successfully unliked...", {
+          this.$toast.show("Post not successfully unliked...", {
             duration: 8000,
           });
         }
       } else {
-        let res = await this.$axios.post(
-          `post/${this.post.id}/like/`
-        );
+        let res = await this.$axios.post(`post/${this.post.id}/like/`);
         if (res.status == 200) {
           this.liked = true;
           this.post.likes_num++;
-          this.$toast.show("Comment liked!", { duration: 8000 });
-          document.getElementById(`${this.post.id}`).classList.toggle("like");
+          this.$toast.show("Post liked!", { duration: 8000 });
+          document
+            .getElementById(`${this.post.id}-${this.post.posted_by.username}`)
+            .classList.toggle("like");
         } else {
-          this.$toast.show("Comment not successfully liked...", {
+          this.$toast.show("Post not successfully liked...", {
+            duration: 8000,
+          });
+        }
+      }
+    },
+    editPost() {
+      
+    },
+    async deletePost() {
+      if (confirm("Really want to delete this post?")) {
+        let res = await this.$axios.delete(`post/${this.post.id}/`);
+        debugger;
+        if (res.status == 204) {
+          this.$toast.show("Post succesfully deleted.", {
+            duration: 8000,
+          });
+          this.$emit("PostDelete", this.post.id);
+        } else {
+          this.$toast.show("Post not successfully deleted...", {
             duration: 8000,
           });
         }
@@ -161,9 +188,20 @@ export default {
     numberOfComments() {
       return this.post.comments.length;
     },
+    postedByUser() {
+      return this.$auth.user.id == this.post.posted_by.id;
+    },
   },
   mounted() {
-    
+    for (var i = 0; i < this.post.liked_by.length; i++) {
+      if (this.post.liked_by[i].id == this.$auth.user.id) {
+        document
+          .getElementById(`${this.post.id}-${this.post.posted_by.username}`)
+          .classList.toggle("like");
+        this.liked = true;
+        break;
+      }
+    }
   },
 };
 </script>

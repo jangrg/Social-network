@@ -3,18 +3,9 @@
     <TopBar @post="setPost" />
     <div class="container-fluid row mx-auto">
       <div class="col-md-2"></div>
-      <div class="col-md-8 no-border">
-        <div class="text-center">
-          <div class="container-fluid new-post">
-            <PostForm @post="setPost" />
-          </div>
-        </div>
-        <div v-for="post in posts" :key="post.id">
-          <Post :post="post" />
-        </div>
+      <PostFeed :filter="''" />
 
-        <div class="col-md-2"></div>
-      </div>
+      <div class="col-md-2"></div>
     </div>
   </div>
 </template>
@@ -24,15 +15,13 @@ import { ButtonPlugin } from "bootstrap-vue";
 
 import TopBar from "@/components/TopBar";
 
-import Post from "@/components/Post";
-
 import Footer from "@/components/Footer";
 
-import PostForm from "@/components/PostForm";
+import PostFeed from "@/components/PostFeed"
 
 export default {
   name: "Home",
-  components: { TopBar, Post, Footer, PostForm },
+  components: { TopBar, Footer, PostFeed },
   middleware: ["auth-notLoggedIn"],
   head() {
     return {
@@ -40,34 +29,34 @@ export default {
       meta: [
         {
           name: "viewport",
-          content: "width=device-width, initial-scale=1, shrink-to-fit=no"
-        }
+          content: "width=device-width, initial-scale=1, shrink-to-fit=no",
+        },
       ],
       bodyAttrs: {
-        class: "body-theme"
-      }
+        class: "body-theme",
+      },
     };
   },
   data() {
     return {
-      posts: []
+      posts: [],
     };
   },
   methods: {
     setPost(parameters) {
       this.posts.unshift(parameters);
-    }
+    },
   },
-  created: async function() {
+  created: async function () {
     let response = await this.$axios.get(`post/followed_posts/`);
     // followed_posts/
     this.posts = response.data;
     console.log(this.posts);
     document.getElementById(`button-home`).classList.toggle("home-clicked");
   },
-  beforeDestroyed: function() {
+  beforeDestroyed: function () {
     document.getElementById(`button-home`).classList.toggle("home-clicked");
-  }
+  },
 };
 </script>
 

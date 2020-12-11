@@ -12,7 +12,19 @@
             {{ comment.posted_by.username }}
           </nuxt-link></strong
         >
-        <span class="three-dots"><strong>...</strong></span>
+        <b-dropdown
+          size="sm"
+          variant="link"
+          class="float-right"
+          no-caret
+          v-if="postedByUser"
+        >
+          <template #button-content>
+            <span class="text-decoration-none">...</span>
+          </template>
+          <b-dropdown-item @click="editComment">Edit</b-dropdown-item>
+          <b-dropdown-item @click="deleteComment">Delete</b-dropdown-item>
+        </b-dropdown>
       </h5>
 
       <hr class="mt-0 post-separator-theme" />
@@ -84,12 +96,17 @@ export default {
         }
       }
     },
+    deleteComment(){},
+    editComment(){},
   },
   computed: {
     uniqueId() {
       return this.comment.id + "-" + this.comment.post;
-    }
-  }
+    },
+    postedByUser() {
+      return this.$auth.user.id == this.comment.posted_by.id;
+    },
+  },
 };
 </script>
 

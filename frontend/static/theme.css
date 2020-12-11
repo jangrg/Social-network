@@ -14,12 +14,12 @@
 }
 
 .text-theme {
-  color: rgb(121, 63, 165);
-  font-size: 1.5rem;
+  color: rgb(121, 63, 165) !important;
+  font-size: 1.5rem ;
 }
 
 .text-theme-secondary {
-  color: white;
+  color: white !important;
   font-size: 1rem;
 }
 

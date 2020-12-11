@@ -9,17 +9,17 @@
   }
   
   .top-bar-theme {
-    background-color: #008DA3 ;
-    color: #001F29;
+    background-color: #008DA3 !important;
+    color: #001F29 !important;
   }
   
   .text-theme {
-    color: #009FB7;
+    color: #009FB7 !important;
     font-size: 1.5rem;
   }
   
   .text-theme-secondary {
-    color: #001F29;
+    color: #001F29 !important;
     font-size: 1rem;
   }
   
@@ -71,7 +71,7 @@
   .like-img {
     height: 26px;
     width: 30px;
-    background-image: url("./empty_heart_theme.png");
+    background-image: url("./empty_heart.png");
     background-size: contain;
     background-repeat: no-repeat;
   }
