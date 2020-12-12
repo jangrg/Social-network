@@ -40,8 +40,8 @@ class Page(models.Model):
     name = models.CharField(max_length=100)
     date_created = models.DateTimeField(default=timezone.now)
     location = models.CharField(max_length=100)
-    categories = models.ManyToManyField(Category, related_name="pages")
-    owner = models.ForeignKey(User, related_name="pages", on_delete=models.CASCADE)
+    categories = models.ManyToManyField(Category, related_name="pages", blank=True)
+    owner = models.OneToOneField(User, related_name="page", on_delete=models.CASCADE)
 
 
 class Post(models.Model):
