@@ -48,6 +48,8 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
         elif self.action == 'get_messages':
             kwargs['only_fields'] = []
             return MessageSerializer(*args, **kwargs)
+        elif self.action == 'get_messaged_users':
+            kwargs['only_fields'] = ['id', 'username', 'first_name', 'last_name']
         return super().get_serializer(*args, **kwargs)
 
     def create(self, request, *args, **kwargs):
@@ -106,7 +108,6 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-                print('asdfasdf')
                 print(serializer)
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -114,11 +115,23 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
     @action(detail=True, methods=['POST'], name='send_message')
     def get_messages(self, request, pk=None):
         user = request.user
+        other_user = self.get_object()
         if user.is_authenticated:
-            messages = Message.objects.filter(Q(sender=user) | Q(receiver=user))
+            messages = Message.objects.filter((Q(sender=user) & Q(receiver=other_user)) |
+                                              (Q(sender=other_user) & Q(receiver=user)))
             serializer = MessageSerializer(messages, many=True)
             return Response(serializer.data)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    @action(detail=False, methods=['GET'], name='send_message')
+    def get_messaged_users(self, request, pk=None):
+        user = request.user
+        if user.is_authenticated:
+            users = User.objects.filter(Q(sent_messages__receiver=user) | Q(received_messages__sender=user)).distinct()
+            serializer = self.get_serializer(users, many=True)
+            return Response(serializer.data)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
 
 
 class PostViewSet(viewsets.ModelViewSet):
