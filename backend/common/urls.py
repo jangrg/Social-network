@@ -15,6 +15,7 @@ router = routers.DefaultRouter()
 router.register(r'account', views.AccountViewSet, basename='account')
 router.register(r'post', views.PostViewSet, basename='post')
 router.register(r'page', views.PageViewSet, basename='page')
+router.register(r'search', views.Search, basename='search')
 
 urlpatterns = [
     path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),

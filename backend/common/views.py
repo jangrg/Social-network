@@ -1,5 +1,6 @@
 from django.contrib import auth
 from django.core.mail import send_mail
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 
@@ -328,3 +329,21 @@ class PageViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+
+class Search(viewsets.ViewSet):
+
+    filter_backends = [filters.SearchFilter]
+
+    def list(self, request, **kwargs):
+        query = self.request.query_params.get('search', None)
+        users = User.objects.all()
+        pages = Page.objects.all()
+
+        if query:
+            users = User.objects.filter(username__icontains=query) | User.objects.filter(email__icontains=query)
+            pages = Page.objects.filter(name__icontains=query)
+
+        return JsonResponse({
+            "users": UserSerializer(users, many=True).data,
+            "posts": PageSerializer(pages, many=True).data
+        })
