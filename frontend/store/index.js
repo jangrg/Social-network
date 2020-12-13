@@ -20,6 +20,8 @@ export const actions = {
       } catch(e) {
           console.log(e)
       }
+      if(!this.$auth.$storage.getCookie("theme"))
+        this.$auth.$storage.setCookie("theme", "light");
     }
   },
 }

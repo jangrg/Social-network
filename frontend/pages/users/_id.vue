@@ -20,18 +20,17 @@
           >
             Message
           </button>
+          <button
+            v-if="!anotherUser"
+            class="btn btn-purple btn-outline btn-lg text-align p-1 m-1 my-1"
+            @click="changeTheme"
+          >
+            Change theme!
+          </button>
         </div>
       </div>
-      <div class="col-md-8 no-border my-3">
-        <div class="text-center">
-          <div v-if="!anotherUser" class="container-fluid new-post">
-            <PostForm @post="setPost" />
-          </div>
-        </div>
-        <div v-for="post in posts" :key="post.id">
-          <Post :post="post" />
-        </div>
-      </div>
+
+      <PostFeed :filter="`?by_user=${this.id}`" />
 
       <div class="container-fluid col-md-2 my-4">
         <div class="post-theme p-3">
@@ -50,44 +49,39 @@
 </template>
 
 <script>
-import Post from "@/components/Post";
 import TopBar from "@/components/TopBar";
-import PostForm from "@/components/PostForm";
+import PostFeed from "@/components/PostFeed";
 
 export default {
   name: "User",
-  components: { Post, TopBar, PostForm },
+  components: { TopBar, PostFeed },
   middleware: ["auth-notLoggedIn"],
   head() {
     return {
       title: "User",
       bodyAttrs: {
-        class: "body-theme"
+        class: "body-theme",
       },
       meta: [
         {
           name: "viewport",
-          content: "width=device-width, initial-scale=1, shrink-to-fit=no"
-        }
-      ]
+          content: "width=device-width, initial-scale=1, shrink-to-fit=no",
+        },
+      ],
     };
   },
 
-  data: function() {
+  data: function () {
     return {
       id: this.$route.params.id,
       currentUser: "",
-      posts: []
     };
   },
 
-  created: async function() {
+  created: async function () {
     try {
       let response = await this.$axios.get(`/account/${this.id}/`);
       this.currentUser = response.data;
-
-      response = await this.$axios.get(`post/?by_user=${this.id}`);
-      this.posts = response.data;
     } catch (e) {
       // this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
       //   duration: 8000,
@@ -102,7 +96,6 @@ export default {
       if (this.anotherUser) return this.currentUser;
       else return this.$auth.user;
     },
-
     anotherUser() {
       return this.id !== this.$auth.user.id;
     }
@@ -113,10 +106,21 @@ export default {
       this.posts.unshift(parameters);
     },
 
+    changeTheme() {
+      debugger;
+      var theme = this.$auth.$storage.getCookie("theme");
+      if (theme == "light") {
+        this.$auth.$storage.setCookie("theme", "dark");
+      } else {
+        this.$auth.$storage.setCookie("theme", "light");
+      }
+      location.reload();
+    },
+
     async follow() {
       let response = await this.$axios.post(`account/${this.id}/follow/`);
       console.log(response.data);
-    }
-  }
+    },
+  },
 };
 </script>

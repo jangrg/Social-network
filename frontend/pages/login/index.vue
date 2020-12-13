@@ -3,7 +3,7 @@
     <!-- <BrandName form="Please log in" /> -->
     <div class="mx-auto center-vertical">
       <div
-        class="border-theme font-theme mx-auto p-5 bg-color justify-content-center text-white"
+        class="border-theme font-theme mx-auto p-5 bg-color justify-content-center text-theme-secondary"
       >
         <div class="center">
           <div class="text-center">
@@ -83,32 +83,42 @@
 export default {
   name: "Index",
   middleware: ["auth-loggedIn"],
+  //theme
   head() {
+    var theme = this.$auth.$storage.getCookie("theme") == "dark" ? "/theme.css" : "/light-theme.css"
     return {
       title: "WeShare",
       meta: [
         {
           name: "viewport",
-          content: "width=device-width, initial-scale=1, shrink-to-fit=no"
-        }
-      ]
+          content: "width=device-width, initial-scale=1, shrink-to-fit=no",
+        },
+      ],
+      link: [
+        {
+          rel: "stylesheet",
+          href: theme,
+          //this.user.theme == "dark" ? "/theme.css" : "/light-theme.css"
+        },
+      ],
     };
   },
+
   data() {
     return {
       form: {
         username: "",
-        password: ""
+        password: "",
       },
       passwordForgot: false,
-      emailForPassword: " "
+      emailForPassword: " ",
     };
   },
   methods: {
     async loginUser() {
       try {
         await this.$auth.loginWith("local", {
-          data: this.form
+          data: this.form,
         });
 
         // redirect to user profile
@@ -118,7 +128,7 @@ export default {
           this.$toast.error(`Not a registered user!`, { duration: 8000 });
         else
           this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
-            duration: 8000
+            duration: 8000,
           });
         this.$router.push("/login");
       }
@@ -127,7 +137,7 @@ export default {
       try {
         if (this.passwordForgot == true) {
           let data = await this.$axios.post(`/password_reset/`, {
-            email: this.emailForPassword
+            email: this.emailForPassword,
           });
           this.$toast.show("Email sent!", { duration: 8000 });
         }
@@ -136,11 +146,11 @@ export default {
           this.$toast.error(`Not a registered user!`, { duration: 8000 });
         else
           this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
-            duration: 8000
+            duration: 8000,
           });
         this.$router.push("/login");
       }
-    }
-  }
+    },
+  },
 };
 </script>

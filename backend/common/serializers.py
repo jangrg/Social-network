@@ -1,4 +1,4 @@
-from common.models import User, Post, Comment, Message
+from common.models import User, Post, Comment, Message, Page
 from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer
 
@@ -79,3 +79,12 @@ class MessageSerializer(DynamicFieldsModelSerializer):
     #     request = self.context.get('request')
     #     photo_url = obj.photo.url
     #     return request.build_absolute_uri(photo_url)
+
+
+class PageSerializer(DynamicFieldsModelSerializer):
+
+    owner = UserSerializer(only_fields=['id', 'username'], read_only=True)
+
+    class Meta:
+        model = Page
+        fields = ['id', 'owner', 'name', 'work_time', 'date_created', 'location', 'categories']

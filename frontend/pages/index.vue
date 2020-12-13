@@ -3,10 +3,10 @@
     <TopBar />
     <div class="mx-auto" v-if="!user">
       <div
-        class="border-theme font-theme rounded mx-auto p-4 bg-color justify-content-center text-white"
+        class="border-theme font-theme rounded mx-auto p-4 bg-color justify-content-center"
       >
         <div class="d-flex flex-column container-fluid">
-          <h1 class="title text-light">
+          <h1 class="title text-theme">
             Welcome
           </h1>
         </div>
