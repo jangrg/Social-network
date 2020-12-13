@@ -45,7 +45,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             kwargs['only_fields'] = ['id', 'username', 'first_name', 'last_name', 'email', 'birth_date']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'send_message':
-            kwargs['only_fields'] = ['sender', 'receiver', 'text_content', 'photo']
+            kwargs['only_fields'] = ['id', 'sender', 'receiver', 'text_content', 'photo']
             return MessageSerializer(*args, **kwargs)
         elif self.action == 'get_messages':
             kwargs['only_fields'] = []
@@ -70,7 +70,6 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
                 {'message': 'Check your email to confirm account!'},
                 status=status.HTTP_200_OK
             )
-
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['POST'], name='confirm')
@@ -80,7 +79,6 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             user.is_active = True
             user.save()
             return Response(status=status.HTTP_201_CREATED)
-
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     @action(detail=True, methods=['POST'], name='add_following')
@@ -111,7 +109,9 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 print(serializer)
-            return Response(status=status.HTTP_200_OK)
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     @action(detail=True, methods=['POST'], name='send_message')
@@ -300,6 +300,12 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
+class CommentViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
+
+
 class PageViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         return PageSerializer
@@ -343,9 +349,7 @@ class PageViewSet(viewsets.ModelViewSet):
             return Response({"No page available."}, status=status.HTTP_404_NOT_FOUND)
 
 
-
 class Search(viewsets.ViewSet):
-
     filter_backends = [filters.SearchFilter]
     filter_backends[0].search_param = "query"
     filter_backends[0].search_title = "Query"
