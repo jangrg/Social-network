@@ -31,7 +31,7 @@
         </div>
       </div>
 
-      <PostFeed :filter="`?by_user=${this.id}`" />
+      <PostFeed :filter="`?by_user=${this.id}`" v-bind:data-following="followed" />
 
       <div class="container-fluid col-md-2 my-4">
         <div class="post-theme p-3">
@@ -76,6 +76,7 @@ export default {
     return {
       id: this.$route.params.id,
       currentUser: "",
+      followed: true
     };
   },
 
@@ -117,6 +118,12 @@ export default {
 
     async follow() {
       let response = await this.$axios.post(`account/${this.id}/follow/`);
+      if(response.status == 200) {
+        this.$toast.show("User followed!", {
+            duration: 8000,
+          });
+          this.followed = true;
+      }
       console.log(response.data);
     },
 

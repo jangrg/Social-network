@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex flex-column font-theme">
-    <TopBar @post="setPost" />
+    <TopBar />
     <div class="container-fluid row mx-auto">
       <div class="col-md-2"></div>
-      <PostFeed :filter="''" />
+      <PostFeed :filter="'followed_posts'" />
 
       <div class="col-md-2"></div>
     </div>
@@ -17,7 +17,7 @@ import TopBar from "@/components/TopBar";
 
 import Footer from "@/components/Footer";
 
-import PostFeed from "@/components/PostFeed"
+import PostFeed from "@/components/PostFeed";
 
 export default {
   name: "Home",
@@ -36,26 +36,6 @@ export default {
         class: "body-theme",
       },
     };
-  },
-  data() {
-    return {
-      posts: [],
-    };
-  },
-  methods: {
-    setPost(parameters) {
-      this.posts.unshift(parameters);
-    },
-  },
-  created: async function () {
-    let response = await this.$axios.get(`post/followed_posts/`);
-    // followed_posts/
-    this.posts = response.data;
-    console.log(this.posts);
-    document.getElementById(`button-home`).classList.toggle("home-clicked");
-  },
-  beforeDestroyed: function () {
-    document.getElementById(`button-home`).classList.toggle("home-clicked");
   },
 };
 </script>
