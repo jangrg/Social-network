@@ -7,21 +7,18 @@
         >
         <div class="col-4">
           <b-form class="navbar-form fix form-theme">
-            <input
+            <b-form-input
               type="search"
               class="form-control search-bar input-grey"
               v-model="searchQuery"
               placeholder="Search"
-            />
-            <b-button
-              variant="btn search-btn"
-              :disabled="search"
-              :to="{
-                name: 'search-keyword',
-                params: { keyword: this.searchQuery },
-              }"
+            ></b-form-input>
+            <button
+              @click.prevent="search"
+              class="btn search-btn"
+              :disabled="!allowSearch"
               type="submit"
-            ></b-button>
+            ></button>
           </b-form>
         </div>
         <div class="links" v-if="!this.$auth.user">
@@ -60,6 +57,7 @@
             class="button-message"
             variant="btn text-align btn-lg"
             v-if="this.user"
+            to="/messages"
           ></b-button>
           <b-avatar
             class="mb-2 usericon"
@@ -92,12 +90,11 @@ export default {
     user() {
       return this.$auth.user;
     },
-    search() {
-      return this.searchQuery == "";
+    allowSearch() {
+      return this.searchQuery != "";
     },
   },
-  head() {
-    debugger
+  head: function() {
     var theme = this.$auth.$storage.getCookie("theme") == "dark" ? "/theme.css" : "/light-theme.css"
     return {
       link: [
@@ -114,9 +111,10 @@ export default {
     }
   },
   methods: {
-    // emitPost(parameters) {
-    //   this.$emit("post", parameters);
-    // },
+    search() {
+      this.$router.push( {name: 'search-keyword', params: { keyword: this.searchQuery }})
+    },
+
     logOut() {
       this.$auth.logout();
       this.$router.push("/");
