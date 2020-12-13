@@ -54,7 +54,7 @@ class PostSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'posted_by', 'content', 'image', 'type_attr', 'likes_num', 'time', 'comments', 'liked_by', 'logged_user_liked']
+        fields = ['id', 'posted_by', 'content', 'image', 'type_attr', 'likes_num', 'time', 'comments', 'liked_by', 'logged_user_liked', 'is_private']
 
     def get_comments(self, obj):
         return CommentSerializer(
