@@ -201,9 +201,10 @@ class PostViewSet(viewsets.ModelViewSet):
         user_id = self.request.query_params.get('by_user', None)
         if user_id is not None:
             user = User.objects.get(id=user_id)
-            if current_user.id != user_id and not current_user.following.filter(id=user_id).exists():
-                queryset = queryset.filter(is_private=False)
             queryset = queryset.filter(posted_by=user)
+            if current_user.id == user_id:
+                if current_user.following.filter(id=user_id).exists():
+                    queryset = queryset.filter(is_private=False)
         else:
             queryset = queryset.filter(is_private=False)
         return Response(self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
