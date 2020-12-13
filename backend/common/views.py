@@ -70,7 +70,6 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
                 {'message': 'Check your email to confirm account!'},
                 status=status.HTTP_200_OK
             )
-
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['POST'], name='confirm')
@@ -80,7 +79,6 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             user.is_active = True
             user.save()
             return Response(status=status.HTTP_201_CREATED)
-
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     @action(detail=True, methods=['POST'], name='add_following')
