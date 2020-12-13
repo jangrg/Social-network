@@ -87,4 +87,4 @@ class PageSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = Page
-        fields = ['owner', 'name', 'work_time', 'date_created', 'location', 'categories']
+        fields = ['id', 'owner', 'name', 'work_time', 'date_created', 'location', 'categories']

@@ -1,5 +1,7 @@
 from django.contrib import auth
 from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 
@@ -133,7 +135,6 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             serializer = self.get_serializer(users, many=True)
             return Response(serializer.data)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
-
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -313,7 +314,8 @@ class PageViewSet(viewsets.ModelViewSet):
         'read': [IsAuthenticated],
         'update': [IsAuthenticated],
         'partial_update': [IsAuthenticated],
-        'delete': [IsAuthenticated]
+        'delete': [IsAuthenticated],
+        'my_page': [IsAuthenticated]
     }
 
     def get_permissions(self):
@@ -325,8 +327,41 @@ class PageViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(owner=request.user)
+        try:
+            serializer.save(owner=request.user)
+        except IntegrityError as error:
+            return Response("Page for this user already exists!", status=status.HTTP_400_BAD_REQUEST)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+    @action(detail=False, methods=['GET'], name="my_page")
+    def my_page(self, request, *args, **kwargs):
+        current_user = request.user
+        try:
+            page = Page.objects.get(owner=current_user)
+            return Response(PageSerializer(page).data, status=status.HTTP_200_OK)
+        except:
+            return Response({"No page available."}, status=status.HTTP_404_NOT_FOUND)
+
+
+
+class Search(viewsets.ViewSet):
+
+    filter_backends = [filters.SearchFilter]
+    filter_backends[0].search_param = "query"
+    filter_backends[0].search_title = "Query"
+
+    def list(self, request, **kwargs):
+        query = self.request.query_params.get('query', None)
+        users = User.objects.all()
+        pages = Page.objects.all()
+
+        if query:
+            users = User.objects.filter(username__icontains=query) | User.objects.filter(email__icontains=query)
+            pages = Page.objects.filter(name__icontains=query)
+
+        return JsonResponse({
+            "users": UserSerializer(users, many=True).data,
+            "pages": PageSerializer(pages, many=True).data
+        })
