@@ -43,7 +43,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             kwargs['only_fields'] = ['id', 'username', 'first_name', 'last_name', 'email', 'birth_date']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'send_message':
-            kwargs['only_fields'] = ['sender', 'receiver', 'text_content', 'photo']
+            kwargs['only_fields'] = ['id', 'sender', 'receiver', 'text_content', 'photo']
             return MessageSerializer(*args, **kwargs)
         elif self.action == 'get_messages':
             kwargs['only_fields'] = []
@@ -109,7 +109,9 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 print(serializer)
-            return Response(status=status.HTTP_200_OK)
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     @action(detail=True, methods=['POST'], name='send_message')
