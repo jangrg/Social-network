@@ -64,9 +64,6 @@ export default {
     let response = await this.$axios.get(`post/${this.filter}`);
     this.posts = response.data;
     console.log(this.posts);
-    document
-      .getElementById(`button-explore`)
-      .classList.toggle("explore-clicked");
   },
 };
 </script>

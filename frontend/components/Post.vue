@@ -45,7 +45,7 @@
           <b-form-radio-group
             id="btn-radios-1"
             class="mr-auto mb-2"
-            v-model="newEditedPost.visibility"
+            v-model="newEditedPost.is_private"
             :options="options"
             buttons
             plain
@@ -62,7 +62,7 @@
                   >
                   <strong v-else class="text-theme-secondary btn btn-purple"
                     >Upload picture</strong
-                  > 
+                  >
                 </h5>
               </label>
               <input
@@ -91,7 +91,6 @@
         <img v-if="hasImage && !changedPicture" :src="post.image" />
         <img v-if="changedPicture" :src="imgEditedUrl" />
       </div>
-
 
       <div class="container-fluid float-right mb-2" v-if="editing">
         <button
@@ -141,7 +140,7 @@
         v-for="comment in post.comments"
         :key="comment.posted_by.id"
       >
-        <Comment :comment="comment" />
+        <Comment :comment="comment" @delete="deleteComment" @edit="changeEditedComment" />
       </div>
     </div>
   </div>
@@ -165,6 +164,7 @@ export default {
       comment: {
         comment_text: "",
         post: this.post.id,
+        likes_num: 0
       },
 
       //if post is getting edited
@@ -172,13 +172,14 @@ export default {
         content: this.post.content,
         id: this.post.id,
         image: this.post.image,
-        type_attr: this.post.type_attr
+        type_attr: this.post.type_attr,
+        is_private: this.post.is_private,
       },
       editing: false,
       changedPicture: false,
       options: [
-        { text: "Private", value: "private" },
-        { text: "Public", value: "public" },
+        { text: "Public", value: false },
+        { text: "Private", value: true },
       ],
     };
   },
@@ -240,6 +241,7 @@ export default {
       try {
         let formData = new FormData();
         formData.append("content", this.newEditedPost.content);
+        formData.append("is_private", this.newEditedPost.is_private);
 
         debugger;
         if (this.newEditedPost.image) {
@@ -295,6 +297,7 @@ export default {
           let createdComment = res.data;
           debugger;
           this.comment.comment_text = "";
+          this.comment.likes_num = 0;
           this.post.comments.push(createdComment);
         }
       } catch (e) {
@@ -303,7 +306,28 @@ export default {
         });
       }
     },
+
+    deleteComment(id) {
+      debugger;
+      for(var i = 0; i < this.post.comments.length; i++) {
+        if(id == this.post.comments[i].id) {
+          this.post.comments.splice(i, 1);
+          break;
+        }
+      }
+    },
+
+    changeEditedComment(comment) {
+      debugger;
+      for(var i = 0; i < this.post.comments.length; i++) {
+        if(comment.id == this.post.comments[i].id) {
+          this.post.comments.splice(i, 1, comment);
+          break;
+        }
+      }
+    }
   },
+
   computed: {
     date() {
       let date = new Date(this.post.time);

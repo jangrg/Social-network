@@ -42,20 +42,23 @@
             id="button-home"
             class="button-home"
             variant="btn text-align btn-lg"
-            to="/following"
+            v-bind:class="selectedHome"
+            to="/home"
             v-if="this.user"
           ></b-button>
           <b-button
             id="button-explore"
             class="button-explore"
             variant="btn text-align btn-lg"
-            to="/home"
+            v-bind:class="selectedFollowing"
+            to="/following"
             v-if="this.user"
           ></b-button>
           <b-button
             id="button-message"
             class="button-message"
             variant="btn text-align btn-lg"
+            v-bind:class="selectedMessage"
             v-if="this.user"
             to="/messages"
           ></b-button>
@@ -84,6 +87,7 @@ export default {
     return {
       // posts: [],
       searchQuery: "",
+      route: this.$nuxt.$route.name,
     };
   },
   computed: {
@@ -93,9 +97,28 @@ export default {
     allowSearch() {
       return this.searchQuery != "";
     },
+    selectedHome() {
+      debugger
+      if (this.route == "home") {
+        return "home-clicked";
+      }
+    },
+    selectedFollowing() {
+      if (this.route == "following") {
+        return "explore-clicked";
+      }
+    },
+    selectedMessage() {
+      if (this.route == "messages") {
+        return "message-clicked";
+      }
+    },
   },
-  head: function() {
-    var theme = this.$auth.$storage.getCookie("theme") == "dark" ? "/theme.css" : "/light-theme.css"
+  head: function () {
+    var theme =
+      this.$auth.$storage.getCookie("theme") == "dark"
+        ? "/theme.css"
+        : "/light-theme.css";
     return {
       link: [
         {
@@ -105,14 +128,17 @@ export default {
         },
         {
           rel: "stylesheet",
-          href: theme
-        }
+          href: theme,
+        },
       ],
-    }
+    };
   },
   methods: {
     search() {
-      this.$router.push( {name: 'search-keyword', params: { keyword: this.searchQuery }})
+      this.$router.push({
+        name: "search-keyword",
+        params: { keyword: this.searchQuery },
+      });
     },
 
     logOut() {
