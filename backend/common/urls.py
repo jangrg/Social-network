@@ -14,6 +14,7 @@ schema_view = get_schema_view(title=API_TITLE)
 router = routers.DefaultRouter()
 router.register(r'account', views.AccountViewSet, basename='account')
 router.register(r'post', views.PostViewSet, basename='post')
+router.register(r'comment', views.CommentViewSet, basename='comment')
 
 urlpatterns = [
     path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
