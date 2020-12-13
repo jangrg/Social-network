@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { ButtonPlugin } from "bootstrap-vue";
+// import { ButtonPlugin } from "bootstrap-vue";
 
 import TopBar from "@/components/TopBar";
 
