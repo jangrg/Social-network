@@ -92,8 +92,8 @@ export default {
   methods: {
     async likeComment() {
       if (this.liked) {
-        let res = await this.$axios.get(
-          `post/unlike_comment/?id=${this.comment.id}`
+        let res = await this.$axios.post(
+          `post/${this.comment.id}/unlike_comment/`
         );
         debugger;
         if (res.status == 200) {
@@ -109,11 +109,11 @@ export default {
           });
         }
       } else {
-        debugger
-        let res = await this.$axios.get(
-          `post/like_comment/?id=${this.comment.id}`
+        debugger;
+        let res = await this.$axios.post(
+          `post/${this.comment.id}/like_comment/`
         );
-        debugger
+        debugger;
         if (res.status == 200) {
           this.liked = true;
           this.comment.likes_num++;
@@ -182,6 +182,17 @@ export default {
     noComment() {
       return this.newComment.comment_text == "";
     },
+  },
+  mounted() {
+    for (var i = 0; i < this.comment.liked_by.length; i++) {
+      if (this.$auth.user.id == this.comment.liked_by[i].id) {
+        document
+          .getElementById(`${this.comment.id}-${this.comment.post}`)
+          .classList.toggle("like");
+        this.liked = true;
+        break;
+      }
+    }
   },
 };
 </script>

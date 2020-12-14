@@ -145,6 +145,8 @@ class PostViewSet(viewsets.ModelViewSet):
         return context
 
     def get_queryset(self):
+        if self.action == 'comment' or self.action == 'like_comment' or self.action == 'unlike_comment':
+            return Comment.objects.all()
         return Post.objects.all()
 
     def get_serializer_class(self):
@@ -178,6 +180,8 @@ class PostViewSet(viewsets.ModelViewSet):
         'delete': [IsAuthenticated],
         'followed_posts': [IsAuthenticated],
         'comment': [IsAuthenticated],
+        'like_comment': [IsAuthenticated],
+        'unlike_comment': [IsAuthenticated],
     }
 
     def get_permissions(self):
@@ -197,17 +201,14 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        current_user = self.request.user
+        current_user = request.user
         user_id = self.request.query_params.get('by_user', None)
-        print(current_user.id)
-        print(user_id)
+
         if user_id is not None:
             user = User.objects.get(id=user_id)
-            print(user_id)
             queryset = queryset.filter(posted_by=user)
-            if str(current_user.id) != str(user_id):
+            if current_user.username != user.username:
                 if not current_user.following.filter(id=user_id).exists():
-                    print("Jesam li tu!")
                     queryset = queryset.filter(is_private=False)
         else:
             queryset = queryset.filter(is_private=False)
@@ -239,43 +240,27 @@ class PostViewSet(viewsets.ModelViewSet):
     def get_comment(self, request):
         return Response(CommentSerializer(Comment.objects.all(), many=True).data)
 
-    @action(detail=False, methods=['GET'], name='comment')
-    def like_comment(self, request):
-        comment_id = request.GET['id']
+    @action(detail=True, methods=['POST'], name='like_comment')
+    def like_comment(self, request, pk=None):
+        comment = self.get_object()
         user = request.user
-        if user.is_authenticated:
-            comment = Comment.objects.get(id=comment_id)
-            if comment is not None:
-                user = comment.liked_by.filter(id=request.user.id)
-                if not user:
-                    if comment.likes_num:
-                        comment.likes_num += 1
-                    else:
-                        comment.likes_num = 1
-                    comment.liked_by.add(user)
-                comment.save()
-                return Response(status=status.HTTP_200_OK)
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
+        if user in comment.liked_by.all():
+            return Response(status=status.HTTP_208_ALREADY_REPORTED)
+        comment.likes_num += 1
+        comment.liked_by.add(user)
+        comment.save()
+        return Response(status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['GET'], name='comment')
-    def unlike_comment(self, request):
-        comment_id = request.GET['id']
+    @action(detail=True, methods=['POST'], name='unlike_comment')
+    def unlike_comment(self, request, pk=None):
+        comment = self.get_object()
         user = request.user
-        if user.is_authenticated:
-            comment = Comment.objects.get(id=comment_id)
-            if comment is not None:
-                user = comment.liked_by.filter(id=request.user.id)
-                if user:
-                    if comment.likes_num:
-                        comment.likes_num -= 1
-                    else:
-                        comment.likes_num = 0
-                    comment.liked_by.remove(request.user)
-                comment.save()
-                return Response(status=status.HTTP_200_OK)
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
+        if user in comment.liked_by.all():
+            comment.likes_num -= 1
+            comment.liked_by.remove(user)
+            comment.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_208_ALREADY_REPORTED)
 
     @action(detail=True, methods=['POST'], name='like')
     def like(self, request, pk=None):
@@ -292,7 +277,7 @@ class PostViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-    @action(detail=True, methods=['POST'], name='like')
+    @action(detail=True, methods=['POST'], name='unlike')
     def unlike(self, request, pk=None):
         user = request.user
         if user.is_authenticated:

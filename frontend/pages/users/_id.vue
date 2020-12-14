@@ -122,7 +122,7 @@ export default {
         this.$toast.show("User followed!", {
             duration: 8000,
           });
-          this.followed = true;
+        this.followed = true;
       }
       console.log(response.data);
     },
