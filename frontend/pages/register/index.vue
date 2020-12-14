@@ -74,7 +74,10 @@
             >
             </b-form-input>
 
-            <b-form-checkbox v-model="form.store" class="mt-3 mb-2  text-theme-secondary">
+            <b-form-checkbox
+              v-model="form.store"
+              class="mt-3 mb-2  text-theme-secondary"
+            >
               Are you a store?</b-form-checkbox
             >
 
@@ -101,13 +104,15 @@
 </template>
 
 <script>
-
 export default {
   name: "RegisterForm",
   middleware: ["auth-loggedIn"],
   //theme
   head() {
-    var theme = this.$auth.$storage.getCookie("theme") == "dark" ? "/theme.css" : "/light-theme.css"
+    var theme =
+      this.$auth.$storage.getCookie("theme") == "dark"
+        ? "/theme.css"
+        : "/light-theme.css";
     return {
       title: "Register",
       meta: [
@@ -166,6 +171,7 @@ export default {
   methods: {
     async register() {
       try {
+        console.log(this.form);
         let response = await this.$axios.post(`account/`, this.form);
         this.$toast.show(response.data.message, { duration: 8000 });
 

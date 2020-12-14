@@ -362,3 +362,7 @@ body {
   height: 100%;
   width: auto;
 }
+
+.input-add-space {
+  margin-top: 10px;
+}

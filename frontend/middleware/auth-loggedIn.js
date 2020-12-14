@@ -1,6 +1,6 @@
-export default async function({$auth, redirect}) {
+export default async function ({ $auth, redirect }) {
     let user = $auth.$state.user;
-    if(user) {
+    if (user) {
         redirect('/home');
     }
 }

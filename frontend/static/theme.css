@@ -15,7 +15,7 @@
 
 .text-theme {
   color: rgb(121, 63, 165) !important;
-  font-size: 1.5rem ;
+  font-size: 1.5rem;
 }
 
 .text-theme-secondary {
@@ -93,7 +93,8 @@ hr {
   background-repeat: no-repeat;
 }
 
-.like-img:hover, .like {
+.like-img:hover,
+.like {
   background-image: url("./full_heart.png");
 }
 
@@ -104,9 +105,10 @@ hr {
   font-size: 13px !important;
 }
 
-.btn-purple:hover {
-  background-color: rgb(77, 39, 105);
-  color: white;
+.btn-purple:hover,
+.btn-selected {
+  background-color: rgb(50, 24, 68) !important;
+  color: white !important;
 }
 
 .center-vertical {
@@ -138,12 +140,13 @@ hr {
   border: none;
 }
 
-input, textarea{
+input,
+textarea {
   width: 30vw;
   height: 5vh;
   border: none;
   background-color: transparent;
-  border-bottom: 2px solid  rgb(77, 39, 105);
+  border-bottom: 2px solid rgb(77, 39, 105);
 }
 
 .search-theme {
@@ -177,10 +180,9 @@ input, textarea{
   color: rgb(121, 63, 165);
 }
 
-
 .input-grey {
   background-color: #2b2828 !important;
-  width: 30vw ;
-  height: 5vh ;
+  width: 30vw;
+  height: 5vh;
   border: 1px black solid !important;
 }

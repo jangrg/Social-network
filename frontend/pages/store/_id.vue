@@ -5,8 +5,8 @@
       <div class="container-fluid col-md-2 my-4 text-center">
         <div class="post-theme p-3">
           <b-avatar class="profile-icon" src=""></b-avatar>
-          <h1 class="profile-username">{{ user.username }}</h1>
-          <h2 class="profile-email">{{ user.email }}</h2>
+          <h1 class="profile-username">{{ this.store.name }}</h1>
+          <h2 class="profile-email">{{ this.owner.username }}</h2>
           <button
             v-if="anotherUser"
             class="btn btn-purple btn-lg text-align p-1 m-1 my-1"
@@ -28,23 +28,9 @@
             Change theme!
           </button>
         </div>
-        <button
-          v-if="!page"
-          class="btn btn-purple btn-lg text-align p-2 m-2 my-1"
-          @click="openCreatePage"
-        >
-          Create store
-        </button>
-        <b-button
-          v-if="page"
-          class="btn btn-purple btn-lg text-align p-2 m-2 my-1"
-          :to="{ name: 'store-id', params: { id: this.store } }"
-        >
-          Store page
-        </b-button>
       </div>
 
-      <PostFeed :filter="`?by_user=${this.id}`" />
+      <PostFeed :filter="`?by_user=${this.$auth.user.id}`" />
 
       <div class="container-fluid col-md-2 my-4">
         <div class="post-theme p-3">
@@ -58,9 +44,6 @@
           <h5 class="font-theme mx-2">Other user profile information.</h5>
         </div>
       </div>
-      <div v-if="openPreview">
-        <CreatePage />
-      </div>
     </div>
   </div>
 </template>
@@ -68,11 +51,10 @@
 <script>
 import TopBar from "@/components/TopBar";
 import PostFeed from "@/components/PostFeed";
-import CreatePage from "@/components/CreatePage";
 
 export default {
-  name: "User",
-  components: { TopBar, PostFeed, CreatePage },
+  name: "Store",
+  components: { TopBar, PostFeed },
   middleware: ["auth-notLoggedIn"],
   head() {
     return {
@@ -92,21 +74,23 @@ export default {
   data: function() {
     return {
       id: this.$route.params.id,
+      store: "",
       currentUser: "",
-      openPreview: false,
-      store: ""
+      owner: ""
     };
   },
-
   created: async function() {
     try {
-      let response = await this.$axios.get(`/account/${this.id}/`);
-      this.currentUser = response.data;
+      let token = this.$auth.getToken("local");
+      console.log(token);
+      let response = await this.$axios.get(`page/my_page/`, {
+        headers: { Authorization: `${token}` }
+      });
+      this.store = response.data;
+      this.owner = this.store.owner;
+      console.log(this.store);
+      console.log(this.owner.id);
     } catch (e) {
-      // this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
-      //   duration: 8000,
-      // });
-      // this.$router.push("/home");
       consol.log(e);
     }
   },
@@ -117,21 +101,7 @@ export default {
       else return this.$auth.user;
     },
     anotherUser() {
-      return this.id !== this.$auth.user.id;
-    },
-    async page() {
-      try {
-        let token = this.$auth.getToken("local");
-        console.log(token);
-        let response = await this.$axios.get(`page/my_page/`, {
-          headers: { Authorization: `${token}` }
-        });
-        console.log(response.data);
-        this.store = response.data.id;
-      } catch (e) {
-        return false;
-      }
-      return true;
+      return this.owner.id !== this.$auth.user.id;
     }
   },
 
@@ -154,10 +124,6 @@ export default {
     async follow() {
       let response = await this.$axios.post(`account/${this.id}/follow/`);
       console.log(response.data);
-    },
-
-    openCreatePage() {
-      this.openPreview = true;
     }
   }
 };

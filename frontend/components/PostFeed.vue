@@ -19,11 +19,11 @@ export default {
   name: "PostFeed",
   components: { Post, PostForm },
   props: {
-    filter: String,
+    filter: String
   },
   data() {
     return {
-      posts: [],
+      posts: []
     };
   },
   methods: {
@@ -33,8 +33,8 @@ export default {
     //very costly, but im bad at programming therefore i dont know of any other way that doesnt mess with props.
     replacePost(editedPost) {
       debugger;
-      for(var i = 0; i < this.posts.length; i++) {
-        if(editedPost.id == this.posts[i].id) {
+      for (var i = 0; i < this.posts.length; i++) {
+        if (editedPost.id == this.posts[i].id) {
           this.posts.splice(i, 1, editedPost);
           break;
         }
@@ -49,7 +49,7 @@ export default {
           break;
         }
       }
-    },
+    }
   },
   computed: {
     anotherUser() {
@@ -58,18 +58,14 @@ export default {
         return this.$nuxt.$route.params.id === this.$auth.user.id;
       }
       return true;
-    },
+    }
   },
-  created: async function () {
+  created: async function() {
     let response = await this.$axios.get(`post/${this.filter}`);
     this.posts = response.data;
     console.log(this.posts);
-    document
-      .getElementById(`button-explore`)
-      .classList.toggle("explore-clicked");
-  },
+  }
 };
 </script>
 
-<style>
-</style>
+<style></style>

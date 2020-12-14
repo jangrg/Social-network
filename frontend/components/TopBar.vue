@@ -18,7 +18,7 @@
               :disabled="search"
               :to="{
                 name: 'search-keyword',
-                params: { keyword: this.searchQuery },
+                params: { keyword: this.searchQuery }
               }"
               type="submit"
             ></b-button>
@@ -45,14 +45,14 @@
             id="button-home"
             class="button-home"
             variant="btn text-align btn-lg"
-            to="/following"
+            to="/home"
             v-if="this.user"
           ></b-button>
           <b-button
             id="button-explore"
             class="button-explore"
             variant="btn text-align btn-lg"
-            to="/home"
+            to="/explore"
             v-if="this.user"
           ></b-button>
           <b-button
@@ -85,7 +85,7 @@ export default {
   data() {
     return {
       // posts: [],
-      searchQuery: "",
+      searchQuery: ""
     };
   },
   computed: {
@@ -94,24 +94,27 @@ export default {
     },
     search() {
       return this.searchQuery == "";
-    },
+    }
   },
   head() {
-    debugger
-    var theme = this.$auth.$storage.getCookie("theme") == "dark" ? "/theme.css" : "/light-theme.css"
+    debugger;
+    var theme =
+      this.$auth.$storage.getCookie("theme") == "dark"
+        ? "/theme.css"
+        : "/light-theme.css";
     return {
       link: [
         {
           rel: "stylesheet",
           href:
-            "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
+            "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
         },
         {
           rel: "stylesheet",
           href: theme
         }
-      ],
-    }
+      ]
+    };
   },
   methods: {
     // emitPost(parameters) {
@@ -120,8 +123,8 @@ export default {
     logOut() {
       this.$auth.logout();
       this.$router.push("/");
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -1,9 +1,10 @@
 <template>
   <div class="d-flex flex-column font-theme">
-    <TopBar />
+    <TopBar @post="setPost" />
     <div class="container-fluid row mx-auto">
       <div class="col-md-2"></div>
       <PostFeed :filter="''" />
+
       <div class="col-md-2"></div>
     </div>
   </div>
@@ -42,11 +43,19 @@ export default {
     };
   },
   methods: {
-    beforeDestroyed: function () {
-      document
-        .getElementById(`button-explore`)
-        .classList.toggle("explore-clicked");
+    setPost(parameters) {
+      this.posts.unshift(parameters);
     },
+  },
+  created: async function () {
+    let response = await this.$axios.get(`post/followed_posts/`);
+    // followed_posts/
+    this.posts = response.data;
+    console.log(this.posts);
+    document.getElementById(`button-home`).classList.toggle("home-clicked");
+  },
+  beforeDestroyed: function () {
+    document.getElementById(`button-home`).classList.toggle("home-clicked");
   },
 };
 </script>
