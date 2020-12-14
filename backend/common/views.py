@@ -201,10 +201,15 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
+        current_user = request.user
         user_id = self.request.query_params.get('by_user', None)
+
         if user_id is not None:
             user = User.objects.get(id=user_id)
             queryset = queryset.filter(posted_by=user)
+            if current_user.username != user.username:
+                if current_user.following.filter(id=user_id).exists():
+                    queryset = queryset.filter(is_private=False)
         else:
             queryset = queryset.filter(is_private=False)
         return Response(self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)

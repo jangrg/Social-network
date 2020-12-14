@@ -7,7 +7,7 @@
           <strong><nuxt-link :to="{name:'users-id', params: {id: this.user.id}}">{{user.username}}</nuxt-link></strong>
         </div>
         <div class="text-right">        
-          <button class="btn btn-purple btn-lg text-align p-1 m-1 my-1">
+          <button class="btn btn-purple btn-lg text-align p-1 m-1 my-1" v-if="this.$auth.user.id != this.user.id">
             Follow
           </button>
         </div>

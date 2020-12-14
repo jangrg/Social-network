@@ -41,13 +41,6 @@ export default {
       posts: [],
     };
   },
-  methods: {
-    beforeDestroyed: function () {
-      document
-        .getElementById(`button-explore`)
-        .classList.toggle("explore-clicked");
-    },
-  },
 };
 </script>
 
