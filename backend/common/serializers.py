@@ -62,7 +62,7 @@ class PostSerializer(DynamicFieldsModelSerializer):
             return None
         try:
             page = Page.objects.get(owner=obj.posted_by)
-            return PageSerializer(page, only_fields=['id']).data
+            return PageSerializer(page, only_fields=['id', 'name']).data
         except:
             return None
 
