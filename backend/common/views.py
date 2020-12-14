@@ -199,11 +199,15 @@ class PostViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         current_user = self.request.user
         user_id = self.request.query_params.get('by_user', None)
+        print(current_user.id)
+        print(user_id)
         if user_id is not None:
             user = User.objects.get(id=user_id)
+            print(user_id)
             queryset = queryset.filter(posted_by=user)
-            if current_user.id != user_id:
-                if current_user.following.filter(id=user_id).exists():
+            if str(current_user.id) != str(user_id):
+                if not current_user.following.filter(id=user_id).exists():
+                    print("Jesam li tu!")
                     queryset = queryset.filter(is_private=False)
         else:
             queryset = queryset.filter(is_private=False)
