@@ -17,6 +17,7 @@
           <button
             v-if="anotherUser"
             class="btn btn-purple btn-lg text-align p-1 m-1 my-1"
+            @click.prevent="sendMessage"
           >
             Message
           </button>
@@ -81,15 +82,13 @@ export default {
   },
   created: async function() {
     try {
-      let token = this.$auth.getToken("local");
-      console.log(token);
-      let response = await this.$axios.get(`page/my_page/`, {
-        headers: { Authorization: `${token}` }
+      let response = await this.$axios.get(`page/`);
+      response.data.forEach(element => {
+        if (element.id === this.id) {
+          this.store = element;
+          this.owner = this.store.owner;
+        }
       });
-      this.store = response.data;
-      this.owner = this.store.owner;
-      console.log(this.store);
-      console.log(this.owner.id);
     } catch (e) {
       consol.log(e);
     }
@@ -124,6 +123,12 @@ export default {
     async follow() {
       let response = await this.$axios.post(`account/${this.id}/follow/`);
       console.log(response.data);
+    },
+    sendMessage() {
+      this.$router.replace({
+        path: "/messages",
+        query: Object.assign({}, { user: this.currentUser })
+      });
     }
   }
 };

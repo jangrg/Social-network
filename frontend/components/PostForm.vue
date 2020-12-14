@@ -37,7 +37,7 @@
     <b-form-radio-group
       id="btn-radios-1"
       class="mr-auto"
-      v-model="newPost.visibility"
+      v-model="newPost.is_private"
       :options="options"
       buttons
       plain
@@ -67,18 +67,19 @@ export default {
   data() {
     return {
       options: [
-        { text: "Private", value: "private" },
-        { text: "Public", value: "public" },
+        { text: "Public", value: false },
+        { text: "Private", value: true }
       ],
 
       openPreview: false,
       newPost: {
         content: "",
-        visibility: null,
-        image: null,
+        is_private: false,
+        is_store: false,
+        image: null
       },
 
-      canUploadImage: false,
+      canUploadImage: false
     };
   },
   methods: {
@@ -108,11 +109,13 @@ export default {
       try {
         let formData = new FormData();
         formData.append("content", this.newPost.content);
+        formData.append("is_private", this.newPost.is_private);
+        formData.append("is_page", this.$nuxt.$route.name.includes("store"));
         if (this.newPost.image) formData.append("image", this.newPost.image);
         let response = await this.$axios.post(`post/`, formData, {
           headers: {
-            "Content-Type": "multipart/form-data",
-          },
+            "Content-Type": "multipart/form-data"
+          }
         });
         debugger;
         if (response.status == 201) {
@@ -121,28 +124,33 @@ export default {
           let createdPost = response.data;
           this.newPost = {
             content: "",
-            visibility: null,
-            image: null,
+            is_private: false,
+            image: null
           };
           this.canUploadImage = false;
-          this.$emit("post", createdPost);
+          debugger;
+          if (createdPost.is_private && this.$nuxt.$route.name == "home") {
+            this.$toast.show(
+              "Private posts will not be visible on this feed. Please go to your profile page or following feed to see your private post!",
+              { duration: 12000 }
+            );
+          } else this.$emit("post", createdPost);
         }
       } catch (e) {
         console.log(e);
       }
-    },
+    }
   },
   computed: {
     allowSubmit() {
-      return this.newPost.content != "" && this.newPost.visibility != null;
+      return this.newPost.content != "";
     },
 
     imgUrl() {
       return URL.createObjectURL(this.newPost.image);
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style>
-</style>
+<style></style>

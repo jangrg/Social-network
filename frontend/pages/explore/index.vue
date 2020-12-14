@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column font-theme">
-    <TopBar @post="setPost" />
+    <TopBar />
     <div class="container-fluid row mx-auto">
       <div class="col-md-2"></div>
       <PostFeed :filter="''" />
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { ButtonPlugin } from "bootstrap-vue";
+// import { ButtonPlugin } from "bootstrap-vue";
 
 import TopBar from "@/components/TopBar";
 
@@ -40,24 +40,6 @@ export default {
     return {
       posts: []
     };
-  },
-  methods: {
-    setPost(parameters) {
-      this.posts.unshift(parameters);
-    }
-  },
-  created: async function() {
-    let response = await this.$axios.get(`post/`);
-    this.posts = response.data;
-    console.log(this.posts);
-    document
-      .getElementById(`button-explore`)
-      .classList.toggle("explore-clicked");
-  },
-  beforeDestroyed: function() {
-    document
-      .getElementById(`button-explore`)
-      .classList.toggle("explore-clicked");
   }
 };
 </script>

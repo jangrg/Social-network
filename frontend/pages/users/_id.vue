@@ -17,6 +17,7 @@
           <button
             v-if="anotherUser"
             class="btn btn-purple btn-lg text-align p-1 m-1 my-1"
+            @click.prevent="sendMessage"
           >
             Message
           </button>
@@ -29,14 +30,14 @@
           </button>
         </div>
         <button
-          v-if="!page"
+          v-if="!hasPage && !anotherUser"
           class="btn btn-purple btn-lg text-align p-2 m-2 my-1"
           @click="openCreatePage"
         >
           Create store
         </button>
         <b-button
-          v-if="page"
+          v-if="hasPage"
           class="btn btn-purple btn-lg text-align p-2 m-2 my-1"
           :to="{ name: 'store-id', params: { id: this.store } }"
         >
@@ -44,7 +45,10 @@
         </b-button>
       </div>
 
-      <PostFeed :filter="`?by_user=${this.id}`" />
+      <PostFeed
+        :filter="`?by_user=${this.id}`"
+        v-bind:data-following="followed"
+      />
 
       <div class="container-fluid col-md-2 my-4">
         <div class="post-theme p-3">
@@ -59,7 +63,7 @@
         </div>
       </div>
       <div v-if="openPreview">
-        <CreatePage />
+        <CreatePage v-on:delete="removeCreatePage()" />
       </div>
     </div>
   </div>
@@ -94,20 +98,29 @@ export default {
       id: this.$route.params.id,
       currentUser: "",
       openPreview: false,
-      store: ""
+      store: false,
+      followed: true
     };
+  },
+
+  async beforeCreate() {
+    try {
+      let response = await this.$axios.get(`page/`);
+      response.data.forEach(element => {
+        if (element.owner.id === this.id) this.store = element.id;
+      });
+    } catch (e) {
+      console.log(e);
+    }
   },
 
   created: async function() {
     try {
       let response = await this.$axios.get(`/account/${this.id}/`);
+      console.log(this.id);
       this.currentUser = response.data;
     } catch (e) {
-      // this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
-      //   duration: 8000,
-      // });
-      // this.$router.push("/home");
-      consol.log(e);
+      console.log(e);
     }
   },
 
@@ -119,19 +132,9 @@ export default {
     anotherUser() {
       return this.id !== this.$auth.user.id;
     },
-    async page() {
-      try {
-        let token = this.$auth.getToken("local");
-        console.log(token);
-        let response = await this.$axios.get(`page/my_page/`, {
-          headers: { Authorization: `${token}` }
-        });
-        console.log(response.data);
-        this.store = response.data.id;
-      } catch (e) {
-        return false;
-      }
-      return true;
+    hasPage() {
+      if (this.store === false) return false;
+      else return true;
     }
   },
 
@@ -153,11 +156,26 @@ export default {
 
     async follow() {
       let response = await this.$axios.post(`account/${this.id}/follow/`);
+      if (response.status == 200) {
+        this.$toast.show("User followed!", {
+          duration: 8000
+        });
+        this.followed = true;
+      }
       console.log(response.data);
     },
 
     openCreatePage() {
       this.openPreview = true;
+    },
+    sendMessage() {
+      this.$router.replace({
+        path: "/messages",
+        query: Object.assign({}, { user: this.currentUser })
+      });
+    },
+    removeCreatePage() {
+      this.openPreview = false;
     }
   }
 };

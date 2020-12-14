@@ -7,6 +7,9 @@
         <div v-for="result in searchResult" :key="result.id">
           <SearchResult :user="result" />
         </div>
+        <div v-if="searchResult.length == 0" class="text-center mt-5">
+          <h5><i>No results found...</i></h5>
+        </div> 
         <div class="col-md-2"></div>
       </div>
     </div>
@@ -15,14 +18,13 @@
 
 <script>
 import TopBar from "../../components/TopBar";
-
 import SearchResult from "../../components/SearchResult";
 
 export default {
   name: "Home",
   components: { TopBar, SearchResult },
   middleware: ["auth-notLoggedIn"],
-  head() {
+  head: function() {
     return {
       title: "Login",
       meta: [
@@ -37,27 +39,15 @@ export default {
     };
   },
 
-  data() {
+  data: function() {
     return {
-      // loaded: false,
-      keyword: this.$route.params.keyword,
       searchResult: []
     };
   },
 
-  async created() {
-    try {
-      let result = await this.$axios.get(`/account/`, {
-        params: { search: this.keyword }
-      });
+  created: async function() {
+      let result = await this.$axios.get(`/account/`, {params:  { query: this.$route.params.keyword}});
       this.searchResult = result.data;
-      // this.loaded = true;
-    } catch (e) {
-      // this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
-      //   duration: 8000,
-      // });
-      console.log(e);
-    }
   }
 };
 </script>

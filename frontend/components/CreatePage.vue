@@ -5,7 +5,7 @@
         <div class="media-body post-theme p-5">
           <div class="center">
             <div class="text-center">
-              <strong class="text-theme text-title">WeShare</strong>
+              <strong class="text-theme text-title">Create Store</strong>
             </div>
             <b-form class="mx-auto mt-2 text-center">
               <b-form-input
@@ -90,10 +90,17 @@
 
               <button
                 @click.prevent="create"
+                type="submit"
                 :disabled="!allowSubmit"
                 class="btn btn-purple mt-2 text-align"
               >
-                Submit
+                Create
+              </button>
+              <button
+                @click="$emit('delete')"
+                class="btn btn-purple mt-2 text-align"
+              >
+                Discard
               </button>
             </b-form>
           </div>
@@ -125,22 +132,19 @@ export default {
   methods: {
     async create() {
       try {
-        // this.form.work_time = this.startTime + "-" + this.endTime;
-        // var today = new Date();
-        // var dd = String(today.getDate()).padStart(2, "0");
-        // var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-        // var yyyy = today.getFullYear();
-        // today = mm + "/" + dd + "/" + yyyy;
-        // this.form.date_created = today;
+        var worktime = this.startTime + "-" + this.endTime;
         let formData = new FormData();
         formData.append("name", this.form.name);
         formData.append("location", this.form.location);
-        // formData.append("work_time", this.startTime + "-" + this.endTime);
+        formData.append("work_time", worktime.toString());
         // formData.append("categories", this.form.categories);
         let response = await this.$axios.post(`page/`, formData);
         this.$toast.show(response.data.message, { duration: 8000 });
-        console.log(response.data);
-        this.$router.push("/");
+        let token = this.$auth.getToken("local");
+        response = await this.$axios.get("page/my_page/", {
+          headers: { Authorization: `${token}` }
+        });
+        this.$router.push(`/store/${response.id}`);
       } catch (e) {
         this.$toast.error(e, { duration: 8000 });
         console.log(e.data);

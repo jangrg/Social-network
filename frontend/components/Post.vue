@@ -5,10 +5,18 @@
         <b-avatar class="mb-2"></b-avatar>
         <strong
           ><nuxt-link
+            v-if="isPage"
             class="text-theme"
-            :to="{ name: 'users-id', params: { id: post.posted_by.id } }"
+            :to="{ name: 'users-id', params: { id: this.id } }"
           >
             {{ post.posted_by.username }}
+          </nuxt-link>
+          <nuxt-link
+            v-if="!isPage"
+            class="text-theme"
+            :to="{ name: 'store-id', params: { id: this.id } }"
+          >
+            {{ post.page.username }}
           </nuxt-link></strong
         >
         <b-dropdown
@@ -45,7 +53,7 @@
           <b-form-radio-group
             id="btn-radios-1"
             class="mr-auto mb-2"
-            v-model="newEditedPost.visibility"
+            v-model="newEditedPost.is_private"
             :options="options"
             buttons
             plain
@@ -62,7 +70,7 @@
                   >
                   <strong v-else class="text-theme-secondary btn btn-purple"
                     >Upload picture</strong
-                  > 
+                  >
                 </h5>
               </label>
               <input
@@ -91,7 +99,6 @@
         <img v-if="hasImage && !changedPicture" :src="post.image" />
         <img v-if="changedPicture" :src="imgEditedUrl" />
       </div>
-
 
       <div class="container-fluid float-right mb-2" v-if="editing">
         <button
@@ -141,7 +148,11 @@
         v-for="comment in post.comments"
         :key="comment.posted_by.id"
       >
-        <Comment :comment="comment" />
+        <Comment
+          :comment="comment"
+          @delete="deleteComment"
+          @edit="changeEditedComment"
+        />
       </div>
     </div>
   </div>
@@ -154,10 +165,11 @@ export default {
   name: "Post",
   components: { Comment },
   props: {
-    post: Object,
+    post: Object
   },
   data() {
     return {
+      id: this.post.id,
       //liking and disliking
       liked: false,
 
@@ -165,6 +177,7 @@ export default {
       comment: {
         comment_text: "",
         post: this.post.id,
+        likes_num: 0
       },
 
       //if post is getting edited
@@ -172,17 +185,25 @@ export default {
         content: this.post.content,
         id: this.post.id,
         image: this.post.image,
-        type_attr: this.post.type_attr
+        type_attr: this.post.type_attr,
+        is_private: this.post.is_private
       },
       editing: false,
       changedPicture: false,
       options: [
-        { text: "Private", value: "private" },
-        { text: "Public", value: "public" },
-      ],
+        { text: "Public", value: false },
+        { text: "Private", value: true }
+      ]
     };
   },
+  created() {
+    console.log(this.post);
+    if (this.post.is_page) this.id = this.post.page.id;
+  },
   methods: {
+    isPage() {
+      return this.post.is_page;
+    },
     changePictureUpload() {
       debugger;
       this.newEditedPost.image = this.$refs.file.files[0];
@@ -207,7 +228,7 @@ export default {
             .classList.toggle("like");
         } else {
           this.$toast.show("Post not successfully disliked...", {
-            duration: 8000,
+            duration: 8000
           });
         }
       } else {
@@ -221,7 +242,7 @@ export default {
             .classList.toggle("like");
         } else {
           this.$toast.show("Post not successfully liked...", {
-            duration: 8000,
+            duration: 8000
           });
         }
       }
@@ -240,6 +261,7 @@ export default {
       try {
         let formData = new FormData();
         formData.append("content", this.newEditedPost.content);
+        formData.append("is_private", this.newEditedPost.is_private);
 
         debugger;
         if (this.newEditedPost.image) {
@@ -252,8 +274,8 @@ export default {
           formData,
           {
             headers: {
-              "Content-Type": "multipart/form-data",
-            },
+              "Content-Type": "multipart/form-data"
+            }
           }
         );
         debugger;
@@ -273,12 +295,12 @@ export default {
         debugger;
         if (res.status == 204) {
           this.$toast.show("Post succesfully deleted.", {
-            duration: 8000,
+            duration: 8000
           });
           this.$emit("PostDelete", this.post.id);
         } else {
           this.$toast.show("Post not successfully deleted...", {
-            duration: 8000,
+            duration: 8000
           });
         }
       }
@@ -295,15 +317,37 @@ export default {
           let createdComment = res.data;
           debugger;
           this.comment.comment_text = "";
+          this.comment.likes_num = 0;
           this.post.comments.push(createdComment);
         }
       } catch (e) {
         this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
-          duration: 8000,
+          duration: 8000
         });
       }
     },
+
+    deleteComment(id) {
+      debugger;
+      for (var i = 0; i < this.post.comments.length; i++) {
+        if (id == this.post.comments[i].id) {
+          this.post.comments.splice(i, 1);
+          break;
+        }
+      }
+    },
+
+    changeEditedComment(comment) {
+      debugger;
+      for (var i = 0; i < this.post.comments.length; i++) {
+        if (comment.id == this.post.comments[i].id) {
+          this.post.comments.splice(i, 1, comment);
+          break;
+        }
+      }
+    }
   },
+
   computed: {
     date() {
       let date = new Date(this.post.time);
@@ -339,7 +383,7 @@ export default {
 
     postedByUser() {
       return this.$auth.user.id == this.post.posted_by.id;
-    },
+    }
   },
   mounted() {
     if (this.post.logged_user_liked) {
@@ -348,6 +392,6 @@ export default {
         .classList.toggle("like");
       this.liked = true;
     }
-  },
+  }
 };
 </script>

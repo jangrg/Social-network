@@ -155,7 +155,8 @@ body {
 }
 
 .search-btn {
-  float: left;
+  display: none;
+  /* float: left;
   height: 40px;
   top: 10px;
   position: relative;
@@ -163,7 +164,7 @@ body {
   background-image: url("./search-icon.png");
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: contain; */
 }
 
 .fix {

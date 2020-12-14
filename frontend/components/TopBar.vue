@@ -7,21 +7,18 @@
         >
         <div class="col-4">
           <b-form class="navbar-form fix form-theme">
-            <input
+            <b-form-input
               type="search"
               class="form-control search-bar input-grey"
               v-model="searchQuery"
               placeholder="Search"
-            />
-            <b-button
-              variant="btn search-btn"
-              :disabled="search"
-              :to="{
-                name: 'search-keyword',
-                params: { keyword: this.searchQuery }
-              }"
+            ></b-form-input>
+            <button
+              @click.prevent="search"
+              class="btn search-btn"
+              :disabled="!allowSearch"
               type="submit"
-            ></b-button>
+            ></button>
           </b-form>
         </div>
         <div class="links" v-if="!this.$auth.user">
@@ -45,6 +42,7 @@
             id="button-home"
             class="button-home"
             variant="btn text-align btn-lg"
+            v-bind:class="selectedHome"
             to="/home"
             v-if="this.user"
           ></b-button>
@@ -52,6 +50,7 @@
             id="button-explore"
             class="button-explore"
             variant="btn text-align btn-lg"
+            v-bind:class="selectedFollowing"
             to="/explore"
             v-if="this.user"
           ></b-button>
@@ -59,7 +58,9 @@
             id="button-message"
             class="button-message"
             variant="btn text-align btn-lg"
+            v-bind:class="selectedMessage"
             v-if="this.user"
+            to="/messages"
           ></b-button>
           <b-avatar
             class="mb-2 usericon"
@@ -85,19 +86,35 @@ export default {
   data() {
     return {
       // posts: [],
-      searchQuery: ""
+      searchQuery: "",
+      route: this.$nuxt.$route.name
     };
   },
   computed: {
     user() {
       return this.$auth.user;
     },
-    search() {
-      return this.searchQuery == "";
+    allowSearch() {
+      return this.searchQuery != "";
+    },
+    selectedHome() {
+      debugger;
+      if (this.route == "home") {
+        return "home-clicked";
+      }
+    },
+    selectedFollowing() {
+      if (this.route == "explore") {
+        return "explore-clicked";
+      }
+    },
+    selectedMessage() {
+      if (this.route == "messages") {
+        return "message-clicked";
+      }
     }
   },
-  head() {
-    debugger;
+  head: function() {
     var theme =
       this.$auth.$storage.getCookie("theme") == "dark"
         ? "/theme.css"
@@ -117,9 +134,13 @@ export default {
     };
   },
   methods: {
-    // emitPost(parameters) {
-    //   this.$emit("post", parameters);
-    // },
+    search() {
+      this.$router.push({
+        name: "search-keyword",
+        params: { keyword: this.searchQuery }
+      });
+    },
+
     logOut() {
       this.$auth.logout();
       this.$router.push("/");
