@@ -102,8 +102,7 @@ class Comment(models.Model):
     likes_num = models.IntegerField(null=True)
     post = models.ForeignKey(Post, related_name="comments", on_delete=models.CASCADE)
     posted_by = models.ForeignKey(User, related_name="comments", on_delete=models.CASCADE)
-    liked_by = models.ManyToManyField(User, related_name="liked_comments")
-    # parent_comment = models.ForeignKey("Comment", related_name="comment", on_delete=models.CASCADE)
+    liked_by = models.ManyToManyField(User, related_name="liked_comments", null=True, blank=True)
 
     class Meta:
         ordering = ['-likes_num']
