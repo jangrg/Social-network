@@ -157,7 +157,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def get_serializer(self, *args, **kwargs):
         if self.action == 'create':
-            kwargs['only_fields'] = ['content', 'image', 'is_private']
+            kwargs['only_fields'] = ['content', 'image', 'is_private', 'is_page']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'list':
             return super().get_serializer(*args, **kwargs)
@@ -202,9 +202,15 @@ class PostViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         current_user = request.user
-        user_id = self.request.query_params.get('by_user', None)
 
-        if user_id is not None:
+        user_id = self.request.query_params.get('by_user', None)
+        page_id = self.request.query_params.get('on_page', None)
+
+        if page_id:
+            page = Page.objects.get(id=page_id)
+            queryset = queryset.filter(is_page=True, page=page)
+
+        if user_id:
             user = User.objects.get(id=user_id)
             queryset = queryset.filter(posted_by=user)
             if current_user.username != user.username:

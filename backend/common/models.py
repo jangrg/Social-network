@@ -52,6 +52,7 @@ class Post(models.Model):
     type_attr = models.CharField(null=True, blank=True, max_length=255)
     likes_num = models.IntegerField(null=True, blank=True, default=0)
     time = models.DateTimeField(auto_now_add=True)
+    is_page = models.BooleanField(default=False)
     page = models.ForeignKey(Page, related_name="posts", null=True, blank=True, on_delete=models.CASCADE)
     liked_by = models.ManyToManyField(User, related_name="liked_posts")
     is_private = models.BooleanField(default=False)

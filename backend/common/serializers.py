@@ -50,11 +50,21 @@ class PostSerializer(DynamicFieldsModelSerializer):
     liked_by = UserSerializer(only_fields=['id', 'username'], many=True)
     comments = SerializerMethodField()
     logged_user_liked = SerializerMethodField()
+    page = SerializerMethodField(read_only=True)
     # image = SerializerMethodField()
 
     class Meta:
         model = Post
-        fields = ['id', 'posted_by', 'content', 'image', 'type_attr', 'likes_num', 'time', 'comments', 'liked_by', 'logged_user_liked', 'is_private']
+        fields = ['id', 'posted_by', 'content', 'image', 'type_attr', 'likes_num', 'time', 'comments', 'liked_by', 'logged_user_liked', 'is_private', 'is_page', 'page']
+
+    def get_page(self, obj):
+        if not obj.is_page:
+            return None
+        try:
+            page = Page.objects.get(owner=obj.posted_by)
+            return PageSerializer(page, only_fields=['id']).data
+        except:
+            return None
 
     def get_comments(self, obj):
         return CommentSerializer(
