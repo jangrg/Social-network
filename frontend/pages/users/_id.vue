@@ -29,20 +29,6 @@
             Change theme
           </button>
         </div>
-        <button
-          v-if="!hasPage && !anotherUser"
-          class="btn btn-purple btn-lg text-align p-2 m-2 my-1"
-          @click="openCreatePage"
-        >
-          Create store
-        </button>
-        <b-button
-          v-if="hasPage"
-          class="btn btn-purple btn-create text-align p-2 m-2 my-1"
-          :to="{ name: 'store-id', params: { id: this.store } }"
-        >
-          Store page
-        </b-button>
       </div>
 
       <PostFeed
@@ -51,6 +37,20 @@
       />
 
       <div class="container-fluid col-md-2 my-4">
+        <button
+          v-if="!hasPage && !anotherUser"
+          class="btn btn-purple btn-create text-align p-2 m-2 my-1"
+          @click="openCreatePage"
+        >
+          + create your store
+        </button>
+        <b-button
+          v-if="hasPage"
+          class="btn btn-purple btn-create text-align p-2 m-2 my-1"
+          :to="{ name: 'store-id', params: { id: this.store.id } }"
+        >
+          {{ this.store.name }}
+        </b-button>
         <div class="post-theme p-3">
           <div class="bg-color text-theme-secondary p-2">
             <h5 class="font-theme lead">
@@ -107,7 +107,7 @@ export default {
     try {
       let response = await this.$axios.get(`page/`);
       response.data.forEach(element => {
-        if (element.owner.id === this.id) this.store = element.id;
+        if (element.owner.id === this.id) this.store = element;
       });
     } catch (e) {
       console.log(e);

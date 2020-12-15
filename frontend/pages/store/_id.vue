@@ -66,9 +66,16 @@
       <div class="container-fluid col-md-2 my-4 text-center">
         <h4 class="text-theme-secondary">STORE OWNER</h4>
         <div class="panel-theme p-1">
-          <b-avatar class="mb-3 smaller-profile-icon" src=""></b-avatar>
-          <h1 class="store-text profile-username">{{ this.owner.username }}</h1>
-          <h2 class="store-text profile-email">{{ this.owner.email }}</h2>
+          <nuxt-link
+            v-if="!isPage"
+            :to="{ name: 'users-id', params: { id: this.owner.id } }"
+          >
+            <b-avatar class="mb-3 smaller-profile-icon" src=""></b-avatar>
+            <h1 class="store-text profile-username">
+              {{ this.owner.username }}
+            </h1>
+            <h2 class="store-text profile-email">{{ this.owner.email }}</h2>
+          </nuxt-link>
           <button
             v-if="anotherUser"
             class="btn btn-purple btn-lg text-align p-1 m-1 my-1"
@@ -79,7 +86,7 @@
           <button
             v-if="anotherUser"
             class="btn btn-purple btn-lg text-align p-1 m-1 my-1"
-            @click.prevent="sendMessage"
+            @click.prevent="sendMessageToOwner"
           >
             Message
           </button>
@@ -122,6 +129,7 @@ export default {
     };
   },
   created: async function() {
+    this.currentUser = this.$auth.user;
     try {
       let response = await this.$axios.get(`page/`);
       response.data.forEach(element => {
@@ -156,10 +164,10 @@ export default {
       console.log(response.data);
     },
     async follow() {},
-    sendMessage() {
+    sendMessageToOwner() {
       this.$router.replace({
         path: "/messages",
-        query: Object.assign({}, { user: this.currentUser })
+        query: Object.assign({}, { user: this.owner })
       });
     },
     switchSelect() {
