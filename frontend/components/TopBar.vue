@@ -50,7 +50,7 @@
             id="button-explore"
             class="button button-explore"
             variant="btn text-align btn-lg"
-            v-bind:class="selectedFollowing"
+            v-bind:class="selectedExplore"
             to="/explore"
             v-if="this.user"
           ></b-button>
@@ -132,7 +132,7 @@ export default {
         return "home-clicked";
       }
     },
-    selectedFollowing() {
+    selectedExplore() {
       if (this.route == "explore") {
         return "explore-clicked";
       }
