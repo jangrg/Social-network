@@ -133,7 +133,7 @@ export default {
           this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
             duration: 8000
           });
-        this.$router.push("/login");
+        this.$router.redirect("/login");
       }
     },
     async forgottenPassword() {

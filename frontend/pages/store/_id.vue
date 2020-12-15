@@ -4,25 +4,76 @@
     <div class="container-fluid row text-theme mx-auto">
       <div class="photo">
         <span class="cover-text"
-          ><bold>{{ this.store.name }} </bold>
+          ><bold>{{ this.nameEdit ? "" : this.store.name }} </bold>
+          <b-form-input
+            v-if="this.nameEdit"
+            required
+            class="input-edit-name"
+            v-model="store.name"
+            type="text"
+            v-on:blur="switchNameEdit"
+          >
+          </b-form-input>
         </span>
+        <b-button
+          v-if="!anotherUser"
+          class="btn btn-edit-name text-center"
+          @click="switchNameEdit"
+          >🖊</b-button
+        >
+        <br />
       </div>
     </div>
     <div class="container-fluid row text-theme mx-auto">
       <div class="container-fluid col-md-2 my-4 text-center">
         <div class="panel-theme p-2">
-          <h1 class="store-text profile-username">
-            📍 {{ this.store.location }}
-          </h1>
-          <h1 class="store-text store-time">
+          <span class="store-text profile-username">
+            📍
+            {{ this.locationEdit ? "" : this.store.location }}
+          </span>
+          <b-form-input
+            v-if="this.locationEdit"
+            required
+            class="input-edit"
+            v-model="store.location"
+            type="text"
+            v-on:blur="switchLocationEdit"
+          >
+          </b-form-input>
+          <b-button
+            v-if="!anotherUser"
+            class="btn btn-edit text-center"
+            @click="switchLocationEdit"
+            >🖊</b-button
+          >
+          <br />
+          <span class="store-text store-time">
             🕐
             {{
-              this.store.work_time == unknown
+              this.timeEdit
+                ? ""
+                : this.store.work_time == unknown
                 ? "not specified"
                 : this.store.work_time
             }}
-          </h1>
-          <button
+          </span>
+          <b-form-input
+            v-if="this.timeEdit"
+            required
+            class="input-edit"
+            v-model="store.work_time"
+            type="text"
+            v-on:blur="switchTimeEdit"
+          >
+          </b-form-input>
+          <b-button
+            v-if="!anotherUser"
+            class="btn btn-edit text-center"
+            @click="switchTimeEdit"
+            >🖊</b-button
+          >
+          <!-- waiting for backend -->
+          <!-- <button
             v-if="anotherUser"
             class="btn btn-purple btn-lg text-align p-1 m-1 my-1"
             @click="follow"
@@ -35,7 +86,7 @@
             @click.prevent="sendMessage"
           >
             Message
-          </button>
+          </button> -->
         </div>
         <b-button
           id="posts"
@@ -55,7 +106,7 @@
 
       <PostFeed
         v-if="this.postsSelected"
-        :filter="`?on_page=${this.$route.params.id}`"
+        :filter="`${this.$route.params.id}/get_posts_from_page`"
       />
       <div v-if="!this.postsSelected" class="container-fluid col-md-8 my-4">
         <h4 class="store-text">
@@ -91,6 +142,13 @@
             Message
           </button>
         </div>
+        <button
+          v-if="!anotherUser"
+          class="btn btn-purple btn-create text-align p-2 m-2 my-1"
+          @click="deletePage"
+        >
+          Delete store
+        </button>
       </div>
     </div>
   </div>
@@ -125,7 +183,10 @@ export default {
       store: "",
       currentUser: "",
       owner: "",
-      postsSelected: true
+      postsSelected: true,
+      nameEdit: false,
+      locationEdit: false,
+      timeEdit: false
     };
   },
   created: async function() {
@@ -176,6 +237,39 @@ export default {
       document
         .getElementById("articles")
         .classList.toggle("btn-choice-selected");
+    },
+    async edit() {
+      let formData = new FormData();
+      formData.append("name", this.store.name);
+      formData.append("location", this.store.location);
+      formData.append("work_time", this.store.work_time);
+      let response = await this.$axios.patch(
+        `page/${this.store.id}/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        }
+      );
+    },
+    async deletePage() {
+      if (confirm("Really want to delete this actualPost?")) {
+        let res = await this.$axios.delete(`page/${this.store.id}/`);
+        this.$router.go(`user/${this.owner.id}`);
+      }
+    },
+    switchLocationEdit() {
+      if (this.locationEdit) this.edit();
+      this.locationEdit = !this.locationEdit;
+    },
+    switchNameEdit() {
+      if (this.nameEdit) this.edit();
+      this.nameEdit = !this.nameEdit;
+    },
+    switchTimeEdit() {
+      if (this.timeEdit) this.edit();
+      this.timeEdit = !this.timeEdit;
     }
   }
 };

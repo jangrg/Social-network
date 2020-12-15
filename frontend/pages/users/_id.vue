@@ -42,7 +42,7 @@
           class="btn btn-purple btn-create text-align p-2 m-2 my-1"
           @click="openCreatePage"
         >
-          + create your store
+          ➕ create your store
         </button>
         <b-button
           v-if="hasPage"

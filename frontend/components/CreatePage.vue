@@ -3,14 +3,19 @@
     <div class="overlay">
       <div class="media font-theme text-left">
         <div class="media-body post-theme p-5">
+          <button @click="$emit('delete')" class="btn btn-exit mt-2 text-align">
+            ✖
+          </button>
           <div class="center">
             <div class="text-center">
-              <strong class="text-theme text-title">Create Store</strong>
+              <strong class="text-theme text-title">
+                🏪 {{ form.name == "" ? "" : form.name }}</strong
+              >
             </div>
             <b-form class="mx-auto mt-2 text-center">
               <b-form-input
                 required
-                class="input-style"
+                class="input-style search-bar input-grey"
                 v-model="form.name"
                 type="text"
                 placeholder="Enter the name of your store"
@@ -19,7 +24,7 @@
 
               <b-form-input
                 required
-                class="input-style"
+                class="input-style search-bar input-grey"
                 v-model="form.location"
                 type="text"
                 placeholder="Enter the location of your store"
@@ -27,14 +32,14 @@
               </b-form-input>
 
               <b-form-timepicker
-                class="input-add-space"
+                class="input-add-space input-grey"
                 v-model="startTime"
                 locale="de"
                 placeholder="Enter when the store opens"
               ></b-form-timepicker>
 
               <b-form-timepicker
-                class="input-add-space"
+                class="input-add-space input-grey"
                 v-model="endTime"
                 locale="de"
                 placeholder="Enter when the store closes"
@@ -91,15 +96,9 @@
               <button
                 @click.prevent="create"
                 type="submit"
-                class="btn btn-purple mt-2 text-align"
+                class="btn btn-purple btn-fill mt-2 text-align"
               >
                 Create
-              </button>
-              <button
-                @click="$emit('delete')"
-                class="btn btn-purple mt-2 text-align"
-              >
-                Discard
               </button>
             </b-form>
           </div>

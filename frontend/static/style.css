@@ -357,13 +357,56 @@ body {
 }
 
 .store-time {
-  font-size: 2em;
+  font-size: 1.7em;
+}
+
+.btn-exit {
+  position: relative;
+  left: 31vw;
+  background-color: transparent !important;
+  color: grey;
 }
 
 .btn-create {
-  width: 10vw;
+  width: 15vw;
+  font-size: 1.5em !important;
 }
 
+.btn-edit {
+  position: relative;
+  top: -3vh;
+  height: 0.5vh;
+  width: 1vw;
+  font-size: 1.5em;
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.btn-edit-name {
+  position: relative;
+  top: 27vh;
+  left: 3vw;
+  height: 0.5vh;
+  width: 1vw;
+  font-size: 0.5em;
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.input-edit {
+  display: inline;
+  background-color: transparent;
+  border: none;
+  width: 9vw;
+}
+.input-edit-name {
+  display: inline;
+  background-color: transparent;
+  border: none;
+  width: 23vw;
+  height: 8vh;
+  font-size: 1em;
+}
 .chat-top-bar {
   height: 50px;
 }

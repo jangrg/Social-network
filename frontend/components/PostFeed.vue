@@ -73,7 +73,11 @@ export default {
     }
   },
   created: async function() {
-    let response = await this.$axios.get(`post/${this.filter}`);
+    let response;
+    if (this.filter.includes("page")) {
+      console.log("tu");
+      response = await this.$axios.get(`page/${this.filter}`);
+    } else response = await this.$axios.get(`post/${this.filter}`);
     this.posts = response.data;
     console.log(this.posts);
   }
