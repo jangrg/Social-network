@@ -253,3 +253,15 @@ textarea {
   font-weight: bold !important;
   font-size: 13px !important;
 }
+
+.messaged-user-selected, .messaged-user:hover {
+  border: 3px solid rgb(71, 26, 71);
+}
+
+.message-bubble.sender {
+  background-color: rgb(86, 19, 142);;
+}
+
+.message-bubble.reciever {
+  background-color: #2b2828;
+}

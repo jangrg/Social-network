@@ -363,3 +363,71 @@ body {
 .btn-create {
   width: 10vw;
 }
+
+.chat-top-bar {
+  height: 50px;
+}
+
+.chat-top-bar > h5 {
+  margin-top: calc((50px - 24px) / 2);
+  margin-bottom: calc((50px - 24px) / 2);
+  margin-left: 5px;
+}
+
+.messaged-user {
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.messaged-users-contrainer {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-right: 2px;
+  height: calc(100vh - 8vh - 50px);
+  background-image: url("./patterns/chat-pattern.png");
+  background-repeat: repeat;
+}
+
+.chat-window {
+  display: flex;
+  flex-direction: column-reverse;
+  overflow-y: scroll;
+  height: 86vh;
+  padding-right: 2vw;
+  padding-left: 2vw;
+}
+
+.message-form {
+  position: relative;
+  bottom: 0px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 6vh;
+  min-height: 40px;
+}
+
+.message-form > button {
+  margin: auto 10px auto 5px;
+  height: 30px;
+  width: 50px;
+  background-image: url("../static/send_message.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.message-input {
+  max-height: 30px;
+  width: 80%;
+  margin: auto 5px auto 10px !important;
+}
+
+.message-bubble {
+  word-wrap: break-word;
+  max-width: 60%;
+  color: white;
+  border-radius: 40px;
+  padding: 15px;
+  margin: 12px;
+}

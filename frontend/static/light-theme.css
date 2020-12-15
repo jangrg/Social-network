@@ -234,3 +234,15 @@ textarea {
 .btn-cat:hover {
   background-color: #056270 !important;
 }
+
+.messaged-user-selected,.messaged-user:hover {
+  border: 3px solid #008da3;
+}
+
+.message-bubble.sender {
+  background-color: #159fb5;
+}
+
+.message-bubble.reciever {
+  background-color: #716d6d;
+}
