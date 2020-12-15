@@ -212,6 +212,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
         if user_id:
             user = User.objects.get(id=user_id)
+            print(user)
             queryset = queryset.filter(posted_by=user)
             if current_user.username != user.username:
                 if not current_user.following.filter(id=user_id).exists():
@@ -219,6 +220,8 @@ class PostViewSet(viewsets.ModelViewSet):
         else:
             queryset = queryset.filter(is_private=False)
         return Response(self.get_serializer(queryset, many=True).data, status=status.HTTP_200_OK)
+    #
+    # def get_posts_from_pages
 
     @action(detail=False, methods=['GET'], name='followed_posts')
     def followed_posts(self, request):
@@ -346,6 +349,13 @@ class PageViewSet(viewsets.ModelViewSet):
             return Response(PageSerializer(page).data, status=status.HTTP_200_OK)
         except:
             return Response({"No page available."}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=True, methods=['GET'], name="my_page")
+    def get_posts_from_page(self, request, *args, **kwargs):
+        page = self.get_object()
+        owner_id = page.owner_id
+        posts = Post.objects.filter(Q(posted_by__id=owner_id) & Q(is_page=True))
+        return Response(PostSerializer(posts, many=True).data)
 
 
 class Search(viewsets.ViewSet):

@@ -90,39 +90,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-/* Move these styles into static folder */
-.chat-top-bar {
-    height: 50px;
-}
-
-.chat-top-bar > h5 {
-    margin-top: calc((50px - 24px) / 2);
-    margin-bottom: calc((50px - 24px) / 2);
-    margin-left: 5px;
-}
-
-.messaged-user {
-    margin-top: 10px;
-    border-radius: 5px;
-}
-
-.messaged-user:hover {
-    border: 3px solid rgb(71, 26, 71);
-}
-
-.messaged-users-contrainer {
-    overflow-y: scroll;
-    overflow-x: hidden;
-    padding-right: 2px;
-    height: calc(100vh - 8vh - 50px);
-    background-image: url("../../static/patterns/5-dots.png");
-    background-size: contain;
-}
-
-.messaged-user-selected {
-    border: 3px solid rgb(71, 26, 71);
-}
-
-</style>
