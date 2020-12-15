@@ -26,7 +26,7 @@
             class="btn btn-purple btn-outline btn-lg text-align p-1 m-1 my-1"
             @click="changeTheme"
           >
-            Change theme!
+            Change theme
           </button>
         </div>
         <button
@@ -38,7 +38,7 @@
         </button>
         <b-button
           v-if="hasPage"
-          class="btn btn-purple btn-lg text-align p-2 m-2 my-1"
+          class="btn btn-purple btn-create text-align p-2 m-2 my-1"
           :to="{ name: 'store-id', params: { id: this.store } }"
         >
           Store page

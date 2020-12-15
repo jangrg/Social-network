@@ -2,11 +2,26 @@
   <div class="d-flex flex-column bg-pattern font-theme">
     <TopBar />
     <div class="container-fluid row text-theme mx-auto">
+      <div class="photo">
+        <span class="cover-text"
+          ><bold>{{ this.store.name }} </bold>
+        </span>
+      </div>
+    </div>
+    <div class="container-fluid row text-theme mx-auto">
       <div class="container-fluid col-md-2 my-4 text-center">
-        <div class="post-theme p-3">
-          <b-avatar class="profile-icon" src=""></b-avatar>
-          <h1 class="profile-username">{{ this.store.name }}</h1>
-          <h2 class="profile-email">{{ this.owner.username }}</h2>
+        <div class="panel-theme p-2">
+          <h1 class="store-text profile-username">
+            📍 {{ this.store.location }}
+          </h1>
+          <h1 class="store-text store-time">
+            🕐
+            {{
+              this.store.work_time == unknown
+                ? "not specified"
+                : this.store.work_time
+            }}
+          </h1>
           <button
             v-if="anotherUser"
             class="btn btn-purple btn-lg text-align p-1 m-1 my-1"
@@ -21,28 +36,53 @@
           >
             Message
           </button>
-          <button
-            v-if="!anotherUser"
-            class="btn btn-purple btn-outline btn-lg text-align p-1 m-1 my-1"
-            @click="changeTheme"
-          >
-            Change theme!
-          </button>
         </div>
+        <b-button
+          id="posts"
+          class="btn btn-choice btn-choice-selected btn-fill mt-2 text-align btn-post"
+          @click="switchSelect"
+        >
+          POSTS
+        </b-button>
+        <b-button
+          id="articles"
+          class="btn btn-choice btn-fill mt-2 text-align btn-post"
+          @click="switchSelect"
+        >
+          ARTICLES
+        </b-button>
       </div>
 
-      <PostFeed :filter="`?by_user=${this.$auth.user.id}`" />
+      <PostFeed
+        v-if="this.postsSelected"
+        :filter="`?on_page=${this.$route.params.id}`"
+      />
+      <div v-if="!this.postsSelected" class="container-fluid col-md-8 my-4">
+        <h4 class="store-text">
+          articles coming...
+        </h4>
+      </div>
 
-      <div class="container-fluid col-md-2 my-4">
-        <div class="post-theme p-3">
-          <div class="bg-color text-theme-secondary p-2">
-            <h5 class="font-theme lead">
-              <b-avatar class="usericon"></b-avatar>
-              <strong> Other user</strong>
-            </h5>
-          </div>
-          <hr />
-          <h5 class="font-theme mx-2">Other user profile information.</h5>
+      <div class="container-fluid col-md-2 my-4 text-center">
+        <h4 class="text-theme-secondary">STORE OWNER</h4>
+        <div class="panel-theme p-1">
+          <b-avatar class="mb-3 smaller-profile-icon" src=""></b-avatar>
+          <h1 class="store-text profile-username">{{ this.owner.username }}</h1>
+          <h2 class="store-text profile-email">{{ this.owner.email }}</h2>
+          <button
+            v-if="anotherUser"
+            class="btn btn-purple btn-lg text-align p-1 m-1 my-1"
+            @click="followUser"
+          >
+            Follow
+          </button>
+          <button
+            v-if="anotherUser"
+            class="btn btn-purple btn-lg text-align p-1 m-1 my-1"
+            @click.prevent="sendMessage"
+          >
+            Message
+          </button>
         </div>
       </div>
     </div>
@@ -77,7 +117,8 @@ export default {
       id: this.$route.params.id,
       store: "",
       currentUser: "",
-      owner: ""
+      owner: "",
+      postsSelected: true
     };
   },
   created: async function() {
@@ -86,9 +127,10 @@ export default {
       response.data.forEach(element => {
         if (element.id === this.id) {
           this.store = element;
-          this.owner = this.store.owner;
         }
       });
+      response = await this.$axios.get(`account/${this.store.owner.id}`);
+      this.owner = response.data;
     } catch (e) {
       consol.log(e);
     }
@@ -109,26 +151,23 @@ export default {
       this.posts.unshift(parameters);
     },
 
-    changeTheme() {
-      debugger;
-      var theme = this.$auth.$storage.getCookie("theme");
-      if (theme == "light") {
-        this.$auth.$storage.setCookie("theme", "dark");
-      } else {
-        this.$auth.$storage.setCookie("theme", "light");
-      }
-      location.reload();
-    },
-
-    async follow() {
-      let response = await this.$axios.post(`account/${this.id}/follow/`);
+    async followUser() {
+      let response = await this.$axios.post(`account/${this.owner.id}/follow/`);
       console.log(response.data);
     },
+    async follow() {},
     sendMessage() {
       this.$router.replace({
         path: "/messages",
         query: Object.assign({}, { user: this.currentUser })
       });
+    },
+    switchSelect() {
+      this.postsSelected = !this.postsSelected;
+      document.getElementById("posts").classList.toggle("btn-choice-selected");
+      document
+        .getElementById("articles")
+        .classList.toggle("btn-choice-selected");
     }
   }
 };

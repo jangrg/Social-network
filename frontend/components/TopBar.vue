@@ -40,7 +40,7 @@
         >
           <b-button
             id="button-home"
-            class="button-home"
+            class="button button-home"
             variant="btn text-align btn-lg"
             v-bind:class="selectedHome"
             to="/home"
@@ -48,7 +48,7 @@
           ></b-button>
           <b-button
             id="button-explore"
-            class="button-explore"
+            class="button button-explore"
             variant="btn text-align btn-lg"
             v-bind:class="selectedFollowing"
             to="/explore"
@@ -56,24 +56,43 @@
           ></b-button>
           <b-button
             id="button-message"
-            class="button-message"
+            class="button button-message"
             variant="btn text-align btn-lg"
             v-bind:class="selectedMessage"
             v-if="this.user"
             to="/messages"
           ></b-button>
-          <b-avatar
-            class="mb-2 usericon"
-            variant="dark"
-            :to="{ name: 'users-id', params: { id: this.user.id } }"
-            v-if="this.user"
-          ></b-avatar>
           <b-button
+            id="button-store"
+            class="button button-store"
+            variant="btn text-align btn-lg"
+            v-bind:class="selectedStore"
+            v-if="hasStore"
+            :to="{ name: 'store-id', params: { id: this.store.id } }"
+          ></b-button>
+          <b-dropdown
+            size="sm"
+            variant="outline-dark"
+            class="float-right remove-style"
+            no-caret
+            v-if="user"
+          >
+            <template #button-content>
+              <b-avatar class="mb-2 usericon" variant="dark"> </b-avatar>
+              <span class="topbar-username">{{ user.username }}</span>
+            </template>
+            <b-dropdown-item
+              :to="{ name: 'users-id', params: { id: this.user.id } }"
+              >Account</b-dropdown-item
+            >
+            <b-dropdown-item @click.prevent="logOut">Logout</b-dropdown-item>
+          </b-dropdown>
+          <!-- <b-button
             variant="btn btn-purple text-align btn-lg btn-logout"
             @click.prevent="logOut"
             v-if="this.user"
             >Logout</b-button
-          >
+          > -->
         </div>
       </div>
     </b-navbar>
@@ -87,8 +106,18 @@ export default {
     return {
       // posts: [],
       searchQuery: "",
-      route: this.$nuxt.$route.name
+      route: this.$nuxt.$route.name,
+      store: false
     };
+  },
+  async beforeCreate() {
+    try {
+      let token = this.$auth.getToken("local");
+      let response = await this.$axios.get("page/my_page/", {
+        headers: { Authorization: `${token}` }
+      });
+      this.store = response.data;
+    } catch (e) {}
   },
   computed: {
     user() {
@@ -112,6 +141,16 @@ export default {
       if (this.route == "messages") {
         return "message-clicked";
       }
+    },
+    selectedStore() {
+      console.log(this.route);
+      if (this.route == "store-id") {
+        return "store-clicked";
+      }
+    },
+    hasStore() {
+      if (this.store == false) return false;
+      return true;
     }
   },
   head: function() {

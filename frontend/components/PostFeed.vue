@@ -23,8 +23,18 @@ export default {
   },
   data() {
     return {
-      posts: []
+      posts: [],
+      otherStore: true
     };
+  },
+  async beforeCreate() {
+    try {
+      let token = this.$auth.getToken("local");
+      let response = await this.$axios.get("page/my_page/", {
+        headers: { Authorization: `${token}` }
+      });
+      this.otherStore = this.$nuxt.$route.params.id != response.data.id;
+    } catch (e) {}
   },
   methods: {
     setPost(parameters) {
@@ -56,6 +66,8 @@ export default {
       debugger;
       if (this.$nuxt.$route.name == "users-id") {
         return this.$nuxt.$route.params.id === this.$auth.user.id;
+      } else if (this.$nuxt.$route.name == "store-id") {
+        return !this.otherStore;
       }
       return true;
     }

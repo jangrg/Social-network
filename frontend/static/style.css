@@ -221,16 +221,18 @@ body {
   width: 12em;
   height: 12em;
 }
-
+.smaller-profile-icon {
+  width: 9em;
+  height: 9em;
+}
 .btn-logout {
   margin-left: 10px;
 }
 
-.button-home {
-  margin-top: 5px;
+.button {
+  margin-top: 8px;
   margin-right: 5px;
   background-color: transparent;
-  background-image: url("./topbar/black_home.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -238,41 +240,6 @@ body {
   height: 32px;
 }
 
-.home-clicked {
-  background-image: url("./topbar/purple_home.png");
-}
-
-.button-explore {
-  margin-top: 5px;
-  margin-right: 5px;
-  background-color: transparent;
-  background-image: url("./topbar/black_globe.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  width: 32px;
-  height: 32px;
-}
-
-.explore-clicked {
-  background-image: url("./topbar/purple_globe.png");
-}
-
-.button-message {
-  margin-top: 5px;
-  margin-right: 5px;
-  background-color: transparent;
-  background-image: url("./topbar/black_message.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  width: 32px;
-  height: 32px;
-}
-
-.message-clicked {
-  background-image: url("./topbar/purple_message.png");
-}
 @media screen and (max-width: 768px) {
   .profile-icon {
     width: 16em;
@@ -366,4 +333,33 @@ body {
 
 .input-add-space {
   margin-top: 10px;
+}
+
+.topbar-username {
+  margin-left: 5px;
+}
+
+.photo {
+  width: 100vw;
+  height: 45vh;
+  /* background-color: blueviolet; */
+  background-image: url("./patterns/double-bubble-dark.png");
+  /* background-repeat: no-repeat;
+  background-size: contain; */
+  font-size: 60px;
+  color: white;
+}
+
+.cover-text {
+  position: relative;
+  top: 35vh;
+  left: 3vw;
+}
+
+.store-time {
+  font-size: 2em;
+}
+
+.btn-create {
+  width: 10vw;
 }

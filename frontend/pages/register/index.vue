@@ -74,12 +74,12 @@
             >
             </b-form-input>
 
-            <b-form-checkbox
+            <!-- <b-form-checkbox
               v-model="form.store"
               class="mt-3 mb-2  text-theme-secondary"
             >
               Are you a store?</b-form-checkbox
-            >
+            > -->
 
             <button
               @click.prevent="register"
@@ -141,8 +141,8 @@ export default {
         password: "",
         birth_date: ""
       },
-      repeatedPassword: "",
-      store: false
+      repeatedPassword: ""
+      // store: false
     };
   },
   computed: {

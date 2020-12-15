@@ -40,48 +40,48 @@
                 placeholder="Enter when the store closes"
               ></b-form-timepicker>
 
-              <span class="input-add-space"
-                >Select a few categories in which your store belongs to:</span
-              >
+              <div class="input-add-space">
+                Select a few categories in which your store belongs to:
+              </div>
               <div>
                 <button
                   id="accessories"
-                  class="btn btn-purple mt-2 text-align accessories"
+                  class="btn btn-cat mt-2 text-align accessories"
                   @click="selectAccessories"
                 >
                   Accessories
                 </button>
                 <button
                   id="clothing"
-                  class="btn btn-purple mt-2 text-align clothing"
+                  class="btn btn-cat mt-2 text-align clothing"
                   @click="selectClothing"
                 >
                   Clothing
                 </button>
                 <button
                   id="home"
-                  class="btn btn-purple mt-2 text-align home"
+                  class="btn btn-cat mt-2 text-align home"
                   @click="selectHome"
                 >
                   Home
                 </button>
                 <button
                   id="entertainment"
-                  class="btn btn-purple mt-2 text-align entertainment"
+                  class="btn btn-cat mt-2 text-align entertainment"
                   @click="selectEntertainment"
                 >
                   Entertain.
                 </button>
                 <button
                   id="art"
-                  class="btn btn-purple mt-2 text-align art"
+                  class="btn btn-cat mt-2 text-align art"
                   @click="selectArt"
                 >
                   Art
                 </button>
                 <button
                   id="tools"
-                  class="btn btn-purple mt-2 text-align tools"
+                  class="btn btn-cat mt-2 text-align tools"
                   @click="selectTools"
                 >
                   Tools
@@ -91,7 +91,6 @@
               <button
                 @click.prevent="create"
                 type="submit"
-                :disabled="!allowSubmit"
                 class="btn btn-purple mt-2 text-align"
               >
                 Create
@@ -144,12 +143,12 @@ export default {
         response = await this.$axios.get("page/my_page/", {
           headers: { Authorization: `${token}` }
         });
-        this.$router.push(`/store/${response.id}`);
       } catch (e) {
         this.$toast.error(e, { duration: 8000 });
         console.log(e.data);
       }
     },
+    //ispricavam se, trenutno ne znam bolje
     selectAccessories() {
       if (this.form.categories.indexOf("accessories") > -1)
         this.removeA(this.form.categories, "accessories");
@@ -198,13 +197,6 @@ export default {
         }
       }
       return arr;
-    }
-  },
-  computed: {
-    allowSubmit() {
-      return true;
-      //   if (this.form.categories.length !== 0) return true;
-      //   return false;
     }
   }
 };

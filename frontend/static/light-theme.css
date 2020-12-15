@@ -1,168 +1,236 @@
 @font-face {
-    font-family: Montserrat-Regular;
-    src: url("./font/Montserrat-Regular.ttf");
-  }
-  
-  @font-face {
-    font-family: Montserrat-TopBar;
-    src: url("./font/Montserrat-Light.ttf");
-  }
-  
-  .top-bar-theme {
-    background-color: #008DA3 !important;
-    color: #001F29 !important;
-  }
-  
-  .text-theme {
-    color: #009FB7 !important;
-    font-size: 1.5rem;
-  }
-  
-  .text-theme-secondary {
-    color: #001F29 !important;
-    font-size: 1rem;
-  }
-  
-  hr {
-    background-color: #009FB7;
-  }
-  
-  .bg-color {
-    background-color: #EFF1F3 !important;
-  }
-  
-  .btn-theme {
-    background-color: #001A23;
-    color: white;
-  }
-  
-  .post-theme {
-    color: black;
-    background-color: #EFF1F3;
-    border: #009FB7 solid 1px;
-    border-radius: 5px;
-    margin: 5px;
-  }
-  
-  .post-theme:hover {
-    border: #004752 solid 1px;
-  }
-  
-  .body-theme {
-    /* background-image: url("patterns/webb-dark.png"); */
-    /* background-repeat: repeat; */
-    background-color: #FFFFFF;
-  }
-  
-  .border-theme {
-    border: 1px solid #008DA3;
-    border-radius: 3px;
-  }
-  
-  .font-theme {
-    font-family: "Montserrat-Regular";
-    font-size: 1rem;
-  }
-  
-  .font-theme-top-bar {
-    font-family: "Montserrat-TopBar";
-  }
-  
-  .like-img {
-    height: 26px;
-    width: 30px;
-    background-image: url("./empty_heart.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-  }
-  
-  .like-img:hover, .like {
-    background-image: url("./full_heart.png");
-  }
-  
-  .btn-purple {
-    background-color: #001A23 !important;
-    color: white !important;
-    font-weight: bold !important;
-    font-size: 13px !important;
-  }
-  
-  .btn-purple:hover {
-    background-color: #000F14;
-    color: white;
-  }
-  
-  .center-vertical {
-    position: relative;
-    top: 13vh;
-  }
-  
-  .text-title {
-    font-size: 2em;
-  }
-  
-  .text-center {
-    text-align: center;
-  }
-  
-  .input-style {
-    font-size: 13px;
-  }
-  
-  .form-theme {
-    text-emphasis: white;
-    border: none;
-  }
-  
-  .form-theme:focus {
-    outline: 0;
-    color: white;
-    background-color: transparent;
-    border: none;
-  }
-  
-  input, textarea{
-    width: 30vw;
-    height: 5vh;
-    border: none;
-    background-color: transparent;
-    border-bottom: 2px solid  rgb(77, 39, 105);
-  }
-  
-  .search-theme {
-    color: white;
-  }
+  font-family: Montserrat-Regular;
+  src: url("./font/Montserrat-Regular.ttf");
+}
 
-  .new-post {
-    color: white;
-    background-color: #EFF1F3;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-  }
-  
-  .new-post textarea {
-    background-color: wt;
-    border: none;
-    margin-left: 10px;
-    margin-right: 10px;
-    width: 98%;
-  }
+@font-face {
+  font-family: Montserrat-TopBar;
+  src: url("./font/Montserrat-Light.ttf");
+}
 
-  .logo {
-    font-size: 25px;
-    color: #000F14;
-    font-weight: bold;
-  }
-  
-  .logo:hover {
-    text-decoration: none;
-    color: black;
-  }
+.top-bar-theme {
+  background-color: #008da3 !important;
+  color: #001f29 !important;
+}
 
-  .input-grey {
-    background-color: white;
-    width: 30vw;
-    height: 5vh;
-    border: 1px black solid;
-  }
+.text-theme {
+  color: #009fb7 !important;
+  font-size: 1.5rem;
+}
+
+.text-theme-secondary {
+  color: #001f29 !important;
+  font-size: 1rem;
+}
+
+hr {
+  background-color: #009fb7;
+}
+
+.bg-color {
+  background-color: #eff1f3 !important;
+}
+
+.btn-theme {
+  background-color: #001a23;
+  color: white;
+}
+
+.post-theme {
+  color: black;
+  background-color: #eff1f3;
+  border: #009fb7 solid 1px;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.post-theme:hover {
+  border: #004752 solid 1px;
+}
+
+.body-theme {
+  /* background-image: url("patterns/webb-dark.png"); */
+  /* background-repeat: repeat; */
+  background-color: #ffffff;
+}
+
+.border-theme {
+  border: 1px solid #008da3;
+  border-radius: 3px;
+}
+
+.font-theme {
+  font-family: "Montserrat-Regular";
+  font-size: 1rem;
+}
+
+.font-theme-top-bar {
+  font-family: "Montserrat-TopBar";
+}
+
+.like-img {
+  height: 26px;
+  width: 30px;
+  background-image: url("./empty_heart.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.like-img:hover,
+.like {
+  background-image: url("./full_heart.png");
+}
+
+.btn-purple {
+  background-color: #001a23 !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 13px !important;
+}
+
+.btn-purple:hover {
+  background-color: #000f14;
+  color: white;
+}
+
+.center-vertical {
+  position: relative;
+  top: 13vh;
+}
+
+.text-title {
+  font-size: 2em;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.input-style {
+  font-size: 13px;
+}
+
+.form-theme {
+  text-emphasis: white;
+  border: none;
+}
+
+.form-theme:focus {
+  outline: 0;
+  color: white;
+  background-color: transparent;
+  border: none;
+}
+
+input,
+textarea {
+  width: 30vw;
+  height: 5vh;
+  border: none;
+  background-color: transparent;
+  border-bottom: 2px solid rgb(77, 39, 105);
+}
+
+.search-theme {
+  color: white;
+}
+
+.new-post {
+  color: white;
+  background-color: #eff1f3;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.new-post textarea {
+  background-color: wt;
+  border: none;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 98%;
+}
+
+.logo {
+  font-size: 25px;
+  color: #000f14;
+  font-weight: bold;
+}
+
+.logo:hover {
+  text-decoration: none;
+  color: black;
+}
+
+.input-grey {
+  background-color: white;
+  width: 30vw;
+  height: 5vh;
+  border: 1px black solid;
+}
+.dropdown button {
+  border: none;
+  color: white;
+  width: 125px;
+}
+
+.button-home {
+  background-image: url("./topbar/black_home.png");
+}
+
+.home-clicked {
+  background-image: url("./topbar/white_home.png");
+}
+
+.button-explore {
+  background-image: url("./topbar/black_globe.png");
+}
+
+.explore-clicked {
+  background-image: url("./topbar/white_globe.png");
+}
+
+.button-message {
+  margin-top: 10px !important;
+  background-image: url("./topbar/black_message.png");
+}
+
+.button-store {
+  background-image: url("./topbar/store-black.png");
+}
+
+.store-clicked {
+  background-image: url("./topbar/white_store.png");
+}
+
+.message-clicked {
+  background-image: url("./topbar/white_message.png");
+}
+
+.btn-choice {
+  background-color: transparent !important;
+  border: none !important;
+  color: black;
+}
+
+.btn-choice-selected {
+  background-color: transparent !important;
+  border-left: 5px solid #008da3 !important;
+  color: black;
+}
+
+.store-text {
+  color: black;
+}
+
+.btn-cat {
+  background-color: #008da3 !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 13px !important;
+}
+
+.btn-selected,
+.btn-cat:hover {
+  background-color: #056270 !important;
+}

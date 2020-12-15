@@ -5,18 +5,18 @@
         <b-avatar class="mb-2"></b-avatar>
         <strong
           ><nuxt-link
-            v-if="isPage"
+            v-if="!isPage"
             class="text-theme"
-            :to="{ name: 'users-id', params: { id: this.id } }"
+            :to="{ name: 'users-id', params: { id: post.posted_by.id } }"
           >
             {{ post.posted_by.username }}
           </nuxt-link>
           <nuxt-link
-            v-if="!isPage"
+            v-if="isPage"
             class="text-theme"
             :to="{ name: 'store-id', params: { id: this.id } }"
           >
-            {{ post.page.username }}
+            {{ post.page.name }}
           </nuxt-link></strong
         >
         <b-dropdown
@@ -197,13 +197,10 @@ export default {
     };
   },
   created() {
-    console.log(this.post);
+    console.log(this.post.is_page);
     if (this.post.is_page) this.id = this.post.page.id;
   },
   methods: {
-    isPage() {
-      return this.post.is_page;
-    },
     changePictureUpload() {
       debugger;
       this.newEditedPost.image = this.$refs.file.files[0];
@@ -363,6 +360,10 @@ export default {
         (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
       // debugger;
       return string;
+    },
+
+    isPage() {
+      return this.post.is_page;
     },
 
     hasImage() {
