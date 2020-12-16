@@ -235,7 +235,8 @@ textarea {
   background-color: #056270 !important;
 }
 
-.messaged-user-selected,.messaged-user:hover {
+.messaged-user-selected,
+.messaged-user:hover {
   border: 3px solid #008da3;
 }
 
@@ -245,4 +246,9 @@ textarea {
 
 .message-bubble.reciever {
   background-color: #716d6d;
+}
+
+.dots {
+  text-decoration: none;
+  color: #159fb5 !important;
 }

@@ -27,7 +27,7 @@
           v-if="postedByUser && !editing"
         >
           <template #button-content>
-            <span class="text-decoration-none">...</span>
+            <span class="text-decoration-none dots">...</span>
           </template>
           <b-dropdown-item @click="editPost(true)">Edit</b-dropdown-item>
           <b-dropdown-item @click="deletePost">Delete</b-dropdown-item>
