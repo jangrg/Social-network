@@ -252,3 +252,8 @@ textarea {
   text-decoration: none;
   color: #159fb5 !important;
 }
+
+.btn-choice,
+.btn-edit {
+  color: black !important;
+}
