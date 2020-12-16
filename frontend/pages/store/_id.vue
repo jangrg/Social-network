@@ -91,14 +91,14 @@
         <b-button
           id="posts"
           class="btn btn-choice btn-choice-selected btn-fill mt-2 text-align btn-post"
-          @click="switchSelect"
+          @click="postSelect"
         >
           POSTS
         </b-button>
         <b-button
           id="articles"
           class="btn btn-choice btn-fill mt-2 text-align btn-post"
-          @click="switchSelect"
+          @click="articleSelect"
         >
           ARTICLES
         </b-button>
@@ -231,12 +231,27 @@ export default {
         query: Object.assign({}, { user: this.owner })
       });
     },
-    switchSelect() {
-      this.postsSelected = !this.postsSelected;
-      document.getElementById("posts").classList.toggle("btn-choice-selected");
-      document
-        .getElementById("articles")
-        .classList.toggle("btn-choice-selected");
+    postSelect() {
+      if (!this.postsSelected) {
+        this.postsSelected = !this.postsSelected;
+        document
+          .getElementById("posts")
+          .classList.toggle("btn-choice-selected");
+        document
+          .getElementById("articles")
+          .classList.toggle("btn-choice-selected");
+      }
+    },
+    articleSelect() {
+      if (this.postsSelected) {
+        this.postsSelected = !this.postsSelected;
+        document
+          .getElementById("posts")
+          .classList.toggle("btn-choice-selected");
+        document
+          .getElementById("articles")
+          .classList.toggle("btn-choice-selected");
+      }
     },
     async edit() {
       let formData = new FormData();

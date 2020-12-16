@@ -49,48 +49,54 @@
                 Select a few categories in which your store belongs to:
               </div>
               <div>
-                <button
+                <b-button
                   id="accessories"
+                  type="button"
                   class="btn btn-cat mt-2 text-align accessories"
                   @click="selectAccessories"
                 >
                   Accessories
-                </button>
-                <button
+                </b-button>
+                <b-button
                   id="clothing"
+                  type="button"
                   class="btn btn-cat mt-2 text-align clothing"
                   @click="selectClothing"
                 >
                   Clothing
-                </button>
-                <button
+                </b-button>
+                <b-button
                   id="home"
+                  type="button"
                   class="btn btn-cat mt-2 text-align home"
                   @click="selectHome"
                 >
                   Home
-                </button>
-                <button
+                </b-button>
+                <b-button
                   id="entertainment"
+                  type="button"
                   class="btn btn-cat mt-2 text-align entertainment"
                   @click="selectEntertainment"
                 >
                   Entertain.
-                </button>
-                <button
+                </b-button>
+                <b-button
                   id="art"
+                  type="button"
                   class="btn btn-cat mt-2 text-align art"
                   @click="selectArt"
                 >
                   Art
-                </button>
-                <button
+                </b-button>
+                <b-button
                   id="tools"
+                  type="button"
                   class="btn btn-cat mt-2 text-align tools"
                   @click="selectTools"
                 >
                   Tools
-                </button>
+                </b-button>
               </div>
 
               <button
@@ -142,6 +148,7 @@ export default {
         response = await this.$axios.get("page/my_page/", {
           headers: { Authorization: `${token}` }
         });
+        this.$router.go();
       } catch (e) {
         this.$toast.error(e, { duration: 8000 });
         console.log(e.data);
