@@ -127,7 +127,6 @@ export default {
       return this.searchQuery != "";
     },
     selectedHome() {
-      debugger;
       if (this.route == "home") {
         return "home-clicked";
       }

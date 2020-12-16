@@ -159,6 +159,9 @@ class PostViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             kwargs['only_fields'] = ['content', 'image', 'is_private', 'is_page']
             return super().get_serializer(*args, **kwargs)
+        elif self.action == 'partial_update':
+            kwargs['only_fields'] = ['content', 'image', 'is_private', 'is_page']
+            return super().get_serializer(*args, **kwargs)
         elif self.action == 'list':
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'comment':
