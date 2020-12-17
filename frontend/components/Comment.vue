@@ -45,7 +45,7 @@
             :disabled="noComment"
             type="submit"
             @click.prevent="saveEdited"
-            ><span>Edit</span></b-button
+            ><span>Save</span></b-button
           >
           <b-button
             variant="btn btn-purple mt-1"

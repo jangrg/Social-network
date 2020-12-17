@@ -257,3 +257,7 @@ textarea {
 .btn-edit {
   color: black !important;
 }
+
+label.active {
+  background-color: black !important;
+}

@@ -267,3 +267,7 @@ textarea {
 .message-bubble.reciever {
   background-color: #2b2828;
 }
+
+label.active {
+  background-color: rgb(86, 19, 142) !important;
+}

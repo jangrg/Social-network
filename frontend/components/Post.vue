@@ -50,15 +50,6 @@
               placeholder="Edit old post..."
             ></textarea>
           </div>
-          <b-form-radio-group
-            id="btn-radios-1"
-            class="mr-auto mb-2"
-            v-model="newEditedPost.is_private"
-            :options="options"
-            buttons
-            plain
-            name="radios-btn-default"
-          ></b-form-radio-group>
           <b-form-group class="d-inline">
             <div class="image-upload">
               <label :for="`${post.image}`">
@@ -81,6 +72,15 @@
                 ref="file"
                 v-on:change="changePictureUpload()"
               />
+              <div class="private-public-buttons d-inline">
+                <b-form-radio-group
+                  id="btn-radios-1"
+                  v-model="newEditedPost.is_private"
+                  :options="options"
+                  buttons
+                  name="radios-btn-default"
+                ></b-form-radio-group>
+              </div>
             </div>
             <!--
             <button
@@ -92,27 +92,26 @@
             </button>
             -->
           </b-form-group>
+          <div class="button-group float-right p-2" v-if="editing">
+            <button
+              @click.prevent="saveEdited()"
+              class="btn btn-purple mt-2 text-align btn-post"
+            >
+              Save
+            </button>
+            <button
+              @click.prevent="editPost(false)"
+              class="btn btn-purple mt-2 text-align btn-post"
+            >
+              Discard
+            </button>
+          </div>
         </b-form>
       </div>
 
       <div class="post-image">
         <img v-if="hasImage && !changedPicture" :src="post.image" />
         <img v-if="changedPicture" :src="imgEditedUrl" />
-      </div>
-
-      <div class="container-fluid float-right mb-2" v-if="editing">
-        <button
-          @click="saveEdited()"
-          class="btn btn-purple mt-2 text-align btn-post"
-        >
-          Edit
-        </button>
-        <button
-          @click="editPost(false)"
-          class="btn btn-purple mt-2 text-align btn-post"
-        >
-          Discard
-        </button>
       </div>
 
       <div class="container-fluid">
@@ -165,7 +164,7 @@ export default {
   name: "Post",
   components: { Comment },
   props: {
-    post: Object
+    post: Object,
   },
   data() {
     return {
@@ -177,7 +176,7 @@ export default {
       comment: {
         comment_text: "",
         post: this.post.id,
-        likes_num: 0
+        likes_num: 0,
       },
 
       //if post is getting edited
@@ -186,14 +185,14 @@ export default {
         id: this.post.id,
         image: this.post.image,
         type_attr: this.post.type_attr,
-        is_private: this.post.is_private
+        is_private: this.post.is_private,
       },
       editing: false,
       changedPicture: false,
       options: [
         { text: "Public", value: false },
-        { text: "Private", value: true }
-      ]
+        { text: "Private", value: true },
+      ],
     };
   },
   created() {
@@ -225,7 +224,7 @@ export default {
             .classList.toggle("like");
         } else {
           this.$toast.show("Post not successfully disliked...", {
-            duration: 8000
+            duration: 8000,
           });
         }
       } else {
@@ -239,7 +238,7 @@ export default {
             .classList.toggle("like");
         } else {
           this.$toast.show("Post not successfully liked...", {
-            duration: 8000
+            duration: 8000,
           });
         }
       }
@@ -271,15 +270,26 @@ export default {
           formData,
           {
             headers: {
-              "Content-Type": "multipart/form-data"
-            }
+              "Content-Type": "multipart/form-data",
+            },
           }
         );
         debugger;
         if (response.status == 200) {
           this.$toast.show("Post succesfully edited!", { duration: 8000 });
-          this.editing = false;
-          this.$emit("edit", response.data);
+          if (response.data.is_private && this.$nuxt.$route.name == "explore") {
+            this.$toast.show(
+              "This edited post will not be visible on this feed.",
+              { duration: 8000 }
+            );
+            this.$toast.show(
+              "Please go to your profile page or home feed to see your private post!",
+              { duration: 8000 }
+            );
+          } else {
+            this.editing = false;
+            this.$emit("edit", response.data);
+          }
         }
       } catch (e) {
         console.log(e);
@@ -292,12 +302,12 @@ export default {
         debugger;
         if (res.status == 204) {
           this.$toast.show("Post succesfully deleted.", {
-            duration: 8000
+            duration: 8000,
           });
           this.$emit("PostDelete", this.post.id);
         } else {
           this.$toast.show("Post not successfully deleted...", {
-            duration: 8000
+            duration: 8000,
           });
         }
       }
@@ -319,7 +329,7 @@ export default {
         }
       } catch (e) {
         this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
-          duration: 8000
+          duration: 8000,
         });
       }
     },
@@ -342,7 +352,7 @@ export default {
           break;
         }
       }
-    }
+    },
   },
 
   computed: {
@@ -384,7 +394,7 @@ export default {
 
     postedByUser() {
       return this.$auth.user.id == this.post.posted_by.id;
-    }
+    },
   },
   mounted() {
     if (this.post.logged_user_liked) {
@@ -393,6 +403,6 @@ export default {
         .classList.toggle("like");
       this.liked = true;
     }
-  }
+  },
 };
 </script>

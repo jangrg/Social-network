@@ -68,7 +68,7 @@ export default {
     return {
       options: [
         { text: "Public", value: false },
-        { text: "Private", value: true }
+        { text: "Private", value: true },
       ],
 
       openPreview: false,
@@ -76,10 +76,10 @@ export default {
         content: "",
         is_private: false,
         is_store: false,
-        image: null
+        image: null,
       },
 
-      canUploadImage: false
+      canUploadImage: false,
     };
   },
   methods: {
@@ -114,8 +114,8 @@ export default {
         if (this.newPost.image) formData.append("image", this.newPost.image);
         let response = await this.$axios.post(`post/`, formData, {
           headers: {
-            "Content-Type": "multipart/form-data"
-          }
+            "Content-Type": "multipart/form-data",
+          },
         });
         debugger;
         if (response.status == 201) {
@@ -125,21 +125,25 @@ export default {
           this.newPost = {
             content: "",
             is_private: false,
-            image: null
+            image: null,
           };
           this.canUploadImage = false;
           debugger;
-          if (createdPost.is_private && this.$nuxt.$route.name == "home") {
+          if (createdPost.is_private && this.$nuxt.$route.name == "explore") {
             this.$toast.show(
-              "Private posts will not be visible on this feed. Please go to your profile page or following feed to see your private post!",
-              { duration: 12000 }
+              "Private posts will not be visible on this feed.",
+              { duration: 8000 }
+            );
+            this.$toast.show(
+              "Please go to your profile page or home feed to see your private post!",
+              { duration: 8000 }
             );
           } else this.$emit("post", createdPost);
         }
       } catch (e) {
         console.log(e);
       }
-    }
+    },
   },
   computed: {
     allowSubmit() {
@@ -148,8 +152,8 @@ export default {
 
     imgUrl() {
       return URL.createObjectURL(this.newPost.image);
-    }
-  }
+    },
+  },
 };
 </script>
 

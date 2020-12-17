@@ -79,7 +79,6 @@ export default {
       response = await this.$axios.get(`page/${this.filter}`);
     } else response = await this.$axios.get(`post/${this.filter}`);
     this.posts = response.data;
-    console.log(this.posts);
   }
 };
 </script>
