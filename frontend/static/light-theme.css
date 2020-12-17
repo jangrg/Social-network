@@ -261,3 +261,7 @@ textarea {
 label.active {
   background-color: black !important;
 }
+
+div .dropdown-toggle {
+  color:black !important;
+}

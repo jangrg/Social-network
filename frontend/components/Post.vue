@@ -180,13 +180,18 @@ export default {
       },
 
       //if post is getting edited
+      /*
       newEditedPost: {
         content: this.post.content,
         id: this.post.id,
         image: this.post.image,
         type_attr: this.post.type_attr,
         is_private: this.post.is_private,
+        time: this.post.time,
+        comments: this.post.comments,
       },
+      */
+      newEditedPost: JSON.parse(JSON.stringify(this.post)),
       editing: false,
       changedPicture: false,
       options: [
@@ -258,9 +263,9 @@ export default {
         let formData = new FormData();
         formData.append("content", this.newEditedPost.content);
         formData.append("is_private", this.newEditedPost.is_private);
-
+        formData.append("is_page", this.newEditedPost.is_page)
         debugger;
-        if (this.newEditedPost.image) {
+        if (this.newEditedPost.image && this.newEditedPost.image != this.post.image) {
           formData.append("image", this.newEditedPost.image);
           debugger;
         }
@@ -277,7 +282,8 @@ export default {
         debugger;
         if (response.status == 200) {
           this.$toast.show("Post succesfully edited!", { duration: 8000 });
-          if (response.data.is_private && this.$nuxt.$route.name == "explore") {
+          this.editing = false;
+          if (this.newEditedPost.is_private && this.$nuxt.$route.name == "explore") {
             this.$toast.show(
               "This edited post will not be visible on this feed.",
               { duration: 8000 }
@@ -286,9 +292,9 @@ export default {
               "Please go to your profile page or home feed to see your private post!",
               { duration: 8000 }
             );
+            this.$emit("PostDelete", this.newEditedPost.id);
           } else {
-            this.editing = false;
-            this.$emit("edit", response.data);
+            this.$emit("edit", this.newEditedPost);
           }
         }
       } catch (e) {
