@@ -19,7 +19,6 @@
                 @click.prevent="sendMessage"
                 type="submit"
                 class="btn"
-                :disabled="!allowSubmit"
             > 
             </button>
         </b-form>
@@ -48,13 +47,19 @@ export default {
 
     created: async function() {
         let response = await this.$axios.post(`account/${this.user.id}/get_messages/`)
-        // console.log(response)
 
         this.messages = response.data.reverse()
     },
 
+    mounted: function() {
+        setInterval(() => this.checkNewMessages(), 1000)
+    },
+
     methods: {
         async sendMessage() {
+            if(this.newMessage.text_content == "")
+                return
+
             console.log(this.newMessage)
             let response = await this.$axios.post(`account/${this.user.id}/send_message/`, this.newMessage)
             //this.messages.push(response.data)
@@ -68,12 +73,12 @@ export default {
             });
 
             this.newMessage.text_content = ""
-        }
-    },
+        },
 
-    computed: {
-        allowSubmit() {
-            return this.newMessage.text_content != ""
+        async checkNewMessages() {
+            let response = await this.$axios.post(`account/${this.user.id}/get_messages/`)
+            if(response.data.length > this.messages.length)
+                   this.messages = response.data.reverse()
         }
     }
 }

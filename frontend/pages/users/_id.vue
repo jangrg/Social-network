@@ -51,7 +51,7 @@
         >
           {{ this.store.name }}
         </b-button>
-        <div class="post-theme p-3">
+        <!-- <div class="post-theme p-3">
           <div class="bg-color text-theme-secondary p-2">
             <h5 class="font-theme lead">
               <b-avatar class="usericon"></b-avatar>
@@ -60,7 +60,7 @@
           </div>
           <hr />
           <h5 class="font-theme mx-2">Other user profile information.</h5>
-        </div>
+        </div> -->
       </div>
       <div v-if="openPreview">
         <CreatePage v-on:delete="removeCreatePage()" />

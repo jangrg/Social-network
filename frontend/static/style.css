@@ -408,7 +408,7 @@ body {
   font-size: 1em;
 }
 .chat-top-bar {
-  height: 50px;
+  height: auto;
 }
 
 .chat-top-bar > h5 {
@@ -423,7 +423,7 @@ body {
 }
 
 .messaged-users-contrainer {
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   padding-right: 2px;
   height: calc(100vh - 8vh - 50px);
@@ -477,4 +477,13 @@ body {
 
 .dots {
   font-size: 20px;
+}
+
+.btn-new-chat {
+  width: auto !important;
+}
+
+.send-message-to-container {
+  overflow-y: auto;
+  max-height: 50vh;
 }
