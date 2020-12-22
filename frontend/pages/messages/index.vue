@@ -57,7 +57,8 @@ export default {
         return {
             activeChatUser: undefined,
             messagedUsers: [],
-            openNewChat: false
+            openNewChat: false,
+            checkPendingUsers: undefined
         }
     },
 
@@ -79,8 +80,12 @@ export default {
         //mounted executes before created has ended so timeout is needed
         setTimeout(() => this.toggleSelectedUser(), 500);
         //activating periodic function
-        setInterval(() => this.checkNewMessagedUsers(), 1000)
-    },  
+        this.checkPendingUsers = setInterval(() => this.checkNewMessagedUsers(), 1000)
+    },
+    
+    beforeDestroy: function() {
+        clearInterval(this.checkPendingUsers);
+    },
 
     methods: {
         openChat(user) {
@@ -114,14 +119,12 @@ export default {
         },
 
         async checkNewMessagedUsers() {
-              let response = await this.$axios.get(`account/get_messaged_users/`)
-              if(response.data.length > this.messagedUsers.length) {
-                    this.messagedUsers = response.data.reverse()
-                    setTimeout(() => this.toggleSelectedUser(), 100)
-              }
-             
+            let response = await this.$axios.get(`account/get_messaged_users/`)
+            if(response.data.length > this.messagedUsers.length) {
+                this.messagedUsers = response.data.reverse()
+                setTimeout(() => this.toggleSelectedUser(), 100)
+            } 
         }
-
     }
 }
 </script>

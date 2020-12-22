@@ -41,7 +41,8 @@ export default {
                 text_content: "",
                 sender: this.$auth.user.id,
                 receiver: this.user.id
-            }
+            },
+            checkPendingMessages: undefined
         }
     },
 
@@ -52,7 +53,11 @@ export default {
     },
 
     mounted: function() {
-        setInterval(() => this.checkNewMessages(), 1000)
+        this.checkPendingMessages = setInterval(() => this.checkNewMessages(), 1000)
+    },
+
+    beforeDestroy: function() {
+        clearInterval(this.checkPendingMessages)
     },
 
     methods: {
