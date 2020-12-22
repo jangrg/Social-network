@@ -84,14 +84,17 @@ export default {
 
     methods: {
         openChat(user) {
-
-            document.getElementById(`${this.activeChatUser.id}`).classList.toggle("messaged-user-selected")
+            if(this.activeChatUser != undefined)
+                document.getElementById(`${this.activeChatUser.id}`).classList.toggle("messaged-user-selected")
             this.activeChatUser = user
             document.getElementById(`${user.id}`).classList.toggle("messaged-user-selected")
         },
 
         newChat(user) {
             this.openNewChat = false
+
+            if(user == undefined)
+                return
 
             if(user.searched != undefined) {
                 user.searched = undefined

@@ -57,8 +57,10 @@ export default {
                 return
             
             let result = await this.$axios.get(`/account/`, {params:  { query: this.searchQuery}});
-            this.searchResult = result.data
-
+            this.searchResult = []
+            for(let user of result.data)
+                if(user.id != this.$auth.user.id)
+                    this.searchResult.push(user)
         }
     }
 }

@@ -8,11 +8,18 @@
           <h1 class="profile-username">{{ user.username }}</h1>
           <h2 class="profile-email">{{ user.email }}</h2>
           <button
-            v-if="anotherUser"
+            id="follow-button"
+            v-if="anotherUser && !followed"
             class="btn btn-purple btn-lg text-align p-1 m-1 my-1"
             @click="follow"
           >
             Follow
+          </button>
+          <button
+            v-if="anotherUser && followed"
+            class="btn btn-purple btn-lg text-align p-1 m-1 my-1"
+          >
+            Unfollow
           </button>
           <button
             v-if="anotherUser"
@@ -99,7 +106,7 @@ export default {
       currentUser: "",
       openPreview: false,
       store: false,
-      followed: true
+      followed: false
     };
   },
 
@@ -115,13 +122,17 @@ export default {
   },
 
   created: async function() {
-    try {
+      //this endpoint must return following array
       let response = await this.$axios.get(`/account/${this.id}/`);
-      console.log(this.id);
       this.currentUser = response.data;
-    } catch (e) {
-      console.log(e);
-    }
+  },
+
+  mounted: async function() {
+      // if(this.anotherUser) {
+      //   console.log(this.$auth.user)
+      //   if(this.$auth.user.following.includes(this.id))
+      //     this.followed = true
+      // }
   },
 
   computed: {
@@ -155,14 +166,11 @@ export default {
     },
 
     async follow() {
+      if(this.followed)
+        return
+
       let response = await this.$axios.post(`account/${this.id}/follow/`);
-      if (response.status == 200) {
-        this.$toast.show("User followed!", {
-          duration: 8000
-        });
-        this.followed = true;
-      }
-      console.log(response.data);
+      this.followed = true
     },
 
     openCreatePage() {

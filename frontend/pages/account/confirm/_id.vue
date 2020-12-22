@@ -5,7 +5,7 @@
       <div
         class="font-theme border-theme mx-auto p-5 bg-color justify-content-center"
       >
-        <div class="center text-white">
+        <div class="center text-secondary-theme">
           <div class="d-flex align-items-center justify-content-center">
             <strong>{{ this.header }}</strong>
           </div>
@@ -48,12 +48,10 @@ export default {
   },
   async mounted() {
     try {
-      console.log(this.$route.params.id);
       var response = await this.$axios.post(
         `/account/${this.id}/confirm/`,
         this.id
       );
-      console.log(response);
       this.header = "Welcome!";
     } catch (e) {
       this.header = "Cannot find id!";
