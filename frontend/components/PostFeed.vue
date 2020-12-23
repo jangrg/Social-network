@@ -5,8 +5,17 @@
         <PostForm @post="setPost" />
       </div>
     </div>
-    <div v-for="post in posts" :key="post.id">
-      <Post :post="post" @PostDelete="deletePost" @edit="replacePost" />
+    <div v-if="this.posts.length != 0">
+      <div v-for="post in posts" :key="post.id">
+        <Post :post="post" @PostDelete="deletePost" @edit="replacePost" />
+      </div>
+    </div>
+    <div v-else>
+      <div class="media p-2 font-theme">
+        <div class="media-body post-theme p-5">
+          <p>Wow, so very empty...</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -19,19 +28,20 @@ export default {
   name: "PostFeed",
   components: { Post, PostForm },
   props: {
-    filter: String
+    filter: String,
   },
   data() {
     return {
       posts: [],
-      otherStore: true
+      otherStore: true,
     };
   },
   async beforeCreate() {
     try {
+      debugger;
       let token = this.$auth.getToken("local");
       let response = await this.$axios.get("page/my_page/", {
-        headers: { Authorization: `${token}` }
+        headers: { Authorization: `${token}` },
       });
       this.otherStore = this.$nuxt.$route.params.id != response.data.id;
     } catch (e) {}
@@ -59,7 +69,7 @@ export default {
           break;
         }
       }
-    }
+    },
   },
   computed: {
     anotherUser() {
@@ -70,16 +80,17 @@ export default {
         return !this.otherStore;
       }
       return true;
-    }
+    },
   },
-  created: async function() {
+  created: async function () {
     let response;
+    debugger;
     if (this.filter.includes("page")) {
       console.log("tu");
       response = await this.$axios.get(`page/${this.filter}`);
     } else response = await this.$axios.get(`post/${this.filter}`);
     this.posts = response.data;
-  }
+  },
 };
 </script>
 

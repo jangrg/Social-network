@@ -201,6 +201,7 @@ export default {
     };
   },
   created() {
+    debugger
     console.log(this.post.is_page);
     if (this.post.is_page) this.id = this.post.page.id;
   },

@@ -9,15 +9,16 @@
           <h2 class="profile-email">{{ user.email }}</h2>
           <button
             id="follow-button"
-            v-if="anotherUser && !followed"
+            v-if="anotherUser && !following"
             class="btn btn-purple btn-lg text-align p-1 m-1 my-1"
             @click="follow"
           >
             Follow
           </button>
           <button
-            v-if="anotherUser && followed"
+            v-if="anotherUser && following"
             class="btn btn-purple btn-lg text-align p-1 m-1 my-1"
+            @click="unfollow"
           >
             Unfollow
           </button>
@@ -38,10 +39,7 @@
         </div>
       </div>
 
-      <PostFeed
-        :filter="`?by_user=${this.id}`"
-        v-bind:data-following="followed"
-      />
+      <PostFeed :filter="`?by_user=${this.id}`" :key="mode" />
 
       <div class="container-fluid col-md-2 my-4">
         <button
@@ -89,31 +87,32 @@ export default {
     return {
       title: "User",
       bodyAttrs: {
-        class: "body-theme"
+        class: "body-theme",
       },
       meta: [
         {
           name: "viewport",
-          content: "width=device-width, initial-scale=1, shrink-to-fit=no"
-        }
-      ]
+          content: "width=device-width, initial-scale=1, shrink-to-fit=no",
+        },
+      ],
     };
   },
 
-  data: function() {
+  data: function () {
     return {
       id: this.$route.params.id,
       currentUser: "",
       openPreview: false,
       store: false,
-      followed: false
+      following: null,
+      mode: 2,
     };
   },
 
   async beforeCreate() {
     try {
       let response = await this.$axios.get(`page/`);
-      response.data.forEach(element => {
+      response.data.forEach((element) => {
         if (element.owner.id === this.id) this.store = element;
       });
     } catch (e) {
@@ -121,18 +120,18 @@ export default {
     }
   },
 
-  created: async function() {
-      //this endpoint must return following array
-      let response = await this.$axios.get(`/account/${this.id}/`);
-      this.currentUser = response.data;
+  created: async function () {
+    //this endpoint must return following array
+    let response = await this.$axios.get(`/account/${this.id}/`);
+    this.currentUser = response.data;
   },
 
-  mounted: async function() {
-      // if(this.anotherUser) {
-      //   console.log(this.$auth.user)
-      //   if(this.$auth.user.following.includes(this.id))
-      //     this.followed = true
-      // }
+  mounted: async function () {
+    // if(this.anotherUser) {
+    //   console.log(this.$auth.user)
+    //   if(this.$auth.user.following.includes(this.id))
+    //     this.followed = true
+    // }
   },
 
   computed: {
@@ -146,7 +145,10 @@ export default {
     hasPage() {
       if (this.store === false) return false;
       else return true;
-    }
+    },
+    followed() {
+      return this.$auth.user.following.includes(this.id);
+    },
   },
 
   methods: {
@@ -166,11 +168,19 @@ export default {
     },
 
     async follow() {
-      if(this.followed)
-        return
-
       let response = await this.$axios.post(`account/${this.id}/follow/`);
-      this.followed = true
+      this.following = true;
+      this.$store.commit("ADD_FOLLOWING", this.id);
+      debugger;
+      this.mode = 1;
+    },
+
+    async unfollow() {
+      let response = await this.$axios.post(`account/${this.id}/unfollow/`);
+      this.following = false;
+      debugger;
+      this.$store.commit("REMOVE_FOLLOWING", this.id);
+      this.mode = 0;
     },
 
     openCreatePage() {
@@ -179,12 +189,19 @@ export default {
     sendMessage() {
       this.$router.replace({
         path: "/messages",
-        query: Object.assign({}, { user: this.currentUser })
+        query: Object.assign({}, { user: this.currentUser }),
       });
     },
     removeCreatePage() {
       this.openPreview = false;
+    },
+  },
+  mounted() {
+    if (this.followed) {
+      this.following = true;
+    } else {
+      this.following = false;
     }
-  }
+  },
 };
 </script>
