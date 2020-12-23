@@ -80,11 +80,11 @@ export default {
         //mounted executes before created has ended so timeout is needed
         setTimeout(() => this.toggleSelectedUser(), 500);
         //activating periodic function
-        this.checkPendingUsers = setInterval(() => this.checkNewMessagedUsers(), 1000)
+        // this.checkPendingUsers = setInterval(() => this.checkNewMessagedUsers(), 1000)
     },
     
     beforeDestroy: function() {
-        clearInterval(this.checkPendingUsers);
+        // clearInterval(this.checkPendingUsers);
     },
 
     methods: {
