@@ -31,7 +31,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
 
     def get_serializer(self, *args, **kwargs):
         if self.action == 'create':
-            kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'birth_date',]
+            kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'birth_date']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'confirm':
             return None
