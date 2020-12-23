@@ -47,7 +47,7 @@ class CommentSerializer(DynamicFieldsModelSerializer):
 
 class PostSerializer(DynamicFieldsModelSerializer):
     posted_by = UserSerializer(only_fields=['id', 'username'], read_only=True)
-    liked_by = UserSerializer(only_fields=['id', 'username'], many=True)
+    liked_by = UserSerializer(only_fields=['id', 'username'], many=True, read_only=True)
     comments = SerializerMethodField()
     logged_user_liked = SerializerMethodField()
     page = SerializerMethodField(read_only=True)
