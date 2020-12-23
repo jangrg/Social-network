@@ -53,11 +53,11 @@ export default {
     },
 
     mounted: function() {
-        this.checkPendingMessages = setInterval(() => this.checkNewMessages(), 1000)
+        // this.checkPendingMessages = setInterval(() => this.checkNewMessages(), 1000)
     },
 
     beforeDestroy: function() {
-        clearInterval(this.checkPendingMessages)
+        // clearInterval(this.checkPendingMessages)
     },
 
     methods: {
