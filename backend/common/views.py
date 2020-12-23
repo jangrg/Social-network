@@ -31,18 +31,18 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
 
     def get_serializer(self, *args, **kwargs):
         if self.action == 'create':
-            kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'birth_date']
+            kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'birth_date',]
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'confirm':
             return None
         elif self.action == 'comment':
             kwargs['only_fields'] = ['text', 'likes_num', 'post']
             return super().get_serializer(*args, **kwargs)
-        elif self.action == 'follow':
+        elif self.action == 'follow' or self.action == 'unfollow':
             kwargs['only_fields'] = ['id']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'retrieve' or self.action == 'logged_user_data':
-            kwargs['only_fields'] = ['id', 'username', 'first_name', 'last_name', 'email', 'birth_date']
+            kwargs['only_fields'] = ['id', 'username', 'first_name', 'last_name', 'email', 'birth_date', 'following']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'send_message':
             kwargs['only_fields'] = ['id', 'sender', 'receiver', 'text_content', 'photo']
@@ -53,6 +53,18 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
         elif self.action == 'get_messaged_users':
             kwargs['only_fields'] = ['id', 'username', 'first_name', 'last_name']
         return super().get_serializer(*args, **kwargs)
+
+    permission_classes_by_action = {
+        'follow': [IsAuthenticated],
+        'unfollow': [IsAuthenticated],
+        'logged_user_data': [IsAuthenticated],
+    }
+
+    def get_permissions(self):
+        try:
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError:
+            return [permission() for permission in self.permission_classes]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -86,9 +98,22 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
         user_to_follow = self.get_object()
         user = request.user
         if user.id != user_to_follow.id:
+            if user_to_follow in user.following.all():
+                return Response(status=status.HTTP_208_ALREADY_REPORTED)
             user.following.add(user_to_follow)
             user.save()
             return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['POST'], name='unfollow')
+    def unfollow(self, request, pk=None):
+        user_to_unfollow = self.get_object()
+        user = request.user
+        if user.id != user_to_unfollow.id:
+            if user_to_unfollow in user.following.all():
+                user.following.remove(user_to_unfollow)
+                user.save()
+                return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['GET'], name='logged_user_data')
