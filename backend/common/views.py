@@ -223,7 +223,7 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             post = serializer.save(posted_by=request.user)
-            return Response(data=PostSerializer(post, context={'request': request}).data,
+            return Response(data=PostSerializer(post).data,
                             status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -383,7 +383,7 @@ class PageViewSet(viewsets.ModelViewSet):
         page = self.get_object()
         owner_id = page.owner_id
         posts = Post.objects.filter(Q(posted_by__id=owner_id) & Q(is_page=True))
-        return Response(PostSerializer(posts, context={'request': request}, many=True).data)
+        return Response(PostSerializer(posts, many=True).data)
 
 
 class Search(viewsets.ViewSet):
