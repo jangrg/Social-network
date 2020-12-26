@@ -6,6 +6,8 @@ frontend/.vscode/
 __pycache__/
 .env
 .vscode/
+backend/static/
+venv/
 # Created by .ignore support plugin (hsz.mobi)
 ### Node template
 # Logs

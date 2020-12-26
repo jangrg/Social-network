@@ -1,3 +1,4 @@
+
 """
 Django settings for app project.
 
@@ -9,6 +10,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+
 import os
 from pathlib import Path
 import django_filters.rest_framework
@@ -25,7 +27,7 @@ SECRET_KEY = 'k2mp&7rmf%j&0ebwz&2q_4u)x9-=#h^m!q5p=9fxn=$2&+077!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ec2-18-224-95-58.us-east-2.compute.amazonaws.com', '0.0.0.0']
 
 # Application definition
 
@@ -86,8 +88,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'social_network',
         'USER': 'janez',
-        'PASSWORD': '12345678',
-        'HOST': '127.0.0.1',
+        'PASSWORD': 'pT937fzqjnESyp0BquFV',
+        'HOST': 'database-r.caocdorhojcc.us-east-2.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
@@ -143,3 +145,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
