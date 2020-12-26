@@ -60,7 +60,7 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: process.env.API_URL
+    baseURL: 'http://ec2-18-224-95-58.us-east-2.compute.amazonaws.com/api/'
   },
   //auth configuration
   auth: {
