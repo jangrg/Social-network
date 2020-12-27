@@ -3,7 +3,7 @@
     <TopBar />
     <div class="container-fluid row mx-auto">
       <div class="col-md-2"></div>
-      <PostFeed :filter="'followed_posts'" />
+      <PostFeed :filter="'followed_posts/'" />
       <div class="col-md-2"></div>
     </div>
   </div>

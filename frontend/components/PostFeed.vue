@@ -36,15 +36,15 @@ export default {
       otherStore: true,
     };
   },
-  async beforeCreate() {
-    try {
-      let token = this.$auth.getToken("local");
-      let response = await this.$axios.get("page/my_page/", {
-        headers: { Authorization: `${token}` },
-      });
-      this.otherStore = this.$nuxt.$route.params.id != response.data.id;
-    } catch (e) {}
-  },
+  // async beforeCreate() {
+  //   try {
+  //     let token = this.$auth.getToken("local");
+  //     let response = await this.$axios.get("page/my_page/", {
+  //       headers: { Authorization: `${token}` },
+  //     });
+  //     this.otherStore = this.$nuxt.$route.params.id != response.data.id;
+  //   } catch (e) {}
+  // },
   methods: {
     setPost(parameters) {
       this.posts.unshift(parameters);

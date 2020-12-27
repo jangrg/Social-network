@@ -12,7 +12,7 @@
           <!-- <div>
             <strong class="text-theme">Login:</strong>
           </div> -->
-          <b-form class="mx-auto mt-2 text-center">
+          <b-form class="mx-auto mt-2 text-center" v-on:submit.prevent="loginUser">
             <b-form-input
               class="input-style"
               v-model="form.username"

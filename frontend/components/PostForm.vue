@@ -1,5 +1,5 @@
 <template>
-  <b-form id="form">
+  <b-form id="form" v-on:submit.prevent="postForm">
     <div class="form-group">
       <label for=""></label>
       <textarea

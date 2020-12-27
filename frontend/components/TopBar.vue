@@ -110,15 +110,15 @@ export default {
       store: false
     };
   },
-  async beforeCreate() {
-    try {
-      let token = this.$auth.getToken("local");
-      let response = await this.$axios.get("page/my_page/", {
-        headers: { Authorization: `${token}` }
-      });
-      this.store = response.data;
-    } catch (e) {}
-  },
+  // async beforeCreate() {
+  //   try {
+  //     let token = this.$auth.getToken("local");
+  //     let response = await this.$axios.get("page/my_page/", {
+  //       headers: { Authorization: `${token}` }
+  //     });
+  //     this.store = response.data;
+  //   } catch (e) {}
+  // },
   computed: {
     user() {
       return this.$auth.user;
