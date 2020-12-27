@@ -133,7 +133,6 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-                print(serializer)
             return Response(
                 serializer.data,
                 status=status.HTTP_200_OK)
@@ -223,7 +222,7 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             post = serializer.save(posted_by=request.user)
-            return Response(data=PostSerializer(post).data,
+            return Response(PostSerializer(post,  context={'request': request}).data,
                             status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -240,7 +239,6 @@ class PostViewSet(viewsets.ModelViewSet):
 
         if user_id:
             user = User.objects.get(id=user_id)
-            print(user)
             queryset = queryset.filter(posted_by=user)
             if current_user.username != user.username:
                 if not current_user.following.filter(id=user_id).exists():

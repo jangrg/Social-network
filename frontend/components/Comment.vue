@@ -95,7 +95,6 @@ export default {
         let res = await this.$axios.post(
           `post/${this.comment.id}/unlike_comment/`
         );
-        debugger;
         if (res.status == 200) {
           this.liked = false;
           this.comment.likes_num--;
@@ -109,11 +108,9 @@ export default {
           });
         }
       } else {
-        debugger;
         let res = await this.$axios.post(
           `post/${this.comment.id}/like_comment/`
         );
-        debugger;
         if (res.status == 200) {
           this.liked = true;
           this.comment.likes_num++;
@@ -132,7 +129,6 @@ export default {
     async deleteComment() {
       if (confirm("Really want to delete this comment?")) {
         let res = await this.$axios.delete(`comment/${this.comment.id}/`);
-        debugger;
         if (res.status == 204) {
           this.$toast.show("Comment succesfully deleted.", {
             duration: 8000,
@@ -156,12 +152,10 @@ export default {
         formData.append("comment_text", this.newComment.comment_text);
         formData.append("id", this.newComment.id);
 
-        debugger;
         let response = await this.$axios.patch(
           `comment/${this.newComment.id}/`,
           formData
         );
-        debugger;
         if (response.status == 200) {
           this.$toast.show("Comment succesfully edited!", { duration: 8000 });
           this.editing = false;

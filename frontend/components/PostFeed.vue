@@ -38,7 +38,6 @@ export default {
   },
   async beforeCreate() {
     try {
-      debugger;
       let token = this.$auth.getToken("local");
       let response = await this.$axios.get("page/my_page/", {
         headers: { Authorization: `${token}` },
@@ -52,7 +51,6 @@ export default {
     },
     //very costly, but im bad at programming therefore i dont know of any other way that doesnt mess with props.
     replacePost(editedPost) {
-      debugger;
       for (var i = 0; i < this.posts.length; i++) {
         if (editedPost.id == this.posts[i].id) {
           this.posts.splice(i, 1, editedPost);
@@ -62,7 +60,6 @@ export default {
     },
     //also very costly, but again bad at programming therefore i dont know of any other way that doesnt mess with props.
     deletePost(parameters) {
-      debugger;
       for (var i = 0; i < this.posts.length; i++) {
         if (this.posts[i].id == parameters) {
           this.posts.splice(i, 1);
@@ -73,7 +70,6 @@ export default {
   },
   computed: {
     anotherUser() {
-      debugger;
       if (this.$nuxt.$route.name == "users-id") {
         return this.$nuxt.$route.params.id === this.$auth.user.id;
       } else if (this.$nuxt.$route.name == "store-id") {
@@ -83,8 +79,7 @@ export default {
     },
   },
   created: async function () {
-    let response;
-    debugger;
+    let response
     if (this.filter.includes("page")) {
       console.log("tu");
       response = await this.$axios.get(`page/${this.filter}`);

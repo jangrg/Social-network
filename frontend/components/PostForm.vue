@@ -117,7 +117,6 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         });
-        debugger;
         if (response.status == 201) {
           this.$toast.show("Post succesfully posted!", { duration: 8000 });
           //Ovaj response ne vraca sliku prvi put!!
@@ -128,7 +127,7 @@ export default {
             image: null,
           };
           this.canUploadImage = false;
-          debugger;
+
           if (createdPost.is_private && this.$nuxt.$route.name == "explore") {
             this.$toast.show(
               "Private posts will not be visible on this feed.",

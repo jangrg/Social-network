@@ -110,7 +110,13 @@
       </div>
 
       <div class="post-image">
-        <img v-if="hasImage && !changedPicture" :src="'http://ec2-18-224-95-58.us-east-2.compute.amazonaws.com/' + post.image" />
+        <img
+          v-if="hasImage && !changedPicture"
+          :src="
+            'http://ec2-18-224-95-58.us-east-2.compute.amazonaws.com/' +
+            post.image
+          "
+        />
         <img v-if="changedPicture" :src="imgEditedUrl" />
       </div>
 
@@ -201,13 +207,11 @@ export default {
     };
   },
   created() {
-    debugger
     console.log(this.post.is_page);
     if (this.post.is_page) this.id = this.post.page.id;
   },
   methods: {
     changePictureUpload() {
-      debugger;
       this.newEditedPost.image = this.$refs.file.files[0];
       this.changedPicture = true;
     },
@@ -251,7 +255,6 @@ export default {
     },
 
     editPost(decision) {
-      debugger;
       this.editing = decision;
       if (this.changedPicture) {
         this.changedPicture = decision;
@@ -264,13 +267,15 @@ export default {
         let formData = new FormData();
         formData.append("content", this.newEditedPost.content);
         formData.append("is_private", this.newEditedPost.is_private);
-        formData.append("is_page", this.newEditedPost.is_page)
-        debugger;
-        if (this.newEditedPost.image && this.newEditedPost.image != this.post.image) {
+        formData.append("is_page", this.newEditedPost.is_page);
+
+        if (
+          this.newEditedPost.image &&
+          this.newEditedPost.image != this.post.image
+        ) {
           formData.append("image", this.newEditedPost.image);
-          debugger;
         }
-        debugger;
+
         let response = await this.$axios.patch(
           `post/${this.newEditedPost.id}/`,
           formData,
@@ -280,11 +285,14 @@ export default {
             },
           }
         );
-        debugger;
+
         if (response.status == 200) {
           this.$toast.show("Post succesfully edited!", { duration: 8000 });
           this.editing = false;
-          if (this.newEditedPost.is_private && this.$nuxt.$route.name == "explore") {
+          if (
+            this.newEditedPost.is_private &&
+            this.$nuxt.$route.name == "explore"
+          ) {
             this.$toast.show(
               "This edited post will not be visible on this feed.",
               { duration: 8000 }
@@ -306,7 +314,7 @@ export default {
     async deletePost() {
       if (confirm("Really want to delete this actualPost?")) {
         let res = await this.$axios.delete(`post/${this.post.id}/`);
-        debugger;
+
         if (res.status == 204) {
           this.$toast.show("Post succesfully deleted.", {
             duration: 8000,
@@ -324,12 +332,12 @@ export default {
       console.log(this.comment);
       try {
         let res = await this.$axios.post(`post/comment/`, this.comment);
-        debugger;
+
         console.log(res);
         if (res.status == 201) {
           this.$toast.show("Comment successfully posted!", { duration: 8000 });
           let createdComment = res.data;
-          debugger;
+
           this.comment.comment_text = "";
           this.comment.likes_num = 0;
           this.post.comments.push(createdComment);
@@ -342,7 +350,6 @@ export default {
     },
 
     deleteComment(id) {
-      debugger;
       for (var i = 0; i < this.post.comments.length; i++) {
         if (id == this.post.comments[i].id) {
           this.post.comments.splice(i, 1);
@@ -352,7 +359,6 @@ export default {
     },
 
     changeEditedComment(comment) {
-      debugger;
       for (var i = 0; i < this.post.comments.length; i++) {
         if (comment.id == this.post.comments[i].id) {
           this.post.comments.splice(i, 1, comment);
@@ -375,7 +381,7 @@ export default {
         (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) +
         ":" +
         (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
-      // debugger;
+
       return string;
     },
 

@@ -157,7 +157,6 @@ export default {
     },
 
     changeTheme() {
-      debugger;
       var theme = this.$auth.$storage.getCookie("theme");
       if (theme == "light") {
         this.$auth.$storage.setCookie("theme", "dark");
@@ -171,14 +170,12 @@ export default {
       let response = await this.$axios.post(`account/${this.id}/follow/`);
       this.following = true;
       this.$store.commit("ADD_FOLLOWING", this.id);
-      debugger;
       this.mode = 1;
     },
 
     async unfollow() {
       let response = await this.$axios.post(`account/${this.id}/unfollow/`);
       this.following = false;
-      debugger;
       this.$store.commit("REMOVE_FOLLOWING", this.id);
       this.mode = 0;
     },

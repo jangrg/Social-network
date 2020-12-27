@@ -58,13 +58,11 @@ export default {
       let response = await this.$axios.post(`account/${this.user.id}/follow/`);
       this.following = true;
       this.$store.commit("ADD_FOLLOWING", this.user.id);
-      debugger
     },
 
     async unfollow() {
       let response = await this.$axios.post(`account/${this.user.id}/unfollow/`);
       this.following = false;
-      debugger
       this.$store.commit("REMOVE_FOLLOWING", this.user.id);
     },
   },
