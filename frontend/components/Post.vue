@@ -110,13 +110,7 @@
       </div>
 
       <div class="post-image">
-        <img
-          v-if="hasImage && !changedPicture"
-          :src="
-            'http://ec2-18-224-95-58.us-east-2.compute.amazonaws.com/' +
-            post.image
-          "
-        />
+        <img v-if="hasImage && !changedPicture" :src="'http://ec2-18-224-95-58.us-east-2.compute.amazonaws.com/' + post.image.split('0.0.0.0:8000/')[1]" />
         <img v-if="changedPicture" :src="imgEditedUrl" />
       </div>
 
