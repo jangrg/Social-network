@@ -60,7 +60,7 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: 'http://ec2-18-224-95-58.us-east-2.compute.amazonaws.com/api/'
+    baseURL: 'http://ec2-18-221-108-223.us-east-2.compute.amazonaws.com/api/'
   },
   //auth configuration
   auth: {

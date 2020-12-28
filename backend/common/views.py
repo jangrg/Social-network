@@ -74,7 +74,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewset
             user.save()
             send_mail(
                 'Account confirmation WeShare',
-                f'Confirm your account on this link: http://ec2-18-224-95-58.us-east-2.compute.amazonaws.com/account/confirm/{user.id}/',
+                f'Confirm your account on this link: http://ec2-18-221-108-223.us-east-2.compute.amazonaws.com/account/confirm/{user.id}/',
                 'noreply@somehost.local',
                 [user.email],
             )
